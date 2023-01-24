@@ -6,7 +6,7 @@ metadata:
   name: mydeployment
   namespace: lyngdemo2
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: lyngdemo2
@@ -17,9 +17,9 @@ spec:
     spec:
       containers:
       - name: asyncapi
-        image: iitaks.azurecr.io/asyncapi:1.4
+        image: iitaks.azurecr.io/asyncapi:2.0
         env:
-        - name: Greeting
+        - name: version
           value: "Hello from Lyngsoe"
         ports:
         - containerPort: 80
