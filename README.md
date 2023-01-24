@@ -54,3 +54,57 @@ az aks get-credentials --name iitaks  --resource-group rg-aks --overwrite-existi
 ```powershell
 kubectl create namespace name_of_namespace
 ```
+
+## Create first application
+
+```powershell
+$namespace = "app1";
+kubectl create namespace $namespace;
+kubectl run $namespace --image iitaks.azurecr.io/asyncapi:1.1 --namespace $namespace;
+```
+
+## Switch to namespace
+
+```powershell
+kubectl config set-context --current --namespace $namespace
+```
+
+## Verify Pod is running
+
+```powershell
+kubectl get all
+```
+
+## See detailed Pod 
+
+```powershell
+kubectl get pods -o wide
+```
+
+### Log Pod
+
+```powershell
+kubectl logs pod/$namespace [-f]
+```
+
+### Create Service for pod
+
+```powershell
+kubectl expose pod $namespace --port=80 --name=$namespace-service --type LoadBalancer;
+```
+### List all
+
+```powershell
+kubectl get all
+```
+### Test Service
+
+```powershell
+Invoke-Webrequest 1.1.1.1/names
+```
+
+### Deploy Templates
+
+```powershell
+kubectl apply -f TemplatePath\Template.yaml
+```
