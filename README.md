@@ -60,7 +60,7 @@ kubectl create namespace name_of_namespace
 ```powershell
 $namespace = "app1";
 kubectl create namespace $namespace;
-kubectl run $namespace --image iitaks.azurecr.io/asyncapi:1.1 --namespace $namespace;
+kubectl run $namespace --image iitaks.azurecr.io/asyncapi:1.2 --namespace $namespace;
 ```
 
 ## Switch to namespace
