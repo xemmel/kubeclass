@@ -69,6 +69,12 @@ kubectl run $namespace --image iitaks.azurecr.io/asyncapi:1.2 --namespace $names
 kubectl config set-context --current --namespace $namespace
 ```
 
+## Switch between context (clusters)
+
+```powershell
+kubectl config use-context iitaks
+```
+
 ## Verify Pod is running
 
 ```powershell
@@ -123,4 +129,11 @@ kubectl delete namespace $namespace
 
 ```powershell
 kubectl apply -f TemplatePath\Template.yaml
+```
+
+### Rollout (force restart of all pods (configMaps, secret))
+
+```powershell
+kubectl rollout restart deployment.apps/your_deployment_name_here
+
 ```
