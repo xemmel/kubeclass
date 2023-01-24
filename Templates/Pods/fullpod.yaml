@@ -13,7 +13,7 @@ metadata:
 spec:
   containers:
   - name: asyncapi
-    image: iitaks.azurecr.io/asyncapi:1.1
+    image: iitaks.azurecr.io/asyncapi:1.2
     ports:
     - containerPort: 80
 ---
