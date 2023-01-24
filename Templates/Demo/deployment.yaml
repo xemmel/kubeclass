@@ -7,6 +7,7 @@ metadata:
   namespace: lyngdemo2
 spec:
   replicas: 3
+  revisionHistoryLimit: 0
   selector:
     matchLabels:
       app: lyngdemo2
@@ -21,8 +22,8 @@ spec:
         env:
         - name: version
           valueFrom:
-            configMapKeyRef:
-              name: lyngdemo2-config
-              key: theversion
+            secretKeyRef:
+              name: lyngdemo2-secret
+              key: secret_version
         ports:
         - containerPort: 80
