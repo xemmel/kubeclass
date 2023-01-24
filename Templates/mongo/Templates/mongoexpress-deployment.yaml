@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongoexpress-deployment
+  namespace: mongo
+  labels:
+    app: mongoexpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongoexpress
+  template:
+    metadata:
+      labels:
+        app: mongoexpress
+    spec:
+      containers:
+      - name: mongoexpress-container
+        image: mongo-express:latest
+        ports:
+        - containerPort: 8081
+        env:
+        - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: configmap-mongo
+              key: userName
+        - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: configmap-mongo
+              key: password
+        - name: ME_CONFIG_MONGODB_SERVER
+          value: mongodb-service
+        - name: ME_CONFIG_MONGODB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: configmap-mongo
+              key: port
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongoexpress-service
+  namespace: mongo
+spec:
+  type: NodePort
+  selector:
+    app: mongoexpress
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8081
+      nodePort: 32328
+

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-mongo
+  namespace: mongo
+data:
+  userName: "morten"
+  password: "Boisse0001!"
+  port: "80"

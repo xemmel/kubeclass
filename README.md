@@ -103,6 +103,22 @@ kubectl get all
 Invoke-Webrequest 1.1.1.1/names
 ```
 
+### Examine Service 
+
+```powershell
+kubectl describe service/$namespace-service
+```
+Compare the **Endpoints** *ip-address* to the pod's internal *ip-address*
+
+```powershell
+kubectl get pods -o wide
+```
+### Clean up
+
+```powershell
+kubectl delete namespace $namespace
+```
+
 ### Deploy Templates
 
 ```powershell
