@@ -34,3 +34,23 @@ choco install vscode -y
 ```powershell
 choco install kubernetes-helm -y
 ```
+
+### login to Azure
+
+```powershell
+
+az login -u "kube1@integration-it.com" -p "...."
+
+```
+
+### Get kubernetes Cluster API Key Certificate
+
+```powershell
+az aks get-credentials --name iitaks  --resource-group rg-aks --overwrite-existing;
+```
+
+### Test the connection (Create your namespace)
+
+```powershell
+kubectl create namespace name_of_namespace
+```
