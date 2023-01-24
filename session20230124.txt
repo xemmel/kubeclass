@@ -1,0 +1,124 @@
+https://github.com/xemmel/kubeclass
+
+
+
+
+
+Service 
+
+
+Kubernetes (Google) -> 2012
+
+Namespace (
+Pod (Container(s)/image(s))
+Deployment (Replicas Pods) (Labels) 
+Service (LoadBalancer) -> Pods/Deployments -> Deployment/Pod -> Labels
+  - ClusterIP (default) -> Internal exposed (private ip)
+  - NodePort (developer) -> unique port (private ip, exposed Node=Server public ip)
+  - LoadBalancer (Public IP) (Prod: Ingress)
+configMap (key/value) -> central, re-useablaity 
+secret (key/value) -> Encrypted at rest
+ingress
+
+(Helm)
+
+Infra
+
+
+config -> SAME NAMESPACE
+
+
+
+Ingress: 
+
+
+(external component) Ingress-Controller (no namespace) (diff from Kubernetes provider) 
+
+
+Ingress (native kube type)!! (
+
+
+
+
+
+Kubernetes Cluster (environment)
+  Cluster Node (System Node) -> API (Control Plane) (REST API -> Json) -> .yaml
+  App Node(s) -> (system tools, network, health pods)
+
+
+
+
+Ingress ->(http) (path) -> Service(LoadBalancer) ->(http) Pod(s) (container, code)
+
+
+
+kubectl (command tool) kubectl
+
+
+
+
+Kubernetes
+  
+Setup AKS (Azure Ku Service)
+
+-> min nodes 1
+-> max nodes 8
+
+-> advanced config (Oracle, on
+
+-> Scaling 1-8
+
+PaaS 
+Azure Web App
+Azure Console -> Scalings regler
+
+
+Mounting:
+  - kubernetes (mount) (yaml)
+  - volumeClaim (5gb) (yaml)
+	- volumes (provider specific)
+  - non kubernetes (serviceClass, -> Azure Disk, Oracle Disk)
+
+
+
+
+
+
+
+kubectl get namespaces
+
+set-psreadlineoption -pre
+
+Deployment 
+  ReplicaSet
+  Pod
+
+
+
+kube1  -> Mula6325
+
+lyngsoe001!
+
+
+
+
+
+-	
+
+
+
+Docker -> Kubernetes (.yaml) 
+
+Helm (Chart)
+    Deployment
+        .yaml {{ .Values.morten }}
+        .yaml
+        .yaml
+Chart.yaml
+value.yaml
+
+helm install
+helm unintall
+
+
+    
