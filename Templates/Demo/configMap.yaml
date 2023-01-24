@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lyngdemo2-config
+  namespace: lyngdemo2
+data:
+  theversion: 'Hello from configMap2'
