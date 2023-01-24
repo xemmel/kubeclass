@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: lyngdemo2-service
+  namespace: lyngdemo2
+spec:
+  selector:
+    app: lyngdemo2
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      name: port1
+      port: 80
+      targetPort: 80
+    - protocol: TCP
+      name: port2
+      port: 81
+      targetPort: 80

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: lyngdemo2
+  name: mydeployment
+  namespace: lyngdemo2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lyngdemo2
+  template:
+    metadata:
+      labels:
+        app: lyngdemo2
+    spec:
+      containers:
+      - name: asyncapi
+        image: iitaks.azurecr.io/asyncapi:1.4
+        env:
+        - name: Greeting
+          value: "Hello from Lyngsoe"
+        ports:
+        - containerPort: 80

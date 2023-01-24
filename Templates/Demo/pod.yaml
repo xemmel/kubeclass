@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: lyngdemo2
+  name: mypod
+  namespace: lyngdemo2
+spec:
+  containers:
+  - name: asyncapi
+    image: iitaks.azurecr.io/asyncapi:1.2
+    ports:
+    - containerPort: 80
