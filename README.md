@@ -14,46 +14,46 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 
 ```
 
-### install Powershell 7 (optional)
+### install Powershell 7
 
 ```powershell
+
 choco install powershell-core -y
+
 ```
 
-### install software (Beginner)
+### install software (In Powershell 7/Core)
 
 ```powershell
 
-choco install azure-cli -y
 choco install kubernetes-cli -y
 choco install vscode -y
-```
-
-### install software (Advanced)
-
-```powershell
 choco install kubernetes-helm -y
+
 ```
 
-### login to Azure
+### Use Azure or Kind
+
+
+
+### Test the connection 
 
 ```powershell
 
-az login -u "kube1@integration-it.com" -p "...."
+kubectl get nodes
 
 ```
 
-### Get kubernetes Cluster API Key Certificate
-
-```powershell
-az aks get-credentials --name iitaks  --resource-group rg-aks --overwrite-existing;
-```
-
-### Test the connection (Create your namespace)
+#### Create a namespace
 
 ```powershell
 kubectl create namespace name_of_namespace
 ```
+
+### Sample Image public
+
+mcr.microsoft.com/azuredocs/aks-helloworld:v1
+
 
 ## Create first application
 
