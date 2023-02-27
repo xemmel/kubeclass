@@ -60,7 +60,8 @@ mcr.microsoft.com/azuredocs/aks-helloworld:v1
 ```powershell
 $namespace = "app1";
 kubectl create namespace $namespace;
-kubectl run $namespace --image iitaks.azurecr.io/asyncapi:1.2 --namespace $namespace;
+kubectl run $namespace --image mcr.microsoft.com/azuredocs/aks-helloworld:v1 --namespace $namespace;
+
 ```
 
 ## Switch to namespace
@@ -93,10 +94,20 @@ kubectl get pods -o wide
 kubectl logs pod/$namespace [-f]
 ```
 
-### Create Service for pod
+### Create Service for pod (Cloud Provider)
 
 ```powershell
 kubectl expose pod $namespace --port=80 --name=$namespace-service --type LoadBalancer;
+```
+
+### Create Service for pod (Local)
+
+```powershell
+
+kubectl expose pod $namespace --port=80 --name=$namespace-service --type ClusterIP;
+
+### Forward it
+kubectl port-forward service/$namespace-service 4000:80
 ```
 ### List all
 
