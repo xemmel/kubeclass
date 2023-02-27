@@ -55,12 +55,25 @@ kubectl create namespace name_of_namespace
 mcr.microsoft.com/azuredocs/aks-helloworld:v1
 
 
-## Create first application
+## Create first application (Single Pod)
 
 ```powershell
 $namespace = "app1";
 kubectl create namespace $namespace;
 kubectl run $namespace --image mcr.microsoft.com/azuredocs/aks-helloworld:v1 --namespace $namespace;
+
+```
+
+## Create first application (Deployment)
+> A deployment is a **ReplicaSet** wrapper for controlled *updates*
+
+```powershell
+
+$namespace = "app1";
+kubectl create namespace $namespace;
+
+kubectl create deployment $namespace-deployment `
+     --image=mcr.microsoft.com/azuredocs/aks-helloworld:v1 ` --replicas=3
 
 ```
 
@@ -109,6 +122,20 @@ kubectl expose pod $namespace --port=80 --name=$namespace-service --type Cluster
 ### Forward it
 kubectl port-forward service/$namespace-service 4000:80
 ```
+
+### Create Service for Deployment (local)
+
+```powershell
+
+kubectl expose deployment $namespace-deployment `
+    --type ClusterIP `
+    --name $namespace-service `
+    --port 80
+;
+
+```
+
+
 ### List all
 
 ```powershell
