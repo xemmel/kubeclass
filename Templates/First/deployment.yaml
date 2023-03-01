@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demofirst-deployment
+  namespace: demofirst
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: demofirst-deployment
+  template:
+    metadata:
+      labels:
+        app: demofirst-deployment
+    spec:
+      containers:
+      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        name: aks-helloworld
+        env: 
+        - name: TITLE
+          value: '123'
+

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scratch-deployment
+  namespace: scratch
+spec:
+  replicas: 8
+  selector:
+    matchLabels:
+      app: scratch
+  template:
+    metadata:
+      name: scratch-pod
+      labels:
+        app: scratch
+    spec:
+      containers:
+      - name: scratch-container
+        image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        env:
+        - name: TITLE
+          value: 'PURE POD'

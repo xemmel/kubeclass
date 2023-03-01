@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: elasticvolume-pv
+  namespace: elasticvolume
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  hostPath:
+    path: /files/elastic
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: elasticvolume-pvc
+  namespace: elasticvolume
+  labels:
+    app: elasticvolume
+spec:
+  volumeName: elasticvolume-pv
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      # The amount of the volume's storage to request
+      storage: 4Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elasticvolume-deployment
+  namespace: elasticvolume
+  labels:
+    app: elasticvolume
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elasticvolume
+  template:
+    metadata:
+      labels:
+        app: elasticvolume
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: elasticcontainer
+        image: elasticsearch:7.17.7
+        ports:
+        - containerPort: 9200
+        env:
+        - name: discovery.type
+          value: single-node
+        volumeMounts:
+        - mountPath: "/usr/share/elasticsearch/data"
+          name: mydir
+      volumes:
+      - name: mydir
+        persistentVolumeClaim:
+          claimName: elasticvolume-pvc
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: elasticvolume-service
+  namespace: elasticvolume
+spec:
+  selector:
+    app: elasticvolume
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9200

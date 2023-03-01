@@ -29,6 +29,7 @@ choco install powershell-core -y
 choco install kubernetes-cli -y
 choco install vscode -y
 choco install kubernetes-helm -y
+choco install diffutils -y
 
 ```
 

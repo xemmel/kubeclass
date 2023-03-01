@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: volumedemo-deployment
+  namespace: volumedemo
+  labels:
+    app: volumedemo
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: volumedemo
+  template:
+    metadata:
+      labels:
+        app: volumedemo
+    spec:
+      containers:
+      - name: nginxcontainer
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: mydir
+      volumes:
+      - name: mydir
+        hostPath:
+          path: /files/claims
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: volumedemo-service
+  namespace: volumedemo
+spec:
+  selector:
+    app: volumedemo
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

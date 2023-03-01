@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "kubernetes://schema/apps/v1%40deployment": "file:///c%3A/docs/kubeclass/Apps/Own/deployment.yaml"
+    }
+}

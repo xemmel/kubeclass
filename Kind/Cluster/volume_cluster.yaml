@@ -6,3 +6,7 @@ nodes:
   extraMounts:
   - hostPath: c:/temp/kindstorage/files
     containerPath: /files
+- role: worker
+  extraMounts:
+  - hostPath: c:/temp/kindstorage/files
+    containerPath: /files
