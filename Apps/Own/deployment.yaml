@@ -9,7 +9,12 @@ metadata:
   name: ownapp
   namespace: ownapp
 spec:
-  replicas: 1
+  replicas: 4
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
   selector:
     matchLabels:
       app: ownapp
@@ -20,6 +25,12 @@ spec:
     spec:
       containers:
       - name: myapp-container
-        image: myown:1.0
+        image: myown:1.1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
         ports:
         - containerPort: 80
+
+
