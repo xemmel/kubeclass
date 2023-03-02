@@ -14,7 +14,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
-      maxUnavailable: 25%
+      maxUnavailable: 50%
   selector:
     matchLabels:
       app: ownapp
@@ -25,11 +25,7 @@ spec:
     spec:
       containers:
       - name: myapp-container
-        image: myown:1.1
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+        image: myown:1.0
         ports:
         - containerPort: 80
 
