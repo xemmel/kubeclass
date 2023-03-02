@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo2-service
+  namespace: demo2
+spec:
+  type: ClusterIP
+  selector:
+    app: demo2
+  ports:
+    - port: 80
+      targetPort: 80
