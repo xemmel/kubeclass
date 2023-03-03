@@ -176,3 +176,89 @@ kubectl apply -f TemplatePath\Template.yaml
 kubectl rollout restart deployment.apps/your_deployment_name_here
 
 ```
+
+POD   :-(
+
+kubectl describe [pod] podname
+  -> METADATA POD LOG
+
+ POD :-)
+
+Unexpected result!
+log container
+kubectl logs podname [-f] (follow -> Live tracke)
+
+
+kubectl exec -> Inject commands into pod
+kubectl exec -it [podname] --namespace debug -- bash
+
+
+
+
+
+
+
+
+
+env: [ { "name" : "TITLE", "value" : "HELLO"},{ "some"	}]
+
+
+
+
+
+
+DRY RUN / DIFF
+
+## Check syntax
+kubectl apply -f ..... --dry-run=client 
+
+## Check changes on server
+kubectl apply -f .... --dry-run=server
+   unchanged
+   configured -> Changes will take place
+
+## Actual yaml diff (Require diff tool)
+kubectl diff -f ...
+
+
+
+## DRAIN (Maintanance)
+
+kubectl drain --ignore-daemonsets --force [node name]
+
+## Release for scheduling
+
+kubectl uncordon [node name]
+
+
+
+### Secrets 
+
+kubectl create secret generic demo2-secret --from-literal=thepassword=verysecret
+
+
+
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+WORKDIR /App
+
+# Copy everything
+COPY . ./
+# Restore as distinct layers
+RUN dotnet restore
+# Build and publish a release
+RUN dotnet publish -c Release -o out
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
+WORKDIR /App
+COPY --from=build-env /App/out .
+ENTRYPOINT ["dotnet", "mywebapi.dll"]
+
+
+
+
+## Docker volume
+
+docker run -dit -p 7779:80 -v C:\mounts\nginx:/usr/share/nginx/html  myownempyapp:1.0
+

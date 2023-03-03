@@ -1,0 +1,6 @@
+app:
+  name: applicationone
+
+deployment:
+  replicas: 2
+  image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
