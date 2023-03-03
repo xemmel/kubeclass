@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my3demo-config
+  namespace: demo2
+data:
+  thetitle: 'Hello from configMap!!!!!'
