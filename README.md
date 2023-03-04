@@ -1,5 +1,12 @@
 ## Kubernetes class
-## Morten la Cour
+
+```
+Morten la Cour
+
+lacour@gmail.com
+mlc@integration-it.com
+
+```
 
 ## Getting started
 
