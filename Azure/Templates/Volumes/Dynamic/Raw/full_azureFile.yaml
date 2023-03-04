@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: volume-dynamic-demo
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: volume-dynamic-demo-pvc
+  namespace: volume-dynamic-demo
+spec:
+  accessModes:
+    - ReadOnlyMany
+  storageClassName: azurefile-csi
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: volume-dynamic-demo-deployment
+  namespace: volume-dynamic-demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: volume-dynamic-demo
+  template:
+    metadata:
+      labels:
+        app: volume-dynamic-demo
+    spec:
+      containers:
+      - name: nginxcontainer
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: mydir
+      volumes:
+      - name: mydir
+        persistentVolumeClaim:
+          claimName: volume-dynamic-demo-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: volume-dynamic-demo-service
+  namespace: volume-dynamic-demo
+spec:
+  selector:
+    app: volume-dynamic-demo
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    name: port1
+    port: 80
+    targetPort: 80
+  
