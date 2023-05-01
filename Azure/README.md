@@ -2,7 +2,7 @@
 
 ```powershell
 
-az login -u "kube1@integration-it.com" -p "...."
+az login -u "studentKuber202305xx@integration-it.com" -p "...."
 
 ```
 

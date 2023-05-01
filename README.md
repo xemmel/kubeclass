@@ -55,7 +55,19 @@ kubectl get nodes
 #### Create a namespace
 
 ```powershell
-kubectl create namespace name_of_namespace
+
+$namespace = "myinit-namespace";
+kubectl create namespace $namespace;
+
+```
+
+### Point kubectl to namespace
+
+```powershell
+
+kubectl config set-context --current --namespace $namespace;
+
+
 ```
 
 ### Sample Image public
@@ -66,12 +78,27 @@ mcr.microsoft.com/azuredocs/aks-helloworld:v1
 ## Create first application (Single Pod)
 
 ```powershell
-$namespace = "app1";
-kubectl create namespace $namespace;
+
+## kubectl create namespace $namespace;
+
 kubectl run $namespace --image mcr.microsoft.com/azuredocs/aks-helloworld:v1 --namespace $namespace;
 
 ```
+### Create the pod (dryrun) -> Output as .yaml
 
+```powershell
+
+$yaml = kubectl run $namespace `
+  --image mcr.microsoft.com/azuredocs/aks-helloworld:v1 `
+  --namespace $namespace `
+  --dry-run=client `
+  --output yaml;
+$yaml;
+$yaml | set-clipboard;
+
+
+
+``` 
 ## Create first application (Deployment)
 > A deployment is a **ReplicaSet** wrapper for controlled *updates*
 
