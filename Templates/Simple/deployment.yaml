@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: myfirstapplication
+  name: mydeployment
+spec: 
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myfirstapplication
+  template:
+    metadata:
+      labels:
+        app: myfirstapplication
+      name: myfirstpod
+    spec:
+      containers:
+      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        name: mycontainer
+        env:
+        - name: TITLE
+          value: 'Hello UFST!!!' 
+       
