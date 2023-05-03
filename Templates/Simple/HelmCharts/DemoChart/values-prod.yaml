@@ -1,0 +1,12 @@
+app: 
+  name: myfirsthelmchart
+replicas:
+  count: 3
+
+image:
+  name: mcr.microsoft.com/azuredocs/aks-helloworld
+  version: v1
+
+title: 'Hello from helm Production'
+
+path: 'theprodpath'

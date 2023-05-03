@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: myfirstapplication-ingress-2
+  name: {{ .Values.app.name }}-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -9,11 +9,11 @@ spec:
   rules:
   - http:
       paths:
-      - path: /testoneteacher
+      - path: /{{ .Values.path }}
         pathType: Prefix
         backend:
           service:
-            name: myservice
+            name: {{ .Values.app.name }}-service
             port:
               number: 80
 

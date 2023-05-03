@@ -16,12 +16,10 @@ spec:
       name: myfirstpod
     spec:
       containers:
-      - image: iitaks.azurecr.io/asyncapi:1.2
+      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
         name: mycontainer
         env:
         - name: TITLE
-          valueFrom:
-            configMapKeyRef:
-              name: myconfigmap
-              key: thetitle
+          value: 'ingress 2222!'
+
        

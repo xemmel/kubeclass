@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Values.app.name }}
+  name: {{ .Values.app.name }}-deployment
+spec: 
+  replicas: {{ .Values.replicas.count }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}
+      name: myfirstpod
+    spec:
+      containers:
+      - image: {{ .Values.image.name }}:{{ .Values.image.version }}
+        name: mycontainer
+        env:
+        - name: TITLE
+          value: {{ .Values.title }}
+
+       
