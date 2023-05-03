@@ -5,7 +5,7 @@ metadata:
     app: myfirstapplication
   name: mydeployment
 spec: 
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: myfirstapplication
@@ -16,9 +16,12 @@ spec:
       name: myfirstpod
     spec:
       containers:
-      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+      - image: iitaks.azurecr.io/asyncapi:1.2
         name: mycontainer
         env:
         - name: TITLE
-          value: 'Hello UFST!!!' 
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: thetitle
        

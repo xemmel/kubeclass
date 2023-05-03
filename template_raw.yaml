@@ -1,0 +1,110 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2023-05-03T07:25:26Z"
+  generateName: mydeployment-5cdb69df4b-
+  labels:
+    app: myfirstapplication
+    pod-template-hash: 5cdb69df4b
+  name: mydeployment-5cdb69df4b-jpmpc
+  namespace: tekno-demo-teacher
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: mydeployment-5cdb69df4b
+    uid: eea2b218-4c29-4131-a0b2-6b585468f304
+  resourceVersion: "8969471"
+  uid: 0ade1c5f-5a55-403d-b04f-3040be2b9011
+spec:
+  containers:
+  - env:
+    - name: TITLE
+      value: Hello UFST DAY 2
+    image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+    imagePullPolicy: IfNotPresent
+    name: mycontainer
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-js2jk
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: aks-nodepool1-42923850-vmss000000
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-js2jk
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2023-05-03T07:25:26Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2023-05-03T07:25:27Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2023-05-03T07:25:27Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2023-05-03T07:25:26Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://505d4a015a3dd2bf6fe3ea821c985647db0f3f3ed9a7c51f98c1509d6f1b0dc7
+    image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+    imageID: mcr.microsoft.com/azuredocs/aks-helloworld@sha256:fb47732ef36b285b1f3fbda69ab8411a430b1dc43823ae33d5992f0295c945f4
+    lastState: {}
+    name: mycontainer
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2023-05-03T07:25:26Z"
+  hostIP: 10.224.0.4
+  phase: Running
+  podIP: 10.244.0.138
+  podIPs:
+  - ip: 10.244.0.138
+  qosClass: BestEffort
+  startTime: "2023-05-03T07:25:26Z"

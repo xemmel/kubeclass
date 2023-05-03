@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: volume-dynamic-demo-service
+spec:
+  selector:
+    app: volume-dynamic-demo
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    name: port1
+    port: 80
+    targetPort: 80
