@@ -6,7 +6,7 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor | 
 
 sudo apt-get update
 
-VERSION=1.26.5-00
+VERSION=1.27.0-00
 
 sudo apt-get install -y kubelet=$VERSION kubeadm=$VERSION kubectl=$VERSION 
 sudo apt-mark hold kubelet kubeadm kubectl containerd

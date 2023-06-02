@@ -50,7 +50,7 @@ sudo apt-get update
 
 apt-cache policy kubelet | head -n 20 
 
-VERSION=1.26.5-00
+VERSION=1.27.0-00
 sudo apt-get install -y kubelet=$VERSION kubeadm=$VERSION kubectl=$VERSION
 sudo apt-mark hold kubelet kubeadm kubectl containerd
 
