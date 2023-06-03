@@ -19,7 +19,7 @@ chmod +x $script_name
 ./$script_name
 
 
-## kubeadm token create --print-join-command
+kubeadm token create --print-join-command
 
 
 
