@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demofirst-deployment
+  name: demofirst
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: demofirst-deployment
+      app: demofirst
   template:
     metadata:
       labels:
