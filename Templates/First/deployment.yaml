@@ -2,9 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: demofirst-deployment
-  namespace: demofirst
 spec:
-  replicas: 6
+  replicas: 2
   selector:
     matchLabels:
       app: demofirst-deployment
@@ -18,5 +17,5 @@ spec:
         name: aks-helloworld
         env: 
         - name: TITLE
-          value: '123'
+          value: 'Welcome to the Kubernetes class'
 
