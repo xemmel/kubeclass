@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demofirst
+  name: demofirst-deployment
 spec:
   replicas: 2
   selector:
@@ -10,7 +10,7 @@ spec:
   template:
     metadata:
       labels:
-        app: demofirst-deployment
+        app: demofirst
     spec:
       containers:
       - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
