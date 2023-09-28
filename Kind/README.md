@@ -1,5 +1,17 @@
 ### Install
 
+### If Docker access problems 
+
+```powershell
+
+whoami
+
+net localgroup docker-users "yourusername" /ADD
+
+restart-computer
+
+```
+
 ```powershell
 
 choco install kind -y
