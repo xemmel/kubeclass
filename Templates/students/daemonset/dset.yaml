@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd-elasticsearch
+spec:
+  selector:
+    matchLabels:
+      name: abc
+  template:
+    metadata:
+      labels:
+        name: abc
+    spec:
+      containers:
+      - name: hello
+        image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+       
