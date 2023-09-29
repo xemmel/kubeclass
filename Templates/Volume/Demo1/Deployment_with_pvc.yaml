@@ -24,4 +24,15 @@ spec:
       - name: mydir
         persistentVolumeClaim:
           claimName: volumedemo1-pvc
-  
+  ---
+  apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: volumedemo1-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 1Gi
