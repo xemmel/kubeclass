@@ -24,7 +24,17 @@ spec:
       - name: mydir
         persistentVolumeClaim:
           claimName: volumedemo1-pvc
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: volumedemo1-service
+spec:
+  type: ClusterIP
+  selector:
+    app: volumedemo1
+  ports:
+    - port: 80
 ---
 
 apiVersion: v1
