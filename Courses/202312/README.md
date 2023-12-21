@@ -93,6 +93,8 @@ kubectl exec -it podname -- bash
 
 kubectl get pods -o wide
 
+### curl [pod-ip]
+
 ```
 
 
