@@ -4,6 +4,7 @@
 - [Table of content](#table-of-content)
   - [Create pod](#create-pod)
   - [Apply pod template](#apply-pod-template)
+  - [Log and debug functions](#log-and-debug-functions)
 
 
 
@@ -68,3 +69,32 @@ kubectl delete -f .....
 
 
 ```
+
+[Back to top](#table-of-content)
+
+
+### Log and debug functions
+
+```powershell
+
+### log single pod (-f to live log)
+
+kubectl logs podname (-f)  
+
+### log several pods with label
+
+kubectl logs -l bent=forcaapp1 -f
+
+### Execute into pod
+
+kubectl exec -it podname -- bash
+
+### View pods with ip-addresses
+
+kubectl get pods -o wide
+
+```
+
+
+
+[Back to top](#table-of-content)
