@@ -16,4 +16,15 @@ spec:
       containers:
       - image: nginx
         name: andersand
- 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deployment1-service
+spec:
+  type: ClusterIP
+  selector:
+    bent: forcaapp1
+  ports:
+  - port: 80
+    targetPort: 80    
