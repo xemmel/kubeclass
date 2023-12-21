@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: deployment1-service
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     bent: forcaapp1
   ports:

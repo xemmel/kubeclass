@@ -5,6 +5,7 @@
   - [Create pod](#create-pod)
   - [Apply pod template](#apply-pod-template)
   - [Log and debug functions](#log-and-debug-functions)
+  - [Port forward](#port-forward)
 
 
 
@@ -98,5 +99,15 @@ kubectl get pods -o wide
 ```
 
 
+
+[Back to top](#table-of-content)
+
+### Port forward
+
+```powershell
+
+kubectl port-forward service/deployment1-service 5555:80
+
+```
 
 [Back to top](#table-of-content)
