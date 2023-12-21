@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: forcapod7
+  labels:
+    app: forcaapp1
 spec:
   containers:
   - image: nginx

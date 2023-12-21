@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      bent: forcaapp1
+  template:
+    metadata:
+      name: forcapod7
+      labels:
+        bent: forcaapp1
+    spec:
+      containers:
+      - image: nginx
+        name: forcapod7
+    
