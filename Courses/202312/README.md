@@ -223,6 +223,11 @@ kubectl cordon nodename
 kubectl uncordon nodename
 
 
+## Drain
+
+kubectl drain --ignore-daemonsets --force [node name]
+
+
 ```
 
 ### HELM
