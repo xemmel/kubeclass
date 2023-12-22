@@ -4,9 +4,12 @@
 - [Table of content](#table-of-content)
   - [Create pod](#create-pod)
   - [Apply pod template](#apply-pod-template)
+  - [Restart pods](#restart-pods)
   - [Log and debug functions](#log-and-debug-functions)
   - [Port forward](#port-forward)
   - [ConfigMap](#configmap)
+  - [Secrets](#secrets)
+  - [HELM](#helm)
 
 
 
@@ -69,6 +72,16 @@ kubectl apply -f .....
 ### Delete artifacts inside the template
 kubectl delete -f .....
 
+
+```
+
+[Back to top](#table-of-content)
+
+### Restart pods
+
+```powershell
+
+kubectl rollout restart deployment.apps/deploymentname
 
 ```
 
@@ -151,3 +164,52 @@ data:
 
 
 [Back to top](#table-of-content)
+
+
+### Secrets
+
+```powershell
+
+kubectl create secret generic demo2-secret --from-literal=thepassword=verysecret
+
+```
+
+```yaml
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: demo01-secret
+type: Opaque
+data:
+  thesecret: [base64stuff]
+
+```
+
+[Back to top](#table-of-content)
+
+
+### HELM
+
+- Chart.yaml                
+- values.yaml               
+- templates/               
+  - _helpers.tpl            
+  - deployment.yaml         
+  - service.yaml            
+  - ingress.yaml
+  - ....
+
+
+```yaml 
+
+helm install name .\...\HelmChart\ --namespace $namespace --create-namespace
+
+### If in correct namespace
+
+helm update name .\...\HelmChart\
+
+```
+
+
+
