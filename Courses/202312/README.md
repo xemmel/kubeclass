@@ -10,6 +10,7 @@
   - [ConfigMap](#configmap)
   - [Secrets](#secrets)
   - [Maintanence](#maintanence)
+  - [Ingress](#ingress)
   - [HELM](#helm)
 
 
@@ -229,6 +230,15 @@ kubectl drain --ignore-daemonsets --force [node name]
 
 
 ```
+
+### Ingress
+
+```powershell
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+```
+
 
 ### HELM
 

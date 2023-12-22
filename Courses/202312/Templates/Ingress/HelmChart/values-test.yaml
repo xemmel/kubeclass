@@ -1,0 +1,9 @@
+app:
+  title: 'the test app'
+  name: 'ingresshelm'
+
+deployment:
+  replicas: 3
+
+ingress:
+  path: test

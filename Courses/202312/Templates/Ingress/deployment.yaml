@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingressdeployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: ingress
+  template:
+    metadata:
+      name: ingress-deployment
+      labels:
+        app: ingress
+    spec:
+      containers:
+      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        name: andersand
+        env:
+          - name: TITLE
+            value: 'app1'

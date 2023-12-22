@@ -18,7 +18,7 @@ kubectl wait --namespace ingress-nginx `
 
 ```powershell
 
-IP_ADDRESS=$(docker container inspect ingress-control-plane \
+IP_ADDRESS=$(docker container inspect ingresscluster-control-plane \
   --format '{{ .NetworkSettings.Networks.kind.IPAddress }}')
 
 echo $IP_ADDRESS

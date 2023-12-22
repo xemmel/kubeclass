@@ -1,0 +1,9 @@
+app:
+  title: 'the prod app'
+  name: 'ingresshelm'
+
+deployment:
+  replicas: 5
+
+ingress:
+  path: prod
