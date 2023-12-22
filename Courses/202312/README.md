@@ -6,6 +6,7 @@
   - [Apply pod template](#apply-pod-template)
   - [Log and debug functions](#log-and-debug-functions)
   - [Port forward](#port-forward)
+  - [ConfigMap](#configmap)
 
 
 
@@ -109,5 +110,44 @@ kubectl get pods -o wide
 kubectl port-forward service/deployment1-service 5555:80
 
 ```
+
+[Back to top](#table-of-content)
+
+### ConfigMap
+
+
+```yaml
+
+ - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        name: andersand
+        env:
+          - name: TITLE
+            value: 'Hardcoded Title'
+
+```
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfigmap
+data:
+  webtitle: 'Web app1111'
+
+```
+
+```yaml
+
+ - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        name: andersand
+        env:
+          - name: TITLE
+            valueFrom:
+              configMapKeyRef:
+                name: myconfigmap
+                key: webtitle
+
+```
+
 
 [Back to top](#table-of-content)

@@ -14,8 +14,14 @@ spec:
         bent: forcaapp1
     spec:
       containers:
-      - image: nginx
+      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
         name: andersand
+        env:
+          - name: TITLE
+            valueFrom:
+              configMapKeyRef:
+                name: myconfigmap
+                key: webtitle
 ---
 apiVersion: v1
 kind: Service
