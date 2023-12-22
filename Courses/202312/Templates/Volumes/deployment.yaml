@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: volumedemo1-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: volumedemo1
+  template:
+    metadata:
+      labels:
+        app: volumedemo1
+    spec:
+      containers:
+      - name: nginxcontainer
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: mydir
+      volumes:
+      - name: mydir
+        persistentVolumeClaim:
+          claimName: volumedemo1-pvc
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: volumedemo1-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: volumedemo1-service
+spec:
+  type: ClusterIP
+  selector:
+    app: volumedemo1
+  ports:
+    - port: 80
+  
