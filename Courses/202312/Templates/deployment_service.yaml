@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: deployment1
 spec:
-  replicas: 4
+  replicas: 10
   selector:
     matchLabels:
       bent: forcaapp1

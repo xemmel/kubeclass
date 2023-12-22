@@ -1,5 +1,5 @@
 kind create cluster `
-    --name thecluster `
-    --image kindest/node:v1.26.0 `
+    --name themulticluster `
+    --image kindest/node:v1.27.3 `
     --config .\Kind\Cluster\cluster.yaml
 ;

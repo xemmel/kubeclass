@@ -9,6 +9,7 @@
   - [Port forward](#port-forward)
   - [ConfigMap](#configmap)
   - [Secrets](#secrets)
+  - [Maintanence](#maintanence)
   - [HELM](#helm)
 
 
@@ -186,8 +187,43 @@ data:
 
 ```
 
+```yaml
+
+          valueFrom:
+            secretKeyRef:
+              name: demo2-secret
+              key: thepassword
+
+```
+
 [Back to top](#table-of-content)
 
+
+### Maintanence
+
+```powershell
+
+kind delete cluster
+
+.\Kind\Cluster\create_cluster.ps1
+
+```
+
+```yaml
+
+## View nodes
+kubectl get nodes
+
+## Not Scheduled (Tainted)
+
+kubectl cordon nodename
+
+
+## Scheduled (Untainted)
+kubectl uncordon nodename
+
+
+```
 
 ### HELM
 
