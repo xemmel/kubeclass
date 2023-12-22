@@ -132,10 +132,10 @@ kubectl port-forward service/deployment1-service 5555:80
 ```yaml
 
  - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
-        name: andersand
-        env:
-          - name: TITLE
-            value: 'Hardcoded Title'
+   name: andersand
+   env:
+     - name: TITLE
+       value: 'Hardcoded Title'
 
 ```
 
