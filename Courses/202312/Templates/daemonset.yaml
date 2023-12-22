@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: helloworld-daemon
+spec:
+  selector:
+    matchLabels:
+      name: abc
+  template:
+    metadata:
+      labels:
+        name: abc
+    spec:
+      containers:
+      - name: hello
+        image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: daemon-service
+spec:
+  type: ClusterIP
+  selector:
+    name: abc
+  ports:
+  - port: 80
+    targetPort: 80         
