@@ -9,6 +9,8 @@
   - [Install debug pod](#install-debug-pod)
   - [Exec into debug pod](#exec-into-debug-pod)
   - [Exec into pod](#exec-into-pod)
+  - [Delete pod](#delete-pod)
+  - [Apply manifest](#apply-manifest)
 
 
 ## Clone repo
@@ -84,3 +86,16 @@ kubectl exec -it pod -n debug -- bash
 ### Exec into pod
 
 kubectl exec -it podname -- bash
+
+
+### Delete pod
+
+kubectl delete pod podname
+
+### Apply manifest
+
+```powershell
+
+kubectl apply -f ./..../file.yaml
+
+```
