@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: forca2024-deployment
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: forca2024
