@@ -1,4 +1,13 @@
+## Clone repo
+
+```powershell
+
+git clone https://github.com/xemmel/kubeclass.git
+```
+
+
 ## Create namespace
+
 
 ```powershell
 $namespace = "yournamespace";
