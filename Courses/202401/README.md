@@ -17,6 +17,7 @@
 - [Scheduled (Untainted)](#scheduled-untainted)
 - [Drain](#drain)
   - [Restart Deployment](#restart-deployment)
+  - [Port forward](#port-forward)
 
 
 ## Clone repo
@@ -135,5 +136,16 @@ kubectl drain --ignore-daemonsets --force themulticluster-worker2
 ```powershell
 
 kubectl rollout restart [deploymentname]
+
+```
+
+
+### Port forward
+
+```powershell
+
+kubectl port-forward service/servicename 4343:80
+
+kubectl port-forward service/forca2024-service 4343:80
 
 ```
