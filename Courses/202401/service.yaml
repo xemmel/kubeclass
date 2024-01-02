@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: forca2024-service
+spec:
+  selector: 
+    app: forca2024
+  ports:
+    - port: 80
+      targetPort: 80

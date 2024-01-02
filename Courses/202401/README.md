@@ -11,6 +11,7 @@
   - [Exec into pod](#exec-into-pod)
   - [Delete pod](#delete-pod)
   - [Apply manifest](#apply-manifest)
+  - [Describe service](#describe-service)
 
 
 ## Clone repo
@@ -97,5 +98,13 @@ kubectl delete pod podname
 ```powershell
 
 kubectl apply -f ./..../file.yaml
+
+```
+
+### Describe service
+
+```powershell
+
+kubectl describe service/servicename 
 
 ```
