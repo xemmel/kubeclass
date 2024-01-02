@@ -12,6 +12,11 @@
   - [Delete pod](#delete-pod)
   - [Apply manifest](#apply-manifest)
   - [Describe service](#describe-service)
+- [Maintanance](#maintanance)
+- [Not Scheduled (Tainted)](#not-scheduled-tainted)
+- [Scheduled (Untainted)](#scheduled-untainted)
+- [Drain](#drain)
+  - [Restart Deployment](#restart-deployment)
 
 
 ## Clone repo
@@ -106,5 +111,29 @@ kubectl apply -f ./..../file.yaml
 ```powershell
 
 kubectl describe service/servicename 
+
+```
+
+## Maintanance
+
+## Not Scheduled (Tainted)
+
+kubectl cordon themulticluster-worker2
+
+
+## Scheduled (Untainted)
+kubectl uncordon themulticluster-worker2
+
+
+## Drain
+
+kubectl drain --ignore-daemonsets --force themulticluster-worker2
+
+
+### Restart Deployment
+
+```powershell
+
+kubectl rollout restart [deploymentname]
 
 ```
