@@ -50,3 +50,8 @@ kubectl get pods
 
 kubectl get pods --watch
 
+
+
+### Exec into pod
+
+kubectl exec -it podname -- bash
