@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ailanguage-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ailanguage
+  template:
+    metadata:
+      labels:
+        app: ailanguage
+    spec:
+      containers:
+        - image: mcr.microsoft.com/azure-cognitive-services/textanalytics/language:latest
+          name: ailanguage-container
+          env:
+            - name: Eula
+              value: accept
+            - name: Billing
+              value: https://intit.cognitiveservices.azure.com/
+            - name: ApiKey
+              valueFrom:
+                secretKeyRef:
+                    name: ailanguage-secret
+                    key: apikey
+       
