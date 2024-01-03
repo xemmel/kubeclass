@@ -18,6 +18,7 @@
 - [Drain](#drain)
   - [Restart Deployment](#restart-deployment)
   - [Port forward](#port-forward)
+  - [Create secret from kubectl](#create-secret-from-kubectl)
 
 
 ## Clone repo
@@ -147,5 +148,13 @@ kubectl rollout restart [deploymentname]
 kubectl port-forward service/servicename 4343:80
 
 kubectl port-forward service/forca2024-service 4343:80
+
+```
+
+### Create secret from kubectl
+
+```powershell
+
+kubectl create secret generic forca2024-secret --from-literal=webtitle="a very secret powershell title"
 
 ```

@@ -18,7 +18,7 @@ spec:
         env:
           - name: TITLE
             valueFrom:
-              configMapKeyRef:
-                name: forca2024-configmap
+              secretKeyRef:
+                name: forca2024-secret
                 key: webtitle
 
