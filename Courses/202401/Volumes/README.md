@@ -5,3 +5,16 @@
 - create deployment and service image: nginx
 
 use port-forward and check webpage in browser
+
+
+
+## Manual upload
+
+```powershell
+
+docker pull nginx
+
+kind load docker-image nginx:latest --name volumecluster
+
+
+```

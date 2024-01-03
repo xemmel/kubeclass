@@ -158,3 +158,4 @@ kubectl port-forward service/forca2024-service 4343:80
 kubectl create secret generic forca2024-secret --from-literal=webtitle="a very secret powershell title"
 
 ```
+
