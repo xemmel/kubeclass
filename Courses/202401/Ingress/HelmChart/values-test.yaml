@@ -1,0 +1,6 @@
+app:
+  name: myhelmdemo
+  webtitle: 'helm-test'
+
+deployment:
+   replicaCount: 2

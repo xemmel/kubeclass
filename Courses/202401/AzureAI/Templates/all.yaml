@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aidemo
+  template:
+    metadata:
+      labels:
+        app: aidemo
+    spec:
+      containers:
+      - image: mcr.microsoft.com/azure-cognitive-services/textanalytics/language:latest
+        name: aidemo
+        env:
+          - name: Eula
+            value: accept
+          - name: Billing
+            value: https://[....].cognitiveservices.azure.com/
+          - name: ApiKey
+            valueFrom:
+              secretKeyRef:
+                name: aidemo-secret
+                key: apikey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aidemo-service
+spec:
+  type: ClusterIP
+  selector:
+    app: aidemo
+  ports:
+  - port: 80
+    targetPort: 80
+

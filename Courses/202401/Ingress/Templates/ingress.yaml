@@ -13,7 +13,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: ingress1-service
+            name: {name}-service
             port:
               number: 80
       - path: /app2
