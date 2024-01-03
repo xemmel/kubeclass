@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqlserver-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sqlserver
+  template:
+    metadata:
+      labels:
+        app: sqlserver
+    spec:
+      containers:
+      - name: sqlserver-container
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          - name: ACCEPT_EULA
+            value: 'Y'
+          - name: MSSQL_SA_PASSWORD
+            value: 'forca12345678!'
+          - name: MSSQL_PID
+            value: 'Developer'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqlserver-service
+spec:
+  selector: 
+    app: sqlserver
+  ports:
+    - port: 1433
+      targetPort: 1433
+
