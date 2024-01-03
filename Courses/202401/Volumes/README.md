@@ -2,7 +2,7 @@
 
 - Create namespace volumedemo
 - Set kubectl to namespace
-- create deployment and service image: nginx
+- create deployment and service image: nginx:latest
 
 use port-forward and check webpage in browser
 
@@ -10,7 +10,7 @@ use port-forward and check webpage in browser
 
 ## Manual upload
 
-```powershell
+```powershell   
 
 docker pull nginx
 
