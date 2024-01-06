@@ -29,7 +29,8 @@ spec:
               mountPath: /html
           command: ['sh', '-c']
           args: 
-            - echo '<h1>hello</h1>' > /html/index.html;
+            - |
+              echo '<h1>HOST: '$HOSTNAME'</h1>' > /html/index.html;
               sleep 5;
       restartPolicy: Always
 ---
