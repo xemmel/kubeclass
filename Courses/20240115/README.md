@@ -92,3 +92,38 @@ kubectl port-forward service/helloworldapp2-service 5000:80
 kubectl rollout restart deployment.apps/helloworldapp2-deployment
 
 ```
+
+
+
+### Maintanance
+
+
+#### Cordon (Unschedule)
+
+```powershell
+
+kubectl cordon multicluster-worker2
+
+
+```
+
+
+#### Uncordon (reschedule)
+
+```powershell
+
+kubectl uncordon multicluster-worker2
+
+
+```
+
+
+#### Drain (Remove existing pods from node)
+
+```powershell
+
+kubectl drain --ignore-daemonsets --force multicluster-worker2
+
+```
+
+
