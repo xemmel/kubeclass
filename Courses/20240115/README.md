@@ -25,3 +25,26 @@ kubectl exec -it myfirstcontainer -- bash
 
 
 ```
+
+
+### Deploy manifest (.yaml file)
+
+
+```powershell
+
+kubectl apply -f .\Templates\singlepod.yaml
+
+```
+
+
+### Git commands
+
+```powershell
+
+git clone https://github.com/xemmel/kubeclass.git
+
+
+git pull
+
+
+```
