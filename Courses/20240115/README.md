@@ -73,3 +73,12 @@ kubectl exec -it *podname* -- bash
 curl *servicename*
 
 ```
+
+
+### Port forward (Expose Service)
+
+```powershell
+
+kubectl port-forward service/helloworldapp2-service 5000:80
+
+```
