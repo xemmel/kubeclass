@@ -57,3 +57,19 @@ git pull
 kubectl run myfirstcontainer2 --image mcr.microsoft.com/azuredocs/aks-helloworld:v1 --dry-run=client -o yaml | Set-Clipboard
 
 ```
+
+
+### Inject command into pod
+
+```powershell
+
+### Change context into pod
+
+kubectl exec -it *podname* -- bash
+
+
+### http get service
+
+curl *servicename*
+
+```

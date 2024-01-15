@@ -15,3 +15,6 @@ spec:
       containers:
         - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
           name: helloworldx-container
+          env:
+            - name: TITLE
+              value: 'Application 3'
