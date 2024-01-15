@@ -48,3 +48,12 @@ git pull
 
 
 ```
+
+
+### get manifest into clipboard
+
+```powershell
+
+kubectl run myfirstcontainer2 --image mcr.microsoft.com/azuredocs/aks-helloworld:v1 --dry-run=client -o yaml | Set-Clipboard
+
+```

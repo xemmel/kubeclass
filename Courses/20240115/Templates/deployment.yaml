@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helloworldx-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: helloworldx
+  template:
+    metadata:
+      labels:
+        app: helloworldx
+    spec:
+      containers:
+        - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          name: helloworldx-container
