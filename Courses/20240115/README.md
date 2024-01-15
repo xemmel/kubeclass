@@ -82,3 +82,13 @@ curl *servicename*
 kubectl port-forward service/helloworldapp2-service 5000:80
 
 ```
+
+
+### Restart all pods in a deployment
+
+
+```powershell
+
+kubectl rollout restart deployment.apps/helloworldapp2-deployment
+
+```

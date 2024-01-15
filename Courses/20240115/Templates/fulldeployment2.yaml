@@ -18,8 +18,8 @@ spec:
           env:
             - name: TITLE
               valueFrom:
-                configMapKeyRef:
-                  name: application-configmap
+                secretKeyRef:
+                  name: application-secret
                   key: thetitle
 ---
 apiVersion: v1

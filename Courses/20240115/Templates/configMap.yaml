@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: application-configmap
 data:
-  thetitle: 'Another Title'
+  thetitle: 'Another Titel'
