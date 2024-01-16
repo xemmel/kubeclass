@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sleeper-cronjob
+spec:
+  schedule: '*/2 * * * *'
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - image: sleeper:0.7
+              name: sleep-container
+              env:
+                - name: x_delay
+                  value: '10000'
+                - name: x_url
+                  value: 'https://en34wxdioc8w7.x.pipedream.net/'
+          restartPolicy: Never
+

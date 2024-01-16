@@ -14,3 +14,11 @@ docker logs 48b8ead3cdd20 -f
 
 
 ```
+
+### Load image into kind
+
+```powershell
+
+kind load docker-image sleeper:0.1 --name multicluster
+
+```
