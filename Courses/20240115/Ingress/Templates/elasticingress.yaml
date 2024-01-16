@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo-elastic-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /elastic(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: elastic-service
+                port:
+                  number: 9200
