@@ -1,0 +1,7 @@
+app:
+  name: thefinalapplication
+  title: 'The Final 1'
+
+image:
+  image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+  name: thefinalimage

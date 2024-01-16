@@ -1,0 +1,10 @@
+app:
+  name: thefinalapplication
+  title: 'The Final test'
+
+image:
+  image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+  name: thefinalimage
+
+ingress:
+  path: /test
