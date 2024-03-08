@@ -17,6 +17,25 @@ restart-computer
 choco install kind -y
 
 ```
+
+ALT:
+
+```powershell
+
+### List all "path" folders
+
+($Env:Path).Split(';') | ForEach-Object { if (Test-Path $_) { $_ } }
+
+
+```
+
+```powershell
+
+curl.exe -Lo kind-windows-amd64.exe https://kind.sigs.k8s.io/dl/v0.20.0/kind-windows-amd64
+
+Move-Item .\kind-windows-amd64.exe c:\some-dir-in-your-PATH\kind.exe
+
+```
 #### Restart computer
 
 

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ubuntu3
+spec:
+  containers:
+  - image: ubuntu
+    name: ubuntu3
+    command: ["/bin/sh", "-c"]
+    args:
+      - apt-get update && apt-get install -y curl; sleep 3600
+  restartPolicy: Always

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello2
+spec:
+  containers:
+  - env:
+    - name: TITLE
+      value: yo
+    image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+    name: hello2
+  restartPolicy: Always
