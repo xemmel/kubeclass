@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application-configmap
+data:
+  thetitle: 'Another Titel'

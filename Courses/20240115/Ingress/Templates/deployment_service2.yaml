@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingressdeployment2
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: ingress2
+  template:
+    metadata:
+      name: ingress-deployment2
+      labels:
+        app: ingress2
+    spec:
+      containers:
+      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        name: andersand2
+        env:
+          - name: TITLE
+            value: 'app2'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress2-service
+spec:
+  selector: 
+    app: ingress2
+  ports:
+    - port: 80
+      targetPort: 80

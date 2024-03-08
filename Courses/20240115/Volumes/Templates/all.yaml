@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forcavolume-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: forcavolume
+  template:
+    metadata:
+      labels:
+        app: forcavolume
+    spec:
+      containers:
+      - name: forcavolume-container
+        image: nginx
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: mydir
+      volumes:
+      - name: mydir
+        persistentVolumeClaim:
+          claimName: forcavolume-pvc
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: forcavolume-service
+spec:
+  selector: 
+    app: forcavolume
+  ports:
+    - port: 80
+      targetPort: 80
+
