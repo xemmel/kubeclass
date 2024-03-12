@@ -10,3 +10,10 @@ kubectl run hello2 --image mcr.microsoft.com/azuredocs/aks-helloworld:v1 --env T
 kubectl run ubuntu2 --image ubuntu --dry-run=client -o yaml -- /bin/sleep 3600 | Set-Clipboard
 
 ```
+
+
+```
+
+kubectl expose pods/hello2 --port 80 --dry-run=client -o yaml
+
+```

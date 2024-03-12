@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongotest-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongotest-mongo
+  template:
+    metadata:
+      labels:
+        app: mongotest-mongo
+    spec:
+      containers:
+        - image: mongo
+          name: mongo-container
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongo-volume
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: userName
+                  name: mongotest-cm
+
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: password
+                  name: mongotest-cm
+      volumes:
+        - name: mongo-volume
+          persistentVolumeClaim: 
+            claimName: mongotest-pvc
+
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: mongotest-service
+spec:
+  selector:
+     app: mongotest-mongo
+  ports:
+    - port: 27017
+      targetPort: 27017

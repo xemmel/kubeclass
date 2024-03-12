@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fulldeploy
+spec:
+  revisionHistoryLimit: 2
+  replicas: 2
+  minReadySeconds: 5
+  selector:
+    matchLabels:
+      app: theapp
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 40%
+      maxUnavailable: 30%
+  template:
+    metadata:
+      labels:
+        app: theapp
+    spec:
+      containers:
+        - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          name: theimage
+          env:
+            - name: TITLE
+              value: 'yesyes'
+          resources:
+            limits:
+              cpu: "1"  
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: theservice
+spec:
+  type: ClusterIP
+  selector:
+    app: theapp
+  ports:
+    - port: 80
+      protocol: TCP

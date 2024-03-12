@@ -8,5 +8,5 @@ spec:
     name: ubuntu3
     command: ["/bin/sh", "-c"]
     args:
-      - apt-get update && apt-get install -y curl; sleep 3600
+      - apt-get update && apt-get install -y curl && apt-get install -y vim; sleep 3600
   restartPolicy: Always

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap 
+metadata:
+  name: mongotest-cm
+data:
+  userName: themongouser
+  password: thepassword1234!
+

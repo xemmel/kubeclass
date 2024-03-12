@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hello-dep
+  name: hello-dep
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: helloapp
+  template:
+    metadata:
+      labels:
+        app: helloapp
+    spec:
+      containers:
+      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        name: aks-helloworld
+        resources:
+          limits:
+            cpu: "1"  
+            memory2: "512Mi"

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongoexpresstest-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongoexpresstest-mongo
+  template:
+    metadata:
+      labels:
+        app: mongoexpresstest-mongo
+    spec:
+      containers:
+        - image: mongo-express
+          name: mongoexpress-container
+          env:
+            - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+              valueFrom:
+                configMapKeyRef:
+                  key: userName
+                  name: mongotest-cm
+
+            - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: password
+                  name: mongotest-cm
+
+            - name: ME_CONFIG_MONGODB_SERVER
+              value: mongotest-service
+                          
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: mongoexpresstest-service
+spec:
+  selector:
+     app: mongoexpresstest-mongo
+  ports:
+    - port: 8081
+      targetPort: 8081

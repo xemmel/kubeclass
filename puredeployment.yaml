@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thedeployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thethe
+  template:
+    metadata:
+      labels:
+        app: thethe
+    spec:
+      containers:
+        - name: thecon
+          image: ubuntu
+          command: ["/bin/sh", "-c"]
+          args:
+            - apt-get update && apt-get install -y curl && apt-get install -y vim; sleep 3600
