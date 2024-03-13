@@ -17,3 +17,11 @@ kubectl exec -it ubuntu -- bash
 kubectl get pods -o wide
 
 ```
+
+### Describe a service 
+
+```powershell
+
+kubectl describe service hello-service
+
+```
