@@ -70,3 +70,14 @@ kubectl port-forward service/mongoexpress-service 5555:8081
 - replicaset (deployment) (Scale)
 - daemonset ()
 - statefulset (data driven containers)
+
+
+### 
+
+### Rollout restart
+
+```powershell
+
+kubectl rollout restart deployment.apps/deploymentname
+
+```

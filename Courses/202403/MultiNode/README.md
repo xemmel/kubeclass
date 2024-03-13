@@ -24,6 +24,14 @@ kubectl cordon node_name
 
 ```
 
+### Uncordon (Allow schedule again)
+
+```powershell
+
+kubectl uncordon node_name
+
+```
+
 ### Drain
 
 ```powershell
