@@ -54,4 +54,10 @@ kubectl logs -l app=mongopod -f
 
 ```
 
+### Port forward to Mongo-express
+
+```powershell
+
+kubectl port-forward service/mongoexpress-service 5555:8081
+
 ```
