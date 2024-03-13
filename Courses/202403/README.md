@@ -41,3 +41,17 @@ kubectl create namespace $namespace
 kubectl config set-context --current --namespace $namespace
 
 ```
+
+### Log pod
+
+```powershell
+
+kubectl logs mongo-deployment-57f698b87d-rngvl -f
+
+## By Label
+
+kubectl logs -l app=mongopod -f
+
+```
+
+```
