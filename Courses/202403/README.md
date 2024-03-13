@@ -61,3 +61,12 @@ kubectl logs -l app=mongopod -f
 kubectl port-forward service/mongoexpress-service 5555:8081
 
 ```
+
+
+
+### Pod watcher types
+
+
+- replicaset (deployment) (Scale)
+- daemonset ()
+- statefulset (data driven containers)
