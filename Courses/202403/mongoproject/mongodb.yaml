@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: mongopod
+  template:
+    metadata:
+      labels:
+        app: mongopod
+    spec:
+      containers:
+      - image: mongo
+        name: mongocontainer
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            value: superuseruser
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            value: thepassword
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  type: ClusterIP
+  selector:
+    app: mongopod
+  ports:
+    - port: 27017
+      targetPort: 27017

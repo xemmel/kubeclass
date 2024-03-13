@@ -25,3 +25,19 @@ kubectl get pods -o wide
 kubectl describe service hello-service
 
 ```
+
+
+### Create/Set namespace
+
+```powershell
+
+$namespace = "mongo"
+
+### Create namespace
+kubectl create namespace $namespace
+
+
+### Change namespace context in kubectl
+kubectl config set-context --current --namespace $namespace
+
+```
