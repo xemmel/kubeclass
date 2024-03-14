@@ -9,10 +9,12 @@ kind create cluster --name ingress --config .\ingress.yaml
 ```
 
 
-### Ingress
+### Ingress Controller
 
 ```powershell
 
-e
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+curl localhost  -> nginx 404
 
 ```
