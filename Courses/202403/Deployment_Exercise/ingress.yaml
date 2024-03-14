@@ -35,4 +35,4 @@ spec:
               service:
                 name: elastic-service
                 port:
-                  number: 80
+                  number: 9200
