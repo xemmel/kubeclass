@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastic-deployment
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: elasticpod
+  template:
+    metadata:
+      labels:
+        app: elasticpod
+    spec:
+      containers:
+      - image: elasticsearch:7.17.18
+        name: elasticcontainer
+        env:
+          - name: discovery.type
+            value: single-node
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic-service
+spec:
+  type: ClusterIP
+  selector:
+    app: elasticpod
+  ports:
+    - port: 9200
+      targetPort: 9200   
+    
