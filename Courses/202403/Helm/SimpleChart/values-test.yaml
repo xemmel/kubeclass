@@ -1,0 +1,4 @@
+app:
+  name: hellotest
+ingress:
+   path: /hellotest

@@ -17,6 +17,6 @@ spec:
         name: {{ .Values.app.name }}container
         env:
           - name: TITLE
-            value: SuperUsers2024
+            value: {{ .Values.app.title }}
     
     
