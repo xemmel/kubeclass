@@ -17,9 +17,23 @@ spec:
         name: mongocontainer
         env:
           - name: MONGO_INITDB_ROOT_USERNAME
-            value: superuseruser
+            valueFrom:
+              configMapKeyRef:
+                name: mongo-config
+                key: mongoUserName
           - name: MONGO_INITDB_ROOT_PASSWORD
-            value: thepassword
+            valueFrom:
+              configMapKeyRef:
+                name: mongo-config
+                key: mongoPassword
+        volumeMounts:
+          - mountPath: /data/db
+            name: mongodb
+      volumes:
+        - name: mongodb
+          persistentVolumeClaim:
+            claimName: mongo-pvc
+
 ---
 apiVersion: v1
 kind: Service

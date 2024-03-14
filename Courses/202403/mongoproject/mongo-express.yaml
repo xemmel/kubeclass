@@ -17,9 +17,15 @@ spec:
         name: mongoexpresscontainer
         env:
           - name: ME_CONFIG_MONGODB_ADMINUSERNAME
-            value: superuseruser
+            valueFrom:
+              configMapKeyRef:
+                name: mongo-config
+                key: mongoUserName
           - name: ME_CONFIG_MONGODB_ADMINPASSWORD
-            value: thepassword
+            valueFrom:
+              configMapKeyRef:
+                name: mongo-config
+                key: mongoPassword
           - name: ME_CONFIG_MONGODB_SERVER
             value: mongo-service
 ---
