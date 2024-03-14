@@ -16,11 +16,16 @@ spec:
       - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
         name: hellocontainer
         env:
-          - name: TITLE
+          - name: TITLE2
             valueFrom:
               configMapKeyRef:
                   name: test-config
                   key: title
+          - name: TITLE
+            valueFrom:
+              secretKeyRef:
+                  name: secret-demo
+                  key: thesecrettitle
 ---
 apiVersion: v1
 kind: Service
