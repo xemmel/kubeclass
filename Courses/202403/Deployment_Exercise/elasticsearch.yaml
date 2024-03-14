@@ -29,6 +29,6 @@ spec:
   selector:
     app: elasticpod
   ports:
-    - port: 9200
+    - port: 80
       targetPort: 9200   
     
