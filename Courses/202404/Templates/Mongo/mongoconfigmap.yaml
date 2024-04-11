@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-cm
+data:
+  username: 'theuser'
+  password: '343fhfjfd455533'

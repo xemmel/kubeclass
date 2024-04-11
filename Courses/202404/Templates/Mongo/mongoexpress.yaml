@@ -17,9 +17,15 @@ spec:
         name: mongoexpresspod
         env:
           - name: ME_CONFIG_MONGODB_ADMINUSERNAME
-            value: 'theuser'
+            valueFrom:
+              configMapKeyRef:
+                name: mongo-cm 
+                key: username
           - name:  ME_CONFIG_MONGODB_ADMINPASSWORD
-            value: 'thepassword'
+            valueFrom:
+              configMapKeyRef:
+                name: mongo-cm 
+                key: password
           - name:  ME_CONFIG_MONGODB_SERVER
             value: 'mongodb-service'
 ---
