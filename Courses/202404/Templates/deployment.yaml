@@ -17,4 +17,7 @@ spec:
         name: secondpod4
         env:
           - name: TITLE
-            value: 'Welcome to Kuber intro'
+            valueFrom:
+              configMapKeyRef:
+                name: demo01-cm
+                key: title
