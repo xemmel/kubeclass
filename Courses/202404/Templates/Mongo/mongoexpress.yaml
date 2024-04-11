@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: mongoexpress-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongoexpress
+  template:
+    metadata:
+      labels:
+        app: mongoexpress
+    spec:
+      containers:
+      - image: mongo-express
+        name: mongoexpresspod
+        env:
+          - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+            value: 'theuser'
+          - name:  ME_CONFIG_MONGODB_ADMINPASSWORD
+            value: 'thepassword'
+          - name:  ME_CONFIG_MONGODB_SERVER
+            value: 'mongodb-service'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongoexpress-service
+spec:
+  selector:
+    app: mongoexpress
+  ports:
+    - port: 80
+      targetPort: 8081

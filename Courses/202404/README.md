@@ -7,3 +7,42 @@ kubectl port-forward service/simple-service 4000:80
 
 ```
 
+### Exec (Bash into pod)
+
+```powershell
+
+kubectl exec -it secondpod4 -- bash
+
+```
+
+### Log (Log Application log in Pod/Container)
+
+```powershell
+
+kubectl logs -l app=app1 -f
+
+```
+
+### Create Namespace
+
+```powershell
+
+kubectl create namespace mongo
+
+```
+
+### View Context
+
+```powershell
+
+kubectl config get-contexts
+
+```
+
+### Change default namespace 
+
+```powershell
+
+kubectl config set-context --current --namespace mongo
+
+```

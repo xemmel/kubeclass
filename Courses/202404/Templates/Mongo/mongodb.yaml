@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: mongodb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - image: mongo
+        name: mongopod
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            value: 'theuser'
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            value: 'thepassword'
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - port: 27017
+      targetPort: 27017
