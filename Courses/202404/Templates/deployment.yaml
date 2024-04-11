@@ -15,3 +15,6 @@ spec:
       containers:
       - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
         name: secondpod4
+        env:
+          - name: TITLE
+            value: 'Welcome to Kuber intro'
