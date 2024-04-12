@@ -46,3 +46,29 @@ kubectl config get-contexts
 kubectl config set-context --current --namespace mongo
 
 ```
+
+
+### Disable Schedule (new pods)
+
+```powershell
+
+kubectl cordon multinodes-worker
+
+```
+
+
+### Drain pods from node
+
+```powershell
+
+kubectl drain --ignore-daemonsets --force multinodes-worker
+
+```
+
+### Enable Schedule
+
+```powershell
+
+kubectl uncordon multinodes-worker
+
+```
