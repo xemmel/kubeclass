@@ -72,3 +72,11 @@ kubectl drain --ignore-daemonsets --force multinodes-worker
 kubectl uncordon multinodes-worker
 
 ```
+
+### Restart all pods
+
+```powershell
+
+kubectl rollout restart deployment.apps/simple-deployment
+
+```
