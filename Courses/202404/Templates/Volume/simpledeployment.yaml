@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demovolume-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demovolume
+  template:
+    metadata:
+      labels:
+        app: demovolume
+    spec:
+      containers:
+      - name: demovolume-container
+        image: nginx
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: mydir
+      volumes:
+      - name: mydir
+        persistentVolumeClaim:
+          claimName: demovolume-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demovolume-service
+spec:
+  selector:
+    app: demovolume
+  ports:
+    - port: 80
+      targetPort: 80
