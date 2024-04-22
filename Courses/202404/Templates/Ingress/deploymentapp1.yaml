@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app1
+  template:
+    metadata:
+      labels:
+        app: app1
+    spec:
+      containers:
+      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        name: app1pod
+        env:
+          - name: TITLE
+            value: app1
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: app1-service
+spec:
+  selector:
+    app: app1
+  ports:
+    - port: 80
+      targetPort: 80
