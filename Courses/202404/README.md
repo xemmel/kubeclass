@@ -80,3 +80,17 @@ kubectl uncordon multinodes-worker
 kubectl rollout restart deployment.apps/simple-deployment
 
 ```
+
+
+### Helm
+
+Path: Templates
+
+```powershell
+
+helm install appxtest .\Helm\ --values .\Helm\values-prod.yaml --namespace appxprod --create-namespace
+
+
+curl localhost/testapplication1
+
+```

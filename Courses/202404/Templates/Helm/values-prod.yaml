@@ -1,0 +1,6 @@
+app:
+  name: prodapp
+  title: 'application prod 1'
+
+ingress:
+  path: /prodapplication1

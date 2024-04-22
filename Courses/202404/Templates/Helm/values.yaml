@@ -1,0 +1,6 @@
+app:
+  name: appli1
+  title: 'application 1'
+
+ingress:
+  path: /application1
