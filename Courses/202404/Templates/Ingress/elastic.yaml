@@ -47,4 +47,3 @@ spec:
             name: elastic-service
             port:
               number: 80
-     

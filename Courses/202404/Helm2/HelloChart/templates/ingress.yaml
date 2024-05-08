@@ -1,17 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: hellotest-ingress
+  name: {{ .Values.app.name }}-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - http:
       paths:
-      - path: /hello
+      - path: {{ .Values.ingress.apiRoute }}
         pathType: Prefix
         backend:
           service:
-            name: hellotest-service
+            name: {{ .Values.app.name }}-service
             port:
               number: 80

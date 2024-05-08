@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hellotest-deployment
+  name: {{ .Values.app.name }}-deployment
 spec:
   replicas: 4
   selector:
     matchLabels:
-      app: hellotest
+      app: {{ .Values.app.name }}
   template:
     metadata:
       labels:
-        app: hellotest
+        app: {{ .Values.app.name }}
     spec:
       containers:
       - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
-        name: hellotestpod
+        name: {{ .Values.app.name }}pod
         env:
           - name: TITLE
             valueFrom:
               configMapKeyRef:
-                name: hellotest-cm
+                name: {{ .Values.app.name }}-cm
                 key: title

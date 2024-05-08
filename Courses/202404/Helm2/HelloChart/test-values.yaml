@@ -1,0 +1,7 @@
+app:
+  name: helmhellotest
+  title: 'I am test, deployed from Helm'
+
+
+ingress:
+  apiRoute: /helmtest

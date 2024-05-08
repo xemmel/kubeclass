@@ -1,0 +1,7 @@
+app:
+  name: helmhelloprod
+  title: 'I am prod, deployed from Helm'
+
+
+ingress:
+  apiRoute: /helmprod
