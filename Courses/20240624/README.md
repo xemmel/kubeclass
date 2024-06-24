@@ -22,7 +22,9 @@ winget install Microsoft.PowerShell
 #### Install git (will require restart of powershell)
 
 winget install Git.Git
+winget install Microsoft.VisualStudioCode
 
+### Restart powershell
 
 #### Git clone (in a parent folder you want to use)
 
@@ -46,6 +48,14 @@ kubectl config set-context --current --namespace test01
 ### Create first deployment (in folder right outside /Templates) (..\kubeclass\Courses\20240624)
 
 kubectl apply -f .\Templates\deployment.yaml
+
+
+### open VS code
+code .
+
+### Manipulate your template (deployment.yaml) change replica no.
+
+### Reapply your template
 
 ```
 
