@@ -29,3 +29,22 @@ winget install Git.Git
 git clone https://github.com/xemmel/kubeclass.git
 
 ```
+
+
+#### Create first deployment
+
+
+```powershell
+
+### Create namespace 
+kubectl create namespace test01
+
+### Switch kubectl to "test01" namespace
+
+kubectl config set-context --current --namespace test01
+
+### Create first deployment (in folder right outside /Templates) (..\kubeclass\Courses\20240624)
+
+kubectl apply -f .\Templates\deployment.yaml
+
+```
