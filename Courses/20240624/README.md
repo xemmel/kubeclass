@@ -72,3 +72,22 @@ kubectl get pods -o wide
 
 
 ```
+
+
+### Deploy a Service
+
+```powershell
+
+## ..\kubeclass\courses\2024....
+
+git pull
+
+kubectl apply -f .\Templates\service.yaml
+
+kubectl get all
+
+
+### examine the endpoints behind the service
+kubectl describe service/thetest-service
+
+```
