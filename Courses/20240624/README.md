@@ -91,3 +91,33 @@ kubectl get all
 kubectl describe service/thetest-service
 
 ```
+
+
+### Deploy two applications
+
+```powershell
+
+#### Clean up
+kubectl delete namespace test01
+
+kubectl create namespace test01
+
+kubectl apply -f .\Templates\application1.yaml
+
+kubectl apply -f .\Templates\application2.yaml
+
+## application 1 will NOT work, because it is dependent on a configMap!!
+
+kubectl apply -f .\Templates\configMap.yaml
+
+## Now it should work
+
+kubectl port-forward service/thetest-service 5000:80
+kubectl port-forward service/thetest2-service 5001:80
+
+### Open in browser
+localhost:5000
+
+
+
+```

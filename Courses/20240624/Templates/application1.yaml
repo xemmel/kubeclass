@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mortenstest-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: thetest
+  template:
+    metadata:
+      labels:
+        app: thetest
+    spec: ## POD
+      containers:
+      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        name: myhelloworldpodtest
+        env:
+          - name: TITLE
+            valueFrom:
+              configMapKeyRef:
+                name: application1-configmap
+                key: webtitle
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: thetest-service
+spec:
+  selector:
+    app: thetest
+  ports:
+    - port: 80
+      targetPort: 80
+      
