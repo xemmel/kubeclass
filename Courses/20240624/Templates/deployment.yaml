@@ -6,11 +6,11 @@ spec:
   replicas: 5
   selector:
     matchLabels:
-      app: mortentest
+      app: thetest
   template:
     metadata:
       labels:
-        app: mortentest
+        app: thetest
     spec: ## POD
       containers:
       - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1

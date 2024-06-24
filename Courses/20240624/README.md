@@ -48,3 +48,17 @@ kubectl config set-context --current --namespace test01
 kubectl apply -f .\Templates\deployment.yaml
 
 ```
+
+### View deployment/pods/replicaset
+
+
+```powershell
+
+kubectl get all
+
+### View pod IP-addresses and nodes
+
+kubectl get pods -o wide
+
+
+```
