@@ -271,3 +271,16 @@ browse: localhost/app1
 ```
 
 
+
+### Helm
+
+```powershell
+
+winget install Helm.Helm
+
+### Inside the folder: Courses\20240624\Helm
+
+helm install app3 .\ApplicationChart\ --set app.name=app3 --set app.title=theapp3 --namespace app3 --create-namespace
+
+```
+

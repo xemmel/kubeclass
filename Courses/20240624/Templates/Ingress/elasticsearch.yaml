@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastic-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elastic
+  template:
+    metadata:
+      labels:
+        app: elastic
+    spec: ## POD
+      containers:
+      - image: elasticsearch:7.17.7
+        name: elastic
+        env:
+          - name: discovery.type
+            value: single-node
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic-service
+spec:
+  selector:
+    app: elastic
+  ports:
+    - port: 9200
+      targetPort: 9200
+      
