@@ -121,3 +121,28 @@ localhost:5000
 
 
 ```
+
+
+## Create multi server cluster
+
+```powershell
+
+kind delete cluster --name kind
+
+## goto folder: Courses\20240624\kindTemplates
+
+kind create cluster --name multinodes --config .\multiworker.yaml
+
+### Verify multi nodes
+
+kubectl get nodes
+
+## goto folder: Courses\20240624
+
+kubectl apply -f .\Templates\deployment.yaml
+
+### verify pods on diff nodes
+
+kubectl get pods -o wide
+
+```
