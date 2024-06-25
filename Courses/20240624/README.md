@@ -242,6 +242,19 @@ curl 127.0.0.1:9200/myindex -X PUT
 ```
 
 
+## Ingress
 
+
+```powershell
+
+### create cluster
+
+kind create cluster --name ingresscluster --config .\ingress.yaml
+
+### install ingress controller
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+```
 
 
