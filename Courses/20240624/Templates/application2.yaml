@@ -13,11 +13,14 @@ spec:
         app: thetest2
     spec: ## POD
       containers:
-      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v2
         name: myhelloworldpodtest2
         env:
           - name: TITLE
-            value: application2
+            valueFrom:
+              secretKeyRef:
+                name: test-secret
+                key: ftppassword
 ---
 apiVersion: v1
 kind: Service

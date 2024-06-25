@@ -146,3 +146,102 @@ kubectl apply -f .\Templates\deployment.yaml
 kubectl get pods -o wide
 
 ```
+
+
+#### Maintanance
+
+```powershell
+
+### Stop scheduling
+
+kubectl cordon multinodes-worker2
+
+### start scheduling
+
+kubectl uncordon multinodes-worker2
+
+### drain
+
+kubectl drain --ignore-daemonsets multinodes-worker2 --force
+
+```
+
+
+### Create secret from kubectl
+
+```powershell
+
+kubectl create secret generic test-secret --from-literal=ftppassword=verysecretagain
+
+
+```
+
+### Show log for individual pod
+
+```powershell
+
+kubectl logs mortenstest2-deployment-858648f8c9-8sjvg -f
+
+```
+
+### shwo log for all pods by label
+
+```powershell
+
+kubectl logs -l app=thetest2 -f
+
+```
+
+
+### Volume
+
+```powershell
+
+### create cluster
+
+## goto folder: Courses\20240624\kindTemplates
+
+kind create cluster --name volumecluster --config .\volumecluster.yaml
+
+
+## goto folder: Courses\20240624
+
+### Deploy the pvc
+
+kubectl apply -f .\Templates\elasticpvc.yaml
+
+#### Check pv, pvc
+
+kubectl get pv,pvc
+
+### Deploy the elasticsearch (which uses pvc, therefore creates a pv (and a local folder))
+
+kubectl apply -f .\Templates\elasticsearch.yaml
+
+### Log the elasticsearch (late starter)
+
+kubectl logs -l app=elastic -f
+
+### Check the folder and pvc,pv again
+
+
+### Port forward
+
+kubectl port-forward service/elastic-service 9200:9200
+
+### ES commands
+
+#### List indices
+
+curl 127.0.0.1:9200/_cat/indices
+
+#### Create index
+
+curl 127.0.0.1:9200/myindex -X PUT
+
+```
+
+
+
+
+
