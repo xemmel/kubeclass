@@ -255,6 +255,19 @@ kind create cluster --name ingresscluster --config .\ingress.yaml
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 
+### Apply app1 and app2
+
+kubectl apply -f .\Templates\Ingress\application1.yaml
+
+kubectl apply -f .\Templates\Ingress\application2.yaml
+
+### Apply ingress
+
+kubectl apply -f .\Templates\Ingress\ingress.yaml
+
+browse: localhost/app1
+
+
 ```
 
 
