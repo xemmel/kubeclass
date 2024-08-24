@@ -85,8 +85,26 @@ kubectl create deployment helloworlddeployment \
      --replicas=3
 
 
+### Dry run to create yaml
+
+kubectl create deployment helloworlddeployment `
+     --image=$helloWorldImage `
+     --replicas=3 `
+     --dry-run=client `
+     --output yaml
+;
+
+kubectl create deployment helloworlddeployment \
+     --image=$HELLOWORLDIMAGE \
+     --replicas=3 \
+     --dry-run=client \
+     --output yaml
+
+
 
 ```
+
+###
 
 ### Delete namespace
 
