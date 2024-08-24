@@ -1,3 +1,18 @@
+### Install ingress cluster
+
+```powershell
+
+### Templates/students/ingress>
+
+kind create cluster `
+    --name ingresscluster `
+    --config .\cluster.yaml
+;
+
+```
+
+### Install INGRESS CONTROLLER
+
 ```powershell
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml

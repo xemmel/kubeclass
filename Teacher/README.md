@@ -98,7 +98,7 @@ kubectl create deployment helloworlddeployment \
      --image=$HELLOWORLDIMAGE \
      --replicas=3 \
      --dry-run=client \
-     --output yaml
+     --output yaml >> deploymentsample.yaml
 
 
 
