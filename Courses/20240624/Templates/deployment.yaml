@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mortenstest-deployment
+spec:
+  replicas: 7
+  selector:
+    matchLabels:
+      app: thetest
+  template:
+    metadata:
+      labels:
+        app: thetest
+    spec: ## POD
+      containers:
+      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        name: myhelloworldpodtest

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mortenstest2-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: thetest2
+  template:
+    metadata:
+      labels:
+        app: thetest2
+    spec: ## POD
+      containers:
+      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v2
+        name: myhelloworldpodtest2
+        env:
+          - name: TITLE
+            valueFrom:
+              secretKeyRef:
+                name: test-secret
+                key: ftppassword
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: thetest2-service
+spec:
+  selector:
+    app: thetest2
+  ports:
+    - port: 80
+      targetPort: 80
+      

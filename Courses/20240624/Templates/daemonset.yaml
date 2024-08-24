@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: daemon-test
+spec:
+  selector:
+    matchLabels:
+      app: daemontest
+  template:
+    metadata:
+      labels:
+        app: daemontest
+    spec: ## POD
+      containers:
+      - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        name: daemon

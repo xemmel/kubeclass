@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appazure-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: appazure
+  template:
+    metadata:
+      labels:
+        app: appazure
+    spec: ## POD
+      containers:
+      - image: iitaks.azurecr.io/morteninfo:2.0
+        name: appazure
+      imagePullSecrets:
+        - name: theazurereg
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: appazure-service
+spec:
+  selector:
+    app: appazure
+  ports:
+    - port: 80
+      targetPort: 80
+      
