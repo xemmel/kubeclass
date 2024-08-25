@@ -104,7 +104,17 @@ kubectl create deployment helloworlddeployment \
 
 ```
 
-###
+
+
+### Upload image to kind nodes
+
+```powershell
+
+kind load docker-image failingwebapi:0.3 --name ingress
+
+```
+
+
 
 ### Delete namespace
 
