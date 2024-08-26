@@ -53,3 +53,42 @@ kubectl run debugpod --image nginx --namespace debugpod
 kubectl exec -it debugpod --namespace debugpod -- bash
 
 ```
+
+
+### Config Map
+
+configMap.yaml
+
+```yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: theconfigmap
+data:
+  title: 'The ConfigMap new title'
+
+
+```
+
+
+kubectl apply --filename .\configMap.yaml
+
+##### Change the deployment:
+
+```powershell
+
+        image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+        env:
+          - name: TITLE
+            valueFrom:
+              configMapKeyRef:
+                name: theconfigmap
+                key: title
+
+```
+
+deploy again
+
+-> Verify new title
+
