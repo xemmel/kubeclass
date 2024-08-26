@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thethird-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: thethird
+  template:
+    metadata:
+      labels:
+        app: thethird
+    spec:
+      containers:
+      - name: mysecondpod-container
+        image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
