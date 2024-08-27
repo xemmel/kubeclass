@@ -92,3 +92,101 @@ deploy again
 
 -> Verify new title
 
+
+
+
+## Yaml rules
+
+```json
+{
+    "id" : "17"
+
+}
+
+```
+
+```yaml
+
+id: 17
+```
+
+```json
+{
+    "address" : {
+        "street" : "Vej"
+    }
+
+}
+
+```
+
+```yaml
+
+address:
+  street: Vej
+
+```
+
+```json
+{
+  "matchLabels": {
+    "app": "thethird",
+    "morten": "morten2"
+  }
+}
+```
+
+```yaml
+
+matchLabels:
+    app: thethird
+    morten: morten2
+
+```
+
+
+```json
+
+{
+  "people" : [ "Morten",  "Morten2" ]
+}
+
+```
+
+```yaml
+people:
+  - Morten
+  - Morten2
+
+```
+
+```json
+
+{
+  "people" : [
+    {
+        "name": "Morten",
+        "address" : "what"
+    },
+    {
+        "name": "Morten2",
+        "address" : "what2"
+    },
+    {
+        "address" : "what3"
+    }
+   ],
+   "pp" ....
+}
+
+```
+
+```yaml
+people:
+  - name: Morten
+    address: what
+  - name: Morten2
+    address: what2
+  - address: what3
+pp:
+```
