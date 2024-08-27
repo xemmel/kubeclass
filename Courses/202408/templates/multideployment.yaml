@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: day2-deployment
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: day2
+  template:
+    metadata:
+      labels:
+        app: day2
+    spec:
+      containers:
+      - name: day2-container
+        image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: day2-service
+spec:
+  selector:
+    app: day2
+  ports:
+    - port: 80
+      targetPort: 80
