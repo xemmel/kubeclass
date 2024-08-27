@@ -32,3 +32,19 @@ kubectl cordon multinodes-worker3
 kubectl drain --ignore-daemonsets --force multinodes-worker3
 
 ```
+
+### Node ready for pods again
+
+```powershell
+
+kubectl uncordon multinodes-worker3
+
+```
+
+### REstart deployment (all pods re-init)
+
+```powershell
+
+kubectl rollout restart deployment.apps/day2-deployment
+
+```

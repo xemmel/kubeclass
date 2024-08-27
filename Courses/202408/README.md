@@ -54,6 +54,32 @@ kubectl exec -it debugpod --namespace debugpod -- bash
 
 ```
 
+### View Application Log in a single pod
+
+```powershell
+
+
+kubectl logs pod/day2-deployment-8488f9d449-dxknm -f
+
+```
+
+### View Application log based on label (multi-pods)
+
+```powershell
+
+kubectl logs -l app=day2 -f
+
+```
+
+### Expose Service on the outside (debug)
+
+```powershell
+
+kubectl port-forward service/day2-service 6000:80
+
+```
+
+
 
 ### Config Map
 
@@ -189,4 +215,20 @@ people:
     address: what2
   - address: what3
 pp:
+```
+
+
+### LivenessProbe
+
+```powershell
+
+  spec:
+      containers:
+        - name: failingapi-container
+          image: failingwebapi:0.3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+
 ```

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: failing-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: failing
+  template:
+    metadata:
+      labels:
+        app: failing
+    spec:
+      containers:
+      - name: failing-container
+        image: myfailingapi:1.3
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: failing-service
+spec:
+  selector:
+    app: failing
+  ports:
+    - port: 80
+      targetPort: 8080
