@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: day2-deployment
 spec:
-  replicas: 6
+  replicas: 8
   selector:
     matchLabels:
       app: day2
