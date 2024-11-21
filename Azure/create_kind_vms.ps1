@@ -86,6 +86,20 @@ $myIp = (curl ifconfig.me);
 
 
 az network nsg rule create `
+	--name tekno `
+	--nsg-name kubeclass1-nsg `
+	--resource-group kubeclass-rg `
+	--priority 4001 `
+	--access Allow `
+	--direction Inbound `
+	--protocol * `
+	--source-address-prefixes $myIp `
+	--source-port-ranges * `
+	--destination-port-ranges 22 `
+	--subscription 9bc198aa-089c-4698-a7ef-8af058b48d90
+;
+
+az network nsg rule create `
 	--name studentIps `
 	--nsg-name kubeclass1-nsg `
 	--resource-group kubeclass-rg `
