@@ -21,7 +21,7 @@ containers:
         - name: test-container
           image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
           env:
-            - name: title
+            - name: TITLE
               value: thevalue
 
 ```
@@ -34,7 +34,7 @@ containers:
         - name: test-container
           image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
           env:
-            - name: title
+            - name: TITLE
               valueFrom:
                 configMapKeyRef:
                   name: test-config
