@@ -1,0 +1,5 @@
+replicas: 2
+container:
+  image: nginx
+ingress:
+  endpoint: hellotest

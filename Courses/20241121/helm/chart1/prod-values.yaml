@@ -1,0 +1,5 @@
+replicas: 4
+container:
+  image: nginx
+ingress:
+  endpoint: helloprod
