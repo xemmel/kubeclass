@@ -16,6 +16,8 @@ restart-computer
 
 choco install kind -y
 
+winget install Kubernetes.kind
+
 ```
 
 ALT:
