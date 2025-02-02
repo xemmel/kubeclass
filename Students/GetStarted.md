@@ -127,10 +127,8 @@ curl localhost:5561
 
 
 #### Cleanup
-
+docker rm nginx -f
 get-item c:\temp\nginxweb | remove-item -force -recurse
-
-
 
 ```
 
@@ -152,5 +150,40 @@ winget install Kubernetes.kind
 
 ```
 
+### Create simple cluster
+
+```powershell
+
+#### Test that kubectl is NOT connected to any Cluster
+
+kubectl get nodes
+
+#### Install a simple standard Kubernetes cluster inside Docker
+
+
+kind create cluster
+
+#### Test that kubectl now works
+
+kubectl get nodes
+
+```
+
+### A simple pod
+
+```powershell
+kubectl create namespace test01
+
+kubectl run hellopod --image mcr.microsoft.com/azuredocs/aks-helloworld:v1 --namespace test01
+
+### wait until container is running
+
+kubectl get pods --namespace test01 -w
+
+### output pods wide and check internal ip address
+
+kubectl get pods --namespace test01 -o wide
+
+```
 
 
