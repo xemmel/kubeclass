@@ -54,6 +54,9 @@ kubectl create namespace appx
 ### Switch context
 kubectl config set-context --current --namespace appx
 ### Create deployment/service
+....
+
+
 
 kubectl get all
 
@@ -61,3 +64,22 @@ kubectl get all
 kubectl get pods -o wide
 ```
 
+### Maintanance
+
+```powershell
+
+## Unschedule (cordon)
+kubectl cordon [nodename]
+
+### "Shuffle" the deck
+kubectl rollout restart deployment.apps/simple-deployment
+
+## Schedule again
+kubectl uncordon [nodename]
+
+### Drain (Evict all existing pods and unschedule)
+kubectl drain [nodename] --ignore-daemonsets
+
+
+
+```
