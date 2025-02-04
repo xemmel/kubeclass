@@ -32,7 +32,7 @@ curl [serviceName].[nameSpaceName]
 ```powershell
 
 ### remove old cluster
-kind remove cluster
+kind delete cluster
 
 ### Create a cluster manifest for multiple worker nodes
 $manifest = @"
@@ -49,5 +49,15 @@ echo $manifest >> multi.yaml
 
 kind create cluster --config .\multi.yaml
 
+### Create a namespace
+kubectl create namespace appx
+### Switch context
+kubectl config set-context --current --namespace appx
+### Create deployment/service
+
+kubectl get all
+
+### get all pods with ip address and node
+kubectl get pods -o wide
 ```
 
