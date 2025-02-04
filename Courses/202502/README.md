@@ -80,6 +80,26 @@ kubectl uncordon [nodename]
 ### Drain (Evict all existing pods and unschedule)
 kubectl drain [nodename] --ignore-daemonsets
 
+```
 
+### Secrets
 
+Change deployment (hello-world)
+```yaml
+
+      containers:
+        - name: mypod
+          image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          env:
+            - name: TITLE
+              valueFrom:
+                secretKeyRef:
+                  name: simple-secret
+                  key: thetitle
+
+```
+
+```powershell
+
+kubectl create secret generic simple-secret --from-literal="thetitle=This title has spaces"
 ```
