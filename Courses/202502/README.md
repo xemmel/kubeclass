@@ -361,3 +361,12 @@ kubectl get ingress -w
 localhost/app1
 
 ```
+
+### Helm
+
+>\Helm
+```powershell
+
+helm install demoapp .\app --set app.name=appprod --set replicas=6 --namespace appprod --create-namespace
+
+```
