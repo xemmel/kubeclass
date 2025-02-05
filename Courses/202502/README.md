@@ -45,7 +45,7 @@ nodes:
 - role: worker
 "@;
 
-echo $manifest >> multi.yaml
+echo $manifest > multi.yaml
 
 kind create cluster --config .\multi.yaml
 
@@ -254,5 +254,110 @@ kubectl delete pod .....
 kubectl port-forward service/mongoexpress-service 5000:8081
 
 Browe: localhost:5000
+
+```
+
+### Ingress
+
+```powershell
+
+kind delete cluster
+
+iisreset /stop
+
+$mani = @"
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+- role: worker
+"@
+
+echo $mani > ingress.yaml
+
+kind create cluster --config .\ingress.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+
+create namespace......
+
+$ingress = @"
+
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: app1-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app1app
+  template:
+    metadata:
+      name: app1pod
+      labels:
+        app: app1app
+    spec:
+      containers:
+        - name: app1pod
+          image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          env:
+            - name: TITLE
+              value: app1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app1-service
+spec:
+  selector:
+    app: app1app
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app1-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /app1
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: app1-service
+                port:
+                  number: 80
+            
+
+
+"@
+
+echo $ingress >> ingressdeployment.yaml
+
+kubectl apply --filename ingressdeployment.yaml
+
+kubectl get ingress -w
+
+localhost/app1
 
 ```
