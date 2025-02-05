@@ -352,7 +352,7 @@ spec:
 
 "@
 
-echo $ingress >> ingressdeployment.yaml
+echo $ingress > ingressdeployment.yaml
 
 kubectl apply --filename ingressdeployment.yaml
 
