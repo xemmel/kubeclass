@@ -37,6 +37,14 @@ cat cp.yaml >> cp_temp.yaml
 
 multipass launch --name cp-1 --cloud-init cp_temp.yaml --disk 20G --memory 4G --cpus 2
 
+multipass shell cp-1
+
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml
+
+watch kubectl get pods -n calico-system
+
 rm cp_temp.yaml
 
 multipass exec cp-1 -- kubectl
