@@ -84,6 +84,7 @@ multipass launch --name $WORKERNAME --cloud-init preflight.yaml --disk 20G --mem
 
 JOINCOMMAND=$(multipass exec cp-1 -- sudo kubeadm token create --print-join-command)
 multipass exec $WORKERNAME -- sudo $JOINCOMMAND
+
 multipass exec cp-1 -- kubectl get nodes -w
 
 ```
