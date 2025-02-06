@@ -30,6 +30,8 @@ winget install Docker.DockerDesktop
 
 ### Restart may be required to add your user to the Docker group
 
+docker images
+
 
 ```
 
