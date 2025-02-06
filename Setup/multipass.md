@@ -45,6 +45,10 @@ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1
 
 watch kubectl get pods -n calico-system
 
+kubectl create namespace test
+kubectl apply --filename ./templates/deployment.yaml --namespace test
+
+
 rm cp_temp.yaml
 
 multipass exec cp-1 -- kubectl
@@ -90,9 +94,8 @@ multipass exec cp-1 -- kubectl get nodes -w
 
 multipass delete cp-1
 multipass delete worker-1
-
 multipass purge
-rm preflight.yaml
+rm cp_temp.yaml
 
 
 multipass delete --all
