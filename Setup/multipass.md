@@ -2,12 +2,13 @@
 
 
 In WSL HOST Maybe:
+```bash
 
 sudo iptables -P FORWARD ACCEPT
 
 multipass launch --name client
 multipass exec client -- ping www.eb.dk
-
+```
 ### Perm (Not working)
 
 sudo iptables-save | sudo tee /etc/iptables/rules.v4
@@ -28,6 +29,7 @@ multipass info cp-1
 watch multipass list
 
 ### Create CP
+```bash
 
 cat preflight.yaml > cp_temp.yaml
 cat cp.yaml >> cp_temp.yaml
@@ -40,7 +42,7 @@ rm cp_temp.yaml
 multipass exec cp-1 -- kubectl
 multipass exec cp-1 -- kubectl get nodes
 
-
+```
 ### CP
 
 
@@ -63,6 +65,7 @@ watch kubectl get pods -n calico-system
 sudo kubeadm token create --print-join-command
 
 ### Join worker
+```bash
 
 WORKERNAME="worker-1"
 multipass launch --name $WORKERNAME --cloud-init preflight.yaml --disk 20G --memory 2G --cpus 2
@@ -70,6 +73,12 @@ multipass launch --name $WORKERNAME --cloud-init preflight.yaml --disk 20G --mem
 multipass exec cp-1 -- sudo kubeadm token create --print-join-command
 multipass exec $WORKERNAME -- sudo 
 multipass exec cp-1 -- kubectl get nodes -w
+
+```
+
+### Clean
+
+```bash
 
 multipass delete cp-1
 multipass delete worker-1
@@ -82,5 +91,5 @@ multipass delete --all
 multipass purge
 
 
-
+```
 

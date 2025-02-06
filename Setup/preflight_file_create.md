@@ -1,3 +1,5 @@
+```bash
+
 cat <<EOF > preflight.yaml
 #cloud-config
 package_update: true
@@ -73,3 +75,5 @@ runcmd:
   - sudo kubeadm config images pull
   
 EOF
+
+```
