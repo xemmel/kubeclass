@@ -15,3 +15,14 @@ spec:
       containers:  
         - name: hellocontainer
           image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-service
+spec:
+  selector:
+    app: hello
+  ports:
+    - port: 80
+      targetPort: 80
