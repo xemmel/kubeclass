@@ -33,3 +33,23 @@ data:
 kubectl rollout restart deployment.apps/appx-deployment
 
 ```
+
+
+### Secrets
+
+```powershell
+
+kubectl create secret generic appx-secret --from-literal=thetitle=verysecrettitle
+
+```
+
+```yaml
+
+          env:
+            - name: TITLE
+              valueFrom:
+                secretKeyRef:
+                  name: appx-secret
+                  key: thetitle
+
+```
