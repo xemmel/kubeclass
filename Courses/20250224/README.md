@@ -11,3 +11,24 @@ kubectl get nodes
 kubectl get pods -o wide
 
 ```
+
+
+### Maintanance
+
+```powershell
+
+#### Unschedule (cordon)
+kubectl cordon multi-worker3
+
+#### Drain
+kubectl drain --ignore-daemonsets multi-worker3
+
+#### ready for work again
+kubectl uncordon multi-worker3
+
+#### Re-distribute all pods
+kubectl rollout restart deployment.apps/appx-deployment
+
+
+
+```
