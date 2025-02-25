@@ -32,3 +32,12 @@ kubectl rollout restart deployment.apps/appx-deployment
 
 
 ```
+
+
+#### Logging
+
+```powershell
+
+kubectl logs -l app=appx -f
+
+```
