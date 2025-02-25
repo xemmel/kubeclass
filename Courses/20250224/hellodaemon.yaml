@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: appxd-deployment
+spec:
+  selector:
+    matchLabels:
+      app: appxd
+  template:
+    metadata:
+      labels:
+        app: appxd
+    spec:    
+      containers:  
+        - name: appxdcontainer
+          image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+

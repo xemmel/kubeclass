@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appx-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: appx
+  template:
+    metadata:
+      labels:
+        app: appx
+    spec:    
+      containers:  
+        - name: appxcontainer
+          image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          env:
+            - name: TITLE
+              value: 'hellox'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: appx-service
+
+spec:
+  selector:
+    app: appx
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: appx-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - http: 
+        paths:
+          - path: /appx
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: appx-service
+                port: 
+                  number: 80
