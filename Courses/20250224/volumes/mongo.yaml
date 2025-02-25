@@ -1,0 +1,98 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-cm
+data:
+  user: theuser
+  password: thepassword
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:    
+      containers:  
+        - name: mongodbcontainer
+          image: mongo
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-cm
+                  key: user
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-cm
+                  key: password
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongodb
+      volumes:
+        - name: mongodb
+          persistentVolumeClaim:
+            claimName: mongodb-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - port: 27017
+      targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongoexpress-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mongoexpress
+  template:
+    metadata:
+      labels:
+        app: mongoexpress
+    spec:    
+      containers:  
+        - name: mongoexpresscontainer
+          image: mongo-express
+          env:
+            - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-cm
+                  key: user
+            - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-cm
+                  key: password
+            - name: ME_CONFIG_BASICAUTH
+              value: 'false'
+            - name: ME_CONFIG_MONGODB_SERVER
+              value: 'mongodb-service'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongoexpress-service
+spec:
+  selector:
+    app: mongoexpress
+  ports:
+    - port: 8081
+      targetPort: 8081

@@ -41,3 +41,15 @@ kubectl rollout restart deployment.apps/appx-deployment
 kubectl logs -l app=appx -f
 
 ```
+
+#### Delete cluster (Kind)
+
+```powershell
+
+kind delete cluster --name multi
+
+kind create cluster --name volume --config .\kind_cluster_volume.yaml
+
+
+
+```
