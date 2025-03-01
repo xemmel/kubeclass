@@ -16,6 +16,18 @@ kubectl exec -it debug --namespace debug -- bash
 
 kubectl exec -it debug --namespace debug -- curl test-service.test01:9200
 
+kubectl exec -it debug --namespace debug -- ping 8.8.8.8
+
+
+
+
+```
+
+```bash
+
+sudo apt install docker.io
+sudo docker login --username=xemmel
+
 
 ```
 
@@ -54,5 +66,15 @@ spec:
     - port: 9200
       targetPort: 9200
 EOF
+
+```
+
+```bash
+
+kubectl create namespace test01
+kubectl config set-context --current --namespace test01
+
+kubectl apply --filename elastic_deployment.yaml
+
 
 ```
