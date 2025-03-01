@@ -4,6 +4,7 @@
 #### In master
 kubeadm token create --print-join-command
 
+watch kubectl get nodes
 
 
 ```
