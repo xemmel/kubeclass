@@ -9,6 +9,11 @@ cat cp.yaml >> cp_temp.yaml
 multipass launch --name cp-1 --cloud-init cp_temp.yaml --disk 20G --memory 2G --cpus 2
 
 
+
+```
+#### Debug
+
+```bash
 kubectl create namespace debug
 kubectl run debug --image nginx --namespace debug
 
@@ -17,9 +22,6 @@ kubectl exec -it debug --namespace debug -- bash
 kubectl exec -it debug --namespace debug -- curl test-service.test01:9200
 
 kubectl exec -it debug --namespace debug -- ping 8.8.8.8
-
-
-
 
 ```
 
@@ -167,8 +169,38 @@ EOF
 
 ```bash
 cat << EOF | tee helloworld_podname_deployment.yaml
-
-
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-pod-deployment
+spec:
+  selector:
+    matchLabels:
+      app: hello-pod
+  template:
+    metadata:
+      labels:
+        app: hello-pod
+    spec:
+      containers:
+        - name: hello-pod-container
+          image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          env:
+            - name: TITLE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-pod-service
+spec:
+  selector:
+    app: hello-pod
+  ports:
+    - port: 80
+      name: main        
 EOF
 
 ```
@@ -209,6 +241,6 @@ kubectl apply --filename helloworld_podname_deployment.yaml
 
 kubectl scale deployment hello-pod-deployment --replicas 3
 
-
+kubectl exec -it debug --namespace debug -- curl hello-pod-service.hello-pod
 
 ```
