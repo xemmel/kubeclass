@@ -163,6 +163,16 @@ EOF
 
 ```
 
+### Hello-pod
+
+```bash
+cat << EOF | tee helloworld_podname_deployment.yaml
+
+
+EOF
+
+```
+
 ```bash
 
 kubectl create namespace test01
@@ -184,10 +194,21 @@ kubectl apply --filename configmap.yaml
 kubectl apply --filename configmap_env.yaml
 kubectl apply --filename configmap_folder.yaml
 
+kubectl scale deployment config-test-deployment --replicas 3
+
 kubectl exec -it pod/config-test-deployment-c5d5b5cb6-b6v45 -- printenv
 kubectl exec -it pod/config-folder-test-deployment-6844bf4fc4-sjjbh -- cat /etc/kuberconfig/thekid
 
 sed 's/Clara4/Clara5/g' configmap.yaml -i
 kubectl apply --filename configmap.yaml
+
+
+kubectl create namespace hello-pod
+kubectl config set-context --current --namespace hello-pod
+kubectl apply --filename helloworld_podname_deployment.yaml
+
+kubectl scale deployment hello-pod-deployment --replicas 3
+
+
 
 ```
