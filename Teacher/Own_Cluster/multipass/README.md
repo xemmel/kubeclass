@@ -33,6 +33,13 @@ sudo docker login --username=xemmel
 
 ```bash
 
+PASSWORD=...;
+kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=xemmel --docker-password=$PASSWORD --docker-email=lacour@gmail.com --namespace="kube-system"
+
+```
+
+```bash
+
 cat << EOF | tee elastic_deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -70,11 +77,40 @@ EOF
 ```
 
 ```bash
+cat << EOF | tee cron.yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: http-job
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: httpcontainer
+              image: curlimages/curl:latest
+              command:
+                - /bin/sh
+                - -c
+                - curl https://webhook.site/98ed9b92-772f-414a-a607-487df59b5987
+          restartPolicy: OnFailure
+EOF
+```
+
+```bash
 
 kubectl create namespace test01
 kubectl config set-context --current --namespace test01
 
 kubectl apply --filename elastic_deployment.yaml
+
+
+kubectl create namespace cron
+kubectl config set-context --current --namespace cron
+
+kubectl apply --filename cron.yaml
 
 
 ```
