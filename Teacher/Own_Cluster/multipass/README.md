@@ -101,6 +101,70 @@ EOF
 
 ```bash
 
+cat << EOF | tee configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-cm
+data:
+  thename: Morten
+  thekid: Clara4
+  thehouse: KOGE
+EOF
+
+cat << EOF | tee configmap_env.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-test-deployment
+spec:
+  selector:
+    matchLabels:
+      app: config-test
+  template:
+    metadata:
+      labels:
+        app: config-test
+    spec:
+      containers:
+        - image: nginx
+          name: nginx-container
+          envFrom:
+            - configMapRef:
+                name: test-cm
+EOF
+
+cat << EOF | tee configmap_folder.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-folder-test-deployment
+spec:
+  selector:
+    matchLabels:
+      app: config-folder-test
+  template:
+    metadata:
+      labels:
+        app: config-folder-test
+    spec:
+      containers:
+        - image: nginx
+          name: nginx-container
+          volumeMounts:
+            - name: configvolume
+              mountPath: /etc/kuberconfig
+              readOnly: true
+      volumes:
+        - name: configvolume
+          configMap:
+            name: test-cm
+EOF
+
+```
+
+```bash
+
 kubectl create namespace test01
 kubectl config set-context --current --namespace test01
 
@@ -112,5 +176,18 @@ kubectl config set-context --current --namespace cron
 
 kubectl apply --filename cron.yaml
 
+
+kubectl create namespace configmap-test
+kubectl config set-context --current --namespace configmap-test
+
+kubectl apply --filename configmap.yaml
+kubectl apply --filename configmap_env.yaml
+kubectl apply --filename configmap_folder.yaml
+
+kubectl exec -it pod/config-test-deployment-c5d5b5cb6-b6v45 -- printenv
+kubectl exec -it pod/config-folder-test-deployment-6844bf4fc4-sjjbh -- cat /etc/kuberconfig/thekid
+
+sed 's/Clara4/Clara5/g' configmap.yaml -i
+kubectl apply --filename configmap.yaml
 
 ```
