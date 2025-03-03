@@ -240,7 +240,13 @@ kubectl config set-context --current --namespace hello-pod
 kubectl apply --filename helloworld_podname_deployment.yaml
 
 kubectl scale deployment hello-pod-deployment --replicas 3
+kubectl describe service hello-pod-service
+
+
 
 kubectl exec -it debug --namespace debug -- curl hello-pod-service.hello-pod
+
+
+kubectl autoscale deployment/hello-pod-deployment --min=1 --max=3 --dry-run=server -o yaml
 
 ```
