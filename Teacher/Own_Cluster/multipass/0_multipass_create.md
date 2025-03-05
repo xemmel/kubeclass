@@ -7,6 +7,10 @@ multipass launch --name wor-1 --disk 20G --memory 2G --cpus 2
 multipass launch --name wor-2 --disk 20G --memory 2G --cpus 2
 
 
+multipass launch --name con-1-large --disk 30G --memory 4G --cpus 2
+multipass launch --name wor-1-large --disk 30G --memory 4G --cpus 2
+multipass launch --name wor-2-large --disk 30G --memory 4G --cpus 2
+
 
 multipass launch --name con-1-temp --disk 20G --memory 2G --cpus 2
 multipass launch --name wor-1-temp --disk 20G --memory 2G --cpus 2
