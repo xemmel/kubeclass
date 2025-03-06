@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hello-cm
+data:
+  TITLE: 'Hello from ConfigMap!!!!!!!!!'
+  anothervar: 'anothervalue'
+  app.config: |
+    properties.noofcores  =    3
+    configblabla          =   23
