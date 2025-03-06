@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-deployment
+spec:
+  selector:
+    matchLabels:
+      app: helloapp
+  template:
+    metadata:
+      labels:
+        app: helloapp
+    spec:
+      containers:
+        - name: helloappcontainer
+          image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          env:
+            - name: TITLE
+              value: 'hello from k8s'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloapp-service
+spec:
+  selector:
+    app: helloapp
+  ports:
+    - name: main
+      port: 80
+      targetPort: 80
