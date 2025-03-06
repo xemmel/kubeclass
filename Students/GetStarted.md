@@ -45,7 +45,7 @@ docker pull $image;
 
 ### run a container of the image as standard on port 5555, inside powershell not detached
 
-docker run -it --name app1 -p 5555:80 $image
+docker run -it --name app1 -p 5555:80 $IMAGE
 
 curl localhost:5555
 
