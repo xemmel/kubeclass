@@ -81,6 +81,11 @@ EOF
 
 ```bash
 
+kubectl create namespace rabbit
+kubectl config set-context --current --namespace rabbit
+
+
+
 kubectl apply --filename rabbitmq.yaml
 
 kubectl exec -it debug --namespace debug -- curl -u user:password rabbitmqvolume-service.rabbit:15672/api/queues
@@ -91,6 +96,12 @@ kubectl exec -it debug --namespace debug -- curl -u user:password -X PUT -H "Con
 
 kubectl exec -it debug --namespace debug -- curl -u user:password http://rabbitmqvolume-service.rabbit:15672/api/queues | jq .
 
+### If on same node as pod created
+ls /opt/local-path-provisioner/
+
+
 kubectl delete --filename rabbitmq.yaml
+
+kubectl delete namespace rabbit
 
 ```
