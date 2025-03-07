@@ -43,3 +43,35 @@ kubectl rollout restart deployment.apps/hello-deployment
 
 ```
 
+### Secrets
+
+```yaml
+
+          valueFrom:
+            secretKeyRef:
+              name: test-secret
+              key: thepassword
+
+```
+
+#### apply secret from kubectl
+
+```powershell
+
+kubectl create secret generic test-secret --from-literal=thepassword=verysecret
+
+```
+
+#### Secret as yaml (we do not like)
+
+```yaml
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: test-secret
+data:
+  thepassword: dmVyeXNlY3JldA==
+type: Opaque
+
+```
