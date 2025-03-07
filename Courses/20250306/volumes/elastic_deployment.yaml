@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastic-deployment
+spec:
+  selector:
+    matchLabels:
+      app: elasticapp
+  template:
+    metadata:
+      labels:
+        app: elasticapp
+    spec:
+      containers:
+        - name: elasticappcontainer
+          image: elasticsearch:7.17.7
+          volumeMounts:
+          - mountPath: /usr/share/elasticsearch/data
+            name: datamount
+          env:
+          - name: discovery.type
+            value: single-node
+      volumes:
+        - name: datamount
+          persistentVolumeClaim:
+            claimName: elastic-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticapp-service
+spec:
+  selector:
+    app: elasticapp
+  ports:
+    - name: main
+      port: 9200
+      targetPort: 9200

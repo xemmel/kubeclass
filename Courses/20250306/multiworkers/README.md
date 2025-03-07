@@ -25,3 +25,21 @@ kind create cluster --name multi --config multi_cluster.yaml
 
 kubectl get pods -o wide
 ```
+
+### Maintanance
+
+```powershell
+
+### UnSchedule
+
+kubectl cordon multi-worker3
+
+### Schedule again
+
+kubectl uncordon multi-worker3
+
+### Drain
+
+kubectl drain multi-worker3 --ignore-daemonsets --force
+
+```

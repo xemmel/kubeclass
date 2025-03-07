@@ -4,5 +4,5 @@ nodes:
 - role: control-plane
 - role: worker
   extraMounts:
-  - hostPath: /home/witadmin/volume/kind
+  - hostPath: c:\temp\kindstorage
     containerPath: /var/local-path-provisioner
