@@ -50,6 +50,8 @@ spec:
               value: user
             - name: RABBITMQ_DEFAULT_PASS
               value: password
+            - name: RABBITMQ_NODENAME
+              value: node1
       volumes:
         - name: datamount
           persistentVolumeClaim:
@@ -70,7 +72,6 @@ spec:
     - name: main
       port: 15672
       targetPort: 15672
-
 EOF
 
 ```
@@ -86,13 +87,22 @@ kubectl config set-context --current --namespace rabbit
 
 kubectl apply --filename rabbitmq.yaml
 
+
+kubectl logs -l app=rabbitmqvolume -f
+
+
 kubectl exec -it debug --namespace debug -- curl -u user:password rabbitmqvolume-service.rabbit:15672/api/queues
 
 ### Create test queue
-kubectl exec -it debug --namespace debug -- curl -u user:password -X PUT -H "Content-Type: application/json" -d '{}' http://rabbitmqvolume-service.rabbit:15672/api/queues/%2F/test-queue
+kubectl exec -it debug --namespace debug -- curl -u user:password -X PUT -H "Content-Type: application/json" -d '{"durable": true}' http://rabbitmqvolume-service.rabbit:15672/api/queues/%2F/test-queue1
 
 
-kubectl exec -it debug --namespace debug -- curl -u user:password http://rabbitmqvolume-service.rabbit:15672/api/queues | jq .
+
+kubectl exec -it debug --namespace debug -- curl -u user:password http://rabbitmqvolume-service.rabbit:15672/api/queues | jq '.durable'
+
+
+kubectl rollout restart deployment rabbitmqvolume-deployment
+
 
 ### If on same node as pod created
 ls /opt/local-path-provisioner/
