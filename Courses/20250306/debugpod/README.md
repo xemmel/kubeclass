@@ -1,10 +1,10 @@
 #### Debug
 
 ```bash
-kubectl create namespace debug
-kubectl run debug --image nginx --namespace debug
+kubectl create namespace andersand
+kubectl run mickey --image nginx --namespace andersand
 
-kubectl exec -it debug --namespace debug -- bash
+kubectl exec -it mickey --namespace andersand -- bash
 
 
 ```

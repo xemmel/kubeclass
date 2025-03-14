@@ -10,11 +10,14 @@ kubectl rollout restart deployment.apps/hello-deployment
 ### Manual use as env var
 
 ```yaml
-          - name: TITLE
-            valueFrom:
-              configMapKeyRef:
-                name: hello-cm
-                key: TITLE
+       - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          name: helloworld5
+          env: 
+            - name: TITLE
+              valueFrom:
+                configMapKeyRef:
+                  name: hello-cm
+                  key: TITLE
 ```
 
 ### Inject all key/values as env var
