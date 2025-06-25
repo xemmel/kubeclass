@@ -16,7 +16,7 @@ docker images
 
 ```
 
-### Intall Docker
+### Install Docker
 
 ```powershell
 
