@@ -18,7 +18,13 @@ multipass shell con-1
 
 ```
 
+## Get latest version
 
+```bash
+
+curl -L -s https://dl.k8s.io/release/stable.txt
+
+```
 
 ## Install containerd, kubelet, kubeadm, kubectl
 
