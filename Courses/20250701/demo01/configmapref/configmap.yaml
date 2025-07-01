@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms2-configmap
+data:
+  TITLE: 'appx title!!!'
+  FFFF: 'morten'
