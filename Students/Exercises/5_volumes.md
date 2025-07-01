@@ -87,3 +87,12 @@ spec:
       storage: 3Gi
 
 ```
+
+
+### View PV,PVC
+
+```yaml
+
+kubectl get pv,pvc
+
+```
