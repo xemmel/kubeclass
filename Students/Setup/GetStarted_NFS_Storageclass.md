@@ -44,6 +44,7 @@ multipass exec $NODE -- bash -c "showmount -e $NFSIP"
 helm repo add nfs-store https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
 helm repo list
 
+NFSIP=$(nslookup nfs-1 | grep -Po '(?<=Address: ).*?(?=$)')
 
 helm install nfs-sc \
 nfs-store/nfs-subdir-external-provisioner \
