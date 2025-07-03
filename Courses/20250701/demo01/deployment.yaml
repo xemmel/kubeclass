@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+spec:
+  replicas: 9
+  selector:
+    matchLabels:
+      app: hellotest
+  template:
+    metadata:
+      labels:
+        app: hellotest
+    spec:
+      containers:
+        - name: hello-container
+          image: nginxdemos/hello 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-service 
+spec:
+  selector:
+    app: hellotest
+  ports:
+    - port: 80
+      targetPort: 80

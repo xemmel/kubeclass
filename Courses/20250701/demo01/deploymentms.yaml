@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deploymentms
+spec:
+  replicas: 9
+  selector:
+    matchLabels:
+      app: hellotestms
+  template:
+    metadata:
+      labels:
+        app: hellotestms
+    spec:
+      containers:
+        - name: hello-containerms
+          image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          env:
+            - name: TITLE
+              value: 'Another title'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-servicems 
+spec:
+  selector:
+    app: hellotestms
+  ports:
+    - port: 80
+      targetPort: 80
