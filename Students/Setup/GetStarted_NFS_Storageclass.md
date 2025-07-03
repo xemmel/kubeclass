@@ -35,5 +35,24 @@ multipass exec $NODE -- bash -c "NFSIP='$NFSIP'"
 multipass exec $NODE -- bash -c "sudo apt install nfs-common -y"
 multipass exec $NODE -- bash -c "showmount -e $NFSIP"
 
+```
+
+### Install NFS provisioner (HELM)
+
+```bash
+
+helm repo add nfs-store https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+helm repo list
+
+
+helm install nfs-sc \
+nfs-store/nfs-subdir-external-provisioner \
+--set nfs.server=$NFSIP \
+--set nfs.path=/k8sdata \
+--set storageClass.onDelete=true -n storagenfs \
+--create-namespace \
+--namespace storagenfs
+
+kubectl get storageclasses.storage.k8s.io
 
 ```
