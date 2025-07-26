@@ -345,6 +345,35 @@ kubectl apply --filename deployment.yaml
 ```
 [Back to top](#kubernetes-and-acr)
 
+#### Test pod
+
+```bash
+
+kubectl create namespace debug && kubectl run --namespace debug debug --image nginx
+
+
+
+kubectl exec -it --namespace debug debug -- bash
+
+
+### Install nmap on debug
+
+kubectl exec -it --namespace debug debug -- bash -c "apt update && apt upgrade -y"
+
+kubectl exec -it --namespace debug debug -- bash -c "apt install nmap -y"
+
+### Get pod CIDR
+
+kubectl get nodes -o custom-columns=NODE:.metadata.name,POD_CIDR:.spec.podCIDR
+
+kubectl exec -it --namespace debug debug -- bash -c "nmap -sP 10.244.0.0/24"
+
+kubectl exec -it --namespace debug debug -- bash -c "nmap -sT -p 80,443 10.244.0.0/24"
+
+kubectl exec -it --namespace debug debug -- bash -c "curl 10.244.0.9"
+
+```
+
 ### Clean up
 
 
