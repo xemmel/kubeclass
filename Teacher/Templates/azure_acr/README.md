@@ -196,7 +196,11 @@ multipass shell kind
 
 ```
 
+[Back to top](#kubernetes-and-acr)
+
 ##### Install kind on server
+
+###### Update
 
 ```bash
 
@@ -204,23 +208,40 @@ sudo apt update
 
 sudo apt upgrade -y
 
+```
 
-### Install docker
+[Back to top](#kubernetes-and-acr)
+
+###### Docker
+
+```bash
 
 sudo apt install docker.io -y
 
 sudo usermod -aG docker $USER
 newgrp docker
 
-### Install kind
+```
+
+[Back to top](#kubernetes-and-acr)
+
+
+###### kind
+
+```bash
 
 curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.29.0/kind-linux-amd64
 
 chmod +x ./kind
 sudo mv ./kind /usr/local/bin/kind
 
+```
 
-### install kubectl 
+[Back to top](#kubernetes-and-acr)
+
+###### Kubectl 
+
+```bash
 
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
@@ -236,9 +257,14 @@ echo "source <(kubectl completion bash)" >> ~/.bashrc
 source ~/.bashrc
 
 
+```
+[Back to top](#kubernetes-and-acr)
+
+###### Create cluster
+
+```bash
+
 kind create cluster
-
-
 
 ```
 
