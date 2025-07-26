@@ -194,7 +194,15 @@ multipass launch --name kind --disk 10G --memory 1G --cpus 2
 
 multipass shell kind
 
-sudo apt update && sudo apt upgrade -y
+```
+
+##### Install kind on server
+
+```bash
+
+sudo apt update
+
+sudo apt upgrade -y
 
 
 ### Install docker
