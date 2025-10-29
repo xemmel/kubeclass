@@ -360,6 +360,210 @@ docker run -p 6011:8080 --name seconddemoapi -d demoapi:1.1
 
 - call both *1.0* and *1.1* version and verify that we are now hosting two containers with different versions
 
+[Back to top](#demo)
+
+### Run ElasticSearch
+
+- Elastic search already has an image in *Docker Hub* so we call *pull* it and start containers with the image as we see fit
+
+   - NOTE: You do not have to pull the image before running a container instance of an image, if the image requsted in a run is not present locally it will be pulled automatically
+
+```bash
+
+docker pull elasticsearch:9.1.5
+
+docker run \
+    -p 9200:9200 \
+	--name elastic1 \
+	-e "discovery.type=single-node" \
+	-e "xpack.security.enabled=false" \
+	-d elasticsearch:9.1.5
 
 
+```
 
+[Back to top](#demo)
+
+- Notice the two **-e** (Environment Variables) this is used to set *Environment Variables* in the container instance we are starting
+
+
+- Your elastic search might take a minutte to be ready to serve requests even if the status is *running*
+- You can follow a *container instance* **STDOUT** and **STDERR** logging with this command
+
+```bash
+
+docker logs elastic1 -f
+
+```
+
+[Back to top](#demo)
+
+- You now have an *elasticsearch* instance running on *localhost:9200* try calling it
+
+```bash
+
+curl localhost:9200
+
+```
+
+- Should give you a result like this:
+
+```json
+
+{
+  "name" : "115c70cb30ed",
+  "cluster_name" : "docker-cluster",
+  "cluster_uuid" : "bH-yPYwWThaczAgjQ0452g",
+  "version" : {
+    "number" : "9.1.5",
+    "build_flavor" : "default",
+    "build_type" : "docker",
+    "build_hash" : "90ee222e7e0136dd8ddbb34015538f3a00c129b7",
+    "build_date" : "2025-10-02T22:07:12.966975992Z",
+    "build_snapshot" : false,
+    "lucene_version" : "10.2.2",
+    "minimum_wire_compatibility_version" : "8.19.0",
+    "minimum_index_compatibility_version" : "8.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
+
+```
+
+[Back to top](#demo)
+
+#### Volumes
+
+- Per default, container instances are *stateless* and should now write any significant data to their local *folder structure*. Many apis are truly *stateless* and are therefore a nice fit for containerization
+
+- However: If we try to containerize a *stateful* service like **elastic search** we need to control the data written to the various files, since they cannot/should not reside inside the container. 
+    - NOTE: A container instance is unstable and might *die* and a new container instance should be able to be created, substituting the original container without any data loss.
+
+- We will now show what the consequences of a *stateful* container can be
+
+- Create an index in your *elastic search* container
+
+```bash
+
+curl localhost:9200/importantindex -X PUT
+
+```
+
+- Verify that the index is now present
+
+```bash
+
+curl localhost:9200/_cat/indices
+
+
+```
+
+[Back to top](#demo)
+
+- You should see your "importantindex"
+
+- Now let's "crash" the container and spin it up again
+
+
+```bash
+
+docker rm elastic1 -f
+
+docker run \
+    -p 9200:9200 \
+	--name elastic1 \
+	-e "discovery.type=single-node" \
+	-e "xpack.security.enabled=false" \
+	-d elasticsearch:9.1.5
+
+
+```
+
+[Back to top](#demo)
+
+- Remember it might that a while before the container is "ready to serve", use *docker logs elastic1 -f* to see logging while initialzing
+
+- Now try listing the indices again
+
+- The index is gone: In other words **WE HAVE LOST ALL DATA**
+
+#### Create an Instance with volume mount
+
+- Remove the elastic search container instance again
+
+```bash
+
+docker rm elastic1 -f
+
+```
+
+[Back to top](#demo)
+
+- Go to your working directory (do NOT do the following inside the *demoapi* folder)
+
+- Create local folders that can hold our *elastic search* data
+   - NOTE: normally we will put this on a File Server, NFS-drive, Cloud Drive etc. and not just a local computer
+
+```bash
+
+mkdir dockerdata
+sudo mkdir -p dockerdata/elastic1
+sudo chown -R 1000:0 dockerdata/elastic1
+sudo chmod -R 770 dockerdata/elastic1
+
+```
+
+- Now run the container again, this time mounting the folder */usr/share/elasticsearch/data* inside the container instance to our local *dockerdata/elastic1* folder
+
+```bash
+CURRENTFOLDER=$(pwd)
+
+docker run \
+    -p 9200:9200 \
+	--name elastic1 \
+	-e "discovery.type=single-node" \
+	-e "xpack.security.enabled=false" \
+	-v $CURRENTFOLDER/dockerdata/elastic1:/usr/share/elasticsearch/data  \
+	-d elasticsearch:9.1.5
+
+
+```
+
+[Back to top](#demo)
+
+- List the local folder and notice that the container has written several folders/files to the local folder
+
+```bash
+
+ls dockerdata/elastic1/ -l
+
+```
+
+- Now create an index again
+- Verify that the index is there
+- remove the container and create it again 
+- Verify that the index is still there (persisted)
+
+```bash
+
+curl localhost:9200/importantindex -X PUT
+
+curl localhost:9200/_cat/indices
+
+docker rm elastic1 -f
+
+docker run \
+    -p 9200:9200 \
+	--name elastic1 \
+	-e "discovery.type=single-node" \
+	-e "xpack.security.enabled=false" \
+	-v $CURRENTFOLDER/dockerdata/elastic1:/usr/share/elasticsearch/data  \
+	-d elasticsearch:9.1.5
+
+### Again: might take a little while before ready to servce
+
+curl localhost:9200/_cat/indices
+
+```
+
+[Back to top](#demo)
