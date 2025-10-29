@@ -567,3 +567,131 @@ curl localhost:9200/_cat/indices
 ```
 
 [Back to top](#demo)
+
+### Network
+
+- Docker do have some network capabilities, but not nearly as advanced as *Kubernetes*
+
+- Let's create a new virtual network in Docker and add two web servers on the network and examine how they communicate with each other internally using *ip addresses* and *DNS*
+
+```bash
+
+docker network create webservernet --subnet 172.65.0.0/24 --ip-range 172.65.0.0/24
+
+docker run \
+   -p 7500:80 \
+   --name netwebserver1 \
+   --network webservernet \
+   -d nginx
+
+
+docker run \
+   -p 7510:80 \
+   --name netwebserver2 \
+   --network webservernet \
+   -d nginx
+   
+
+
+```
+
+- List your running container instances again
+
+```bash
+
+docker ps -a --format json | jq '{Name: .Names, State: .State, Net: .Networks,Ports: .Ports}'
+
+```
+
+- Notice that we have the two webservers now: *netwebserver1* and *netwebserver2*
+
+- We can communicate with them using localhost:7500 or 7510 but since they are on the same *virtual network* in *Docker* they can also communicate internally with either *ip addresses* or *fqdn*
+
+- Let's first alter *netwebserver1*'s default page
+
+```bash
+
+docker exec -it netwebserver1 sh -c "echo '<html><body><h1>Hello students</h1></body></html>' > /usr/share/nginx/html/index.html"
+
+
+```
+
+[Back to top](#demo)
+
+- If you call localhost:7500 you should now see your custom web page
+
+- Now let's call *netwebserver1* from **within** *netwebserver2*
+
+- Bash into *netwebserver2*
+
+```bash
+
+docker exec -it netwebserver2 bash
+
+### Inside get your ip address
+
+hostname -I
+
+```
+
+- The local ip address for *netwebserver2* will be something like 172.65.0.3
+
+- We will now install *nmap* and scan the subnet
+   - NOTE: nmap is a **hacker tool* for both *white-hats* and *black-hats* please only use inside this virtual network we are doing now, and NOT for anything else, unless you know what you are doing
+
+```bash
+
+apt update
+apt install nmap -y
+
+
+```
+[Back to top](#demo)
+
+- Now with my ip adress being 172.65.0.3 and the virtual network we created was a 172.65.0.0/24 CIDR range, let's scan the entire subnet for servers that respond and try to get their DNS names
+
+```bash
+
+nmap -sn 172.65.0.0/24
+
+
+```
+
+- The scan should detect our *netwebserver1* and its ip address, with something like this
+
+```
+Nmap scan report for netwebserver1.webservernet (172.65.0.2)
+
+```
+
+- Now the default DNS registration for *Docker* is as follows: 
+  - [container instance name].[subnet name]
+
+- If our case, the *subnet name* can be eliminated since we are on the same subnet
+- So calling the following from within *netwebserver2* should give us the custom web page on *netwebserver1* created earlier
+
+```bash
+
+curl 172.65.0.2 ## Or what ip address nmap showed for netwebserver1
+
+curl netwebserver1
+
+
+```
+
+
+[Back to top](#demo)
+
+##### Clean up network demo
+
+```bash
+
+docker rm netwebserver1 -f
+docker rm netwebserver2 -f
+
+docker network rm webservernet
+
+
+```
+
+[Back to top](#demo)
