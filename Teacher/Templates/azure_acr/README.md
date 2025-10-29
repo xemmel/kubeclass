@@ -112,6 +112,32 @@ get-item imagetemp | remove-item -force -recurse
 
 ```
 
+
+#### Dotnet Dockerfile
+
+
+```dockerfile
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /source
+
+COPY *.csproj .
+
+RUN dotnet restore
+
+# copy everything else and build app
+COPY . .
+
+RUN dotnet publish -c release -o /app --no-restore
+
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+WORKDIR /app
+COPY --from=build /app ./
+ENTRYPOINT ["dotnet", "name.dll"]
+
+```
+
 [Back to top](#kubernetes-and-acr)
 
 #### Image name
@@ -343,6 +369,23 @@ kubectl apply --filename deployment.yaml
 
 
 ```
+[Back to top](#kubernetes-and-acr)
+
+#### Better upgrade
+
+```yaml
+
+      containers:
+        - name: api-container
+          image: acrkubernetesmlc.azurecr.io/versionapi:1.3
+          readinessProbe:
+            httpGet:
+              path: /version
+              port: 8080
+            initialDelaySeconds: 2
+
+```
+
 [Back to top](#kubernetes-and-acr)
 
 #### Test pod
