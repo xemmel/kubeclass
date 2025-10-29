@@ -292,9 +292,20 @@ docker build -t demoapi:1.0 .
 
 ```
 
+- Check your docker images again, you might see a couple of images, but pay attention to the image demoapi with *TAG* 1.0
+
+
 [Back to top](#demo)
 
+##### Create a container from image
 
+- We will now create a container from our *demoapi* **container image**
+
+```bash
+
+docker run -p 6010:8080 --name firstdemoapi -d demoapi:1.0
+
+```
 
 #### List containers (both running and exited)
 
@@ -304,6 +315,51 @@ docker ps -a --format json | jq '{Name: .Names, State: .State, Net: .Networks,Po
 
 ```
 [Back to top](#demo)
+
+
+- As just listed, our container *firstdemoapi* is running locally now and listening on port *6010* the reason we chose port *8080* as the target port inside the container is because as of .NET 8 the default port for a *webapi* when containerized is *8080*
+
+
+- Call the version method on the api
+
+```bash
+
+curl localhost:6010/version
+
+```
+
+- Try in your browser as well, remember localhost might not work, then use the ip address retrieved earlier
+
+
+[Back to top](#demo)
+
+
+#### Create a new version
+
+- Change version 1.0 to 1.1 inside the code
+
+```bash
+
+sed -i 's/1.0/1.1/g' Program.cs
+docker build -t demoapi:1.1 .
+
+```
+
+- Check docker images, you should now have both a *1.0* and *1.1* version of **demoapi**
+
+- create a new container with the *1.1* version, leave the original version *1.0* container running
+   - NOTE: the new container will need a new port number since all containers running in Docker reside on *localhost* 
+
+```bash
+
+docker run -p 6011:8080 --name seconddemoapi -d demoapi:1.1
+
+```
+
+- List all running containers, you should have both *firstdemoapi* and *seconddemoapi* listening on seperate ports
+
+- call both *1.0* and *1.1* version and verify that we are now hosting two containers with different versions
+
 
 
 
