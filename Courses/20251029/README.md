@@ -13,10 +13,11 @@
 
 
 
-- Used everywhere    (Azure Entra)
-   - Azure and O365 do not go about building their own Identity Provider
-   - Separation of concern (Do what you are good at)
-   - 
+- Microservices are services within a single application, and in general not to be shared across applications
+   - BUT: this is too strict of a rule and there are different opinions about this
+   - Don't mistake a microservice with a "multi-purpose" application / api like 
+        - Entra
+        - The companies own "Billing Service" used by many applications
 
 
 [Back to top](#demo)
