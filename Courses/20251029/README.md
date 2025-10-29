@@ -82,6 +82,9 @@ newgrp docker
 
 ```
 
+[Back to top](#demo)
+
+
 #### First container / "Mini" VM
 
 ```bash
@@ -90,8 +93,208 @@ docker run -p 5000:80 --name myfirstcontainer -d nginx
 
 ```
 
+Since *nginx* is a webserver you can access the default web page on your localhost port 5000 now
+
+```bash
+
+curl localhost:5000
+
+```
 
 [Back to top](#demo)
+
+
+Let's execute a command in the newly created container / mini-vm
+
+```bash
+
+docker exec -it myfirstcontainer ls -l
+
+```
+
+We can also take control of a *bash* session
+
+```bash
+
+docker exec -it myfirstcontainer bash
+
+
+```
+
+[Back to top](#demo)
+
+
+Let's find all the .html files in the file system to see where the *nginx* web server's default path is
+
+```bash
+
+find / -type f -name *.html 2>/dev/null
+
+```
+
+As you can see it is in the **/usr/share/nginx/html** folder
+Go there and change the default *html* page to something else
+
+```bash
+
+cd /usr/share/nginx/html
+echo '<html><body><h1>Hello students</h1></body></html>' > index.html
+
+
+exit
+
+```
+
+[Back to top](#demo)
+
+Now try to call the *localhost:5000* again
+
+You should see the new html appear
+
+You might even be able to browse this page from a browser in your windows environment
+
+If your *Linux* environment does not forward to your localhost in your Windows env. You can try the following
+
+- In Linux get all the eth0 ip address 
+
+```bash
+
+hostname -I
+
+```
+It's usually the first ip address to appear
+
+try that ip address with the port 5000 in your browser  (like 172.30.211.202:5000)
+
+[Back to top](#demo)
+
+
+### Create own API
+
+We will create our own *.NET ASPNET CORE WebApi* and build a **container image** hosting the api
+
+- First let's check how many images there already are in your local docker image repo
+
+```bash
+
+docker images
+
+```
+
+[Back to top](#demo)
+
+
+#### Install .NET SDK if needed
+
+```bash
+
+sudo add-apt-repository ppa:dotnet/backports
+
+sudo apt-get update && \
+  sudo apt-get install -y dotnet-sdk-9.0
+
+```
+
+[Back to top](#demo)
+
+#### Create a webapi project
+
+- Create the project and add a *GET* method /version that returns **1.0**
+
+```bash
+
+dotnet new webapi -o demoapi
+cd demoapi/
+sed -i '/app\.MapGet("\/weatherforecast/i app.MapGet("/version", () => { return "1.0"; });' Program.cs
+
+```
+
+[Back to top](#demo)
+
+#### Create a Dockerfile
+
+- A **Dockerfile** is a *recipe* for creating a *container image* with the application running inside
+
+- The file will contains the following
+
+```dockerfile
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /source
+
+COPY *.csproj .
+RUN dotnet restore
+
+COPY . .
+
+RUN dotnet publish -c release -o /app --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+WORKDIR /app
+COPY --from=build /app ./
+ENTRYPOINT ["dotnet", "demoapi.dll"]
+
+
+```
+
+[Back to top](#demo)
+
+- We will also need a *.dockerignore* file the contains the folders: *obj* and *bin* since we don't want them copied into the container image if the project has already been build locally before building the container
+
+```dockerfile
+
+bin
+obj
+
+```
+
+[Back to top](#demo)
+
+- Here are bash commands for creating both these files, remember to be in the /demoapi folder
+
+```bash
+
+cat<<EOF>>Dockerfile
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /source
+
+COPY *.csproj .
+RUN dotnet restore
+
+COPY . .
+
+RUN dotnet publish -c release -o /app --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+WORKDIR /app
+COPY --from=build /app ./
+ENTRYPOINT ["dotnet", "demoapi.dll"]
+EOF
+
+cat<<EOF>>.dockerignore
+bin
+obj
+EOF
+
+
+```
+
+[Back to top](#demo)
+
+
+#### Build the container image
+
+- To build the *container image* you supply it with both a container image name and version. Remember to be located in the same folder as your **Dockerfile** The last dot (.) indicates that the *recipe* is named the default name of **Dockerfile** and is located in the same folder as you're executing from
+
+```bash
+
+docker build -t demoapi:1.0 .
+
+```
+
+[Back to top](#demo)
+
+
 
 #### List containers (both running and exited)
 
@@ -101,5 +304,6 @@ docker ps -a --format json | jq '{Name: .Names, State: .State, Net: .Networks,Po
 
 ```
 [Back to top](#demo)
+
 
 
