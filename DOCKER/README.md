@@ -1,41 +1,42 @@
-### Create simple container image
 
-```powershell
+### Network
 
-docker run -p 5555:80 mcr.microsoft.com/azuredocs/aks-helloworld:v1
+```bash
 
-```
-
-Can be run http://localhost:5555
-
-
-### Kill the image
-
-```powershell
-
-### List all running containers
-
-docker ps 
-
-### Stop the container
-
-docker stop 123456
-
-### List all containers (also stopped)
-
-docker ps -a
-
-### Remove the stopped container
-
-docker rm 123456
+docker network create datanet
 
 ```
 
-## Clean up containers
+### SQL SERVER
 
-```powershell
 
-$mask = Read-Host("mask");
-docker ps -a --format='{{json .}}' | ConvertFrom-Json | Where-Object {$_.Image -like "*$($mask)*"} | ForEach-Object {docker rm $_.ID -f};
+#### FILES
+
+```bash
+
+mkdir dockerdata
+sudo mkdir -p dockerdata/sql/{data,log,secrets}
+sudo chown -R 10001:0 dockerdata/sql
+sudo chmod -R 770 dockerdata/sql
+
+```
+
+
+#### Run Container
+
+```bash
+
+
+CURRENTDIR=$(pwd)
+docker run -e "ACCEPT_EULA=Y" \
+	-e "SA_PASSWORD=YourNewP@ssw0rd123!" \
+    -p 1433:1433 \
+	--name sqlserver1 \
+	--network datanet \
+	-v $CURRENTDIR/dockerdata/sql/data:/var/opt/mssql/data  \
+	-v $CURRENTDIR/dockerdata/sql/log:/var/opt/mssql/log \
+    -v $CURRENTDIR/dockerdata/sql/log/secrets:/var/opt/mssql/secrets \
+	-d mcr.microsoft.com/mssql/server:2022-latest
+
 
 ```
