@@ -25,6 +25,17 @@ spec:
       containers:
         - image: nginx
           name: webserver-container
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-service
+spec:
+  selector:
+    app: webserver
+  ports:
+    - port: 80
+      targetPort: 80
 
 ```
 
@@ -42,6 +53,20 @@ kubectl scale deployment webserver-deployment --replicas 15
 ## View pods and deployment/replicaset
 
 kubectl get all
+
+
+### Logs all pods
+kubectl logs -l app=webserver -f
+
+
+
+## debug pod
+
+kubectl create namespace debug && kubectl run --namespace debug debug --image nginx
+
+### Exec into debug pod
+
+kubectl exec -it --namespace debug debug -- bash
 
 
 ```
