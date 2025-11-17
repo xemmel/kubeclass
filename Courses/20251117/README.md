@@ -69,4 +69,13 @@ kubectl create namespace debug && kubectl run --namespace debug debug --image ng
 kubectl exec -it --namespace debug debug -- bash
 
 
+### DNS
+
+[ServiceName].[Namespace]
+test-service.demo01
+
+
+### Port-forward
+
+kubectl port-forward services/test-service 7777:80
 ```
