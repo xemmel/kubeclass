@@ -31,7 +31,7 @@ spec:
 ```bash
 
 kubectl delete namespace demo01
-kubectl create namesapce demo01
+kubectl create namespace demo01
 
 kubectl apply --filename deployment.yaml
 
