@@ -7,6 +7,17 @@ kubectl rollout restart deployment.apps/hello-deployment
 
 ```
 
+#### Use Env variables hardcoded in Deployment (Pod Spec)
+
+```yaml
+       - image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          name: helloworld5
+          env: 
+            - name: TITLE
+              value: 'A hardcoded value'
+
+```
+
 ### Manual use as env var (1)
 
 ```yaml
