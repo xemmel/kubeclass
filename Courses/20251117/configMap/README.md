@@ -7,6 +7,18 @@ kubectl rollout restart deployment.apps/hello-deployment
 
 ```
 
+### Configmap
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hello-cm
+data:
+  appTitle: 'Hello students from config map v3'
+
+```
+
 #### Use Env variables hardcoded in Deployment (Pod Spec)
 
 ```yaml
