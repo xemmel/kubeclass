@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}-{{ .Values.env }}-deployment
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}-{{ .Values.env }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}-{{ .Values.env }}
+    spec:
+      containers:
+        - name: helloappcontainer
+          image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          env:
+            - name: TITLE
+              value: {{ .Values.app.name }}-{{ .Values.env }}
