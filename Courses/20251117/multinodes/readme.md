@@ -46,4 +46,8 @@ kubectl uncordon multicluster-worker3
 ## Drain node (will also cordon)
 kubectl drain multicluster-worker2 --ignore-daemonsets
 
+
+### rollout restart
+kubectl rollout restart deployment webserver-deployment
+
 ```
