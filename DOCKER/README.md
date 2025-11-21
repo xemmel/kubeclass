@@ -40,3 +40,32 @@ docker run -e "ACCEPT_EULA=Y" \
 
 
 ```
+
+#### Install sqlcmd
+
+```bash
+
+sudo su
+
+curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list | tee /etc/apt/sources.list.d/mssql-release.list
+exit
+
+sudo apt-get update
+sudo apt-get install mssql-tools18 unixodbc-dev
+
+
+echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bash_profile
+source ~/.bash_profile
+
+
+```
+
+#### Execute
+
+```bash
+
+sqlcmd -S localhost -C -U sa -P 'YourNewP@ssw0rd123!' -Q "select name from sys.databases;"
+
+
+```
