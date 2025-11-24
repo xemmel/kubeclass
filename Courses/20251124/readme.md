@@ -61,3 +61,11 @@ kubectl exec -it debug --namespace debug -- bash
 curl webserver-service.demo01
 
 ```
+
+#### Port-forward 
+> DEV/TEST ONLY!!!!
+
+```bash
+kubectl port-forward services/webserverhello-service 5555:80
+
+```
