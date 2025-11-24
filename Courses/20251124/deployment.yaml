@@ -14,3 +14,14 @@ spec:
       containers:
         - image: nginx
           name: webserver-container
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webserver-service
+spec:
+  selector:
+    app: webserver
+  ports:
+    - port: 80
+      targetPort: 80

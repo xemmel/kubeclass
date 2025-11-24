@@ -31,3 +31,33 @@ kubectl get all
 kubectl scale deployment webserver-deployment --replicas 8
 
 ```
+
+
+### Services
+
+```bash
+
+kubectl describe service webserver-service
+
+```
+
+
+### Debug pod
+
+```bash
+
+kubectl create namespace debug && kubectl run debug --namespace debug --image nginx
+
+
+kubectl exec -it debug --namespace debug -- bash
+
+
+```
+
+#### Call Service via DNS
+
+```bash
+
+curl webserver-service.demo01
+
+```
