@@ -69,3 +69,11 @@ curl webserver-service.demo01
 kubectl port-forward services/webserverhello-service 5555:80
 
 ```
+
+### Rollout restart 
+
+```bash
+
+kubectl rollout restart deployment webserverhello-deployment
+
+```

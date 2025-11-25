@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: container-cm
+data:
+  appTitle: 'The common title v3'
+  sqlserver: 'The server'
+  theapp: theappvalue

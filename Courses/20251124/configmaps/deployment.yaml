@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserverhello-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: webserverhello
+  template: 
+    metadata:
+      labels:
+        app: webserverhello
+    spec:
+      containers:
+        - name: webserverhello-container
+          image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          env:
+            - name: TITLE
+              valueFrom:
+                configMapKeyRef:
+                  name: test-cm
+                  key: appTitle
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webserverhello-service
+spec:
+  selector:
+    app: webserverhello
+  ports:
+    - port: 80
+      targetPort: 80
