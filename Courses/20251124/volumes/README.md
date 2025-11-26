@@ -82,6 +82,10 @@ spec:
       targetPort: 9200
 EOF
 
+kubectl create namespace demo
+kubectl config set-context --current --namespace demo
+
+
 kubectl apply --filename elastic_pvc.yaml
 kubectl apply --filename deployment.yaml
 
@@ -90,4 +94,20 @@ kubectl get pv,pvc
 ls ../kindstorage/files
 
 ```
+
+### Debug
+
+```bash
+
+kubectl create namespace debug && kubectl run debug --namespace debug --image nginx
+
+kubectl exec -it --namespace debug debug -- sh -c "curl elastic-service.demo:9200/_cat/indices"
+
+
+kubectl exec -it --namespace debug debug -- sh -c "curl elastic-service.demo:9200/db1 -X PUT"
+
+
+```
+
+
 
