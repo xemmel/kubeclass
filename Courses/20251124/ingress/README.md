@@ -30,6 +30,8 @@ EOF
 
 kind create cluster --name ingress --config ingress_cluster.yaml
 
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
 
 curl localhost:89
 
