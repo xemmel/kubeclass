@@ -937,8 +937,118 @@ kubectl get pods --output wide
 
 ### Services
 
+Services are a *Load Balancer* in front of a *Deployment* (a number of identical pods)
+All pods with an entry-point (this practically means all deployments) will also have a *Service* in front of them.
+
+- Append this at the end of your *deployment.yaml*
+
+```yaml
+          image: nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+      targetPort: 80
+```
+
+- Re-apply your *deployment.yaml*
+
+```bash
+kubectl apply --filename deployment.yaml
+
+```
+
+- Notice the output
+
+```
+deployment.apps/nginx-deployment unchanged
+service/nginx-service created
+```
+- Unchanged means that the manifest/desired state for the deployment *nginx-deployment* was identical to the actual state and therefore nothing changed
+- Created means that the service *nginx-service* was not in *kubernetes* before and therefore was created
+- Configured means that the artifact is already deployed in *kubernetes* but changes has been made in the manifest and therefore it has been altered
+
+
+- Now get all again and notice that we now have a service with it's own *ip address*
+
+- Go into the *debug pod* and curl the service address (exit again)
+
+- Notice that the *load balancer/service* hits one of the 4 pods, we don't know which one and don't care
+
+- Check out that the service has all 4 pods in its *endpoints*
+
+```bash
+### View all pods with ip adresses
+kubectl get pods --output wide
+### View the service's endpoints
+kubectl describe service nginx-service
+### Here you will see Endpoints: and 3 of the endpoints with an indication that there are more
+### Scale down to 2 replicas
+kubectl scale deployment nginx-deployment --replicas 2
+### View pods again
+### Now describe service again and notice that the service only have 2 endpoints now
+
+```
+
+- So think of the service as a *Load Balancer* that will detect automatically if more of less pods are available
+
+##### Service DNS
+
+- In practice we never want to call an ip address from a pod/container to another pod/service. Services comes with out-of-the-box DNS registration as follows:
+
+```
+SERVICE_NAME[.NAMESPACE][.svc.cluster.local]
+```
+Notice that *namespace* is optional and only needs to be specified if calling from a pod output the namespace of the service
+Notice that the *domain* is also optional and may differ for various *kubernetes clusters*
+
+- Go into the debug pod (which resides in ANOTHER namespace than our service)
+
+```bash
+kubectl exec -it debug --namespace debug -- bash
+
+### Now try to curl just the service name (this won't work since we are not in the same namespace)
+curl nginx-service
+### Now append the namespace and it should work
+curl nginx-service.test
+```
+
+
+[Back to top](#demo)
 
 
 
+## Infrastructure
 
+
++-----------------------------------------------------------------------------------+
+|                                 Kubernetes Cluster                                |
+|                                                                                   |
+|  +---------------------------+        +-----------------------------------------+ |
+|  |        Control Plane      |        |                 Worker Nodes            | |
+|  |                           |        |                                         | |
+|  |  +---------------------+  |        |  +---------------+   +---------------+  | |
+|  |  |  kube-apiserver      |<-----------------> kubelet   |   |   kubelet     |  | |
+|  |  +---------------------+  |        |  +---------------+   +---------------+  | |
+|  |  |  etcd               |  |        |  |  kube-proxy   |   |  kube-proxy   |  | |
+|  |  +---------------------+  |        |  +---------------+   +---------------+  | |
+|  |  |  scheduler          |  |        |  | container rt  |   | container rt  |  | |
+|  |  +---------------------+  |        |  | (containerd)  |   | (containerd)  |  | |
+|  |  |  controller-manager |  |        |  +---------------+   +---------------+  | |
+|  |  +---------------------+  |        |  |  Pods         |   |  Pods         |  | |
+|  +---------------------------+        |  |  - app        |   |  - app        |  | |
+|                                       |  |  - sidecar    |   |  - ingress    |  | |
+|                                       |  +---------------+   +---------------+  | |
+|                                       +-----------------------------------------+ |
+|                                                                                   |
+|  Add-ons (often): CoreDNS, CNI plugin, Ingress Controller, Metrics Server         |
++-----------------------------------------------------------------------------------+
+
+[Back to top](#demo)
 
