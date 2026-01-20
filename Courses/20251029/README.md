@@ -1023,6 +1023,39 @@ curl nginx-service.test
 [Back to top](#demo)
 
 
+## Logging
+
+- First let's try and log (and follow) one of our nginx pods (name will differ)
+
+```bash
+kubectl logs nginx-deployment-77b4f5b649-f78gs -f
+```
+
+- Open another terminal go into your debug pod and curl the service
+
+```bash
+kubectl exec -it --namespace debug debug -- bash
+
+
+curl nginx-service.test
+
+```
+
+- Notice that not all calls are logged since we have two pods and we are calling a load-balancer. So approx. 50% of the calls will go to the one pod we were monitoring
+
+- Let's monitor all the pods in the **ReplicaSet** by using *labels* instead. Exit the existing logging
+
+```bash
+kubectl logs -l app=nginx -f
+```
+- Now you should see all calls when calling the *service* in the *debug pod*
+
+- In most cases we don't care about which pod/container is being hit, but if you need that information, run log like this
+
+```bash
+kubectl logs -l app=nginx --prefix=true -f
+```
+- This will set the *pod name* in front of each *log line*
 
 ## Infrastructure
 
