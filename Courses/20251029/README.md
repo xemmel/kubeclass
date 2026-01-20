@@ -1095,3 +1095,111 @@ flowchart LR
 
 [Back to top](#demo)
 
+### Multi worker node cluster
+
+- Let's create a *multi node cluster*
+
+```bash
+### Remove existing cluster
+kind delete cluster --name mycluster
+
+### Create config file
+cat<<EOF>>multi_cluster.yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+- role: worker
+EOF
+
+### create cluster
+kind create cluster --name multi --config multi_cluster.yaml
+
+```
+
+- You should now have a cluster with 4 *nodes* 3 *worker nodes* and 1 *control plane node*
+
+```bash
+kubectl get nodes
+
+```
+
+- Let's deploy the *deployment* again 
+
+```bash
+kubectl create namespace test
+
+kubectl config set-context --current --namespace test
+
+kubectl apply --filename deployment.yaml
+
+### Scale to 5 replicas
+kubectl scale deployment nginx-deployment --replicas 5
+
+kubectl get pods --output wide
+
+#### Notice that the pods are distributed between the 3 worker nodes
+
+```
+
+
+### Restart deployment
+
+```bash
+
+kubectl rollout restart deployment nginx-deployment
+
+```
+[Back to top](#demo)
+
+### Maintanance
+
+#### cordon a worker node
+
+To *cordon* a worker node means setting it in *unschedule* mode but keep existing pods running
+
+```bash
+
+### Unschedule node3
+kubectl cordon multi-worker3
+### Check that pods are still running 
+kubectl get pods --output wide
+### Restart deployment
+kubectl rollout restart deployment nginx-deployment
+
+```
+- Note that all pods are now placed in *worker node* 1 and 2
+
+#### uncordon a worker node
+
+To *uncordon* a worker node means setting it back in *schedule* mode so that pods can be placed on the node again
+
+```bash
+### Check that scheduling is disabled on worker node 3
+kubectl get nodes
+### schedule node3
+kubectl uncordon multi-worker3
+### Check that scheduling is now enabled again on worker node 3
+kubectl get nodes
+### Restart deployment
+kubectl rollout restart deployment nginx-deployment
+
+```
+
+- Now pods should be on all 3 *worker nodes* again
+
+### Drain a node
+
+Draning a node means setting it in *unscheduling* mode and removing all pods (except *daemonsets*) from the *worker node*
+
+```bash
+kubectl drain multi-worker3 --ignore-daemonsets
+```
+
+- Now the *worker node* is *unscheduled* and all pods are either on *worker node* 1 or 2
+
+- When the node is updated *unschedule*/*uncordon* it again
+
+[Back to top](#demo)
