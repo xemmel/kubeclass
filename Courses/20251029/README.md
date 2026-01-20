@@ -1057,6 +1057,8 @@ kubectl logs -l app=nginx --prefix=true -f
 ```
 - This will set the *pod name* in front of each *log line*
 
+[Back to top](#demo)
+
 ## Infrastructure
 
 
