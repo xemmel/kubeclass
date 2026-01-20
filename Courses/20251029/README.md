@@ -698,7 +698,7 @@ docker network rm webservernet
 [Back to top](#demo)
 
 
-### Kubernetes
+## Kubernetes
 
 ### Update ubuntu
 
@@ -742,7 +742,7 @@ source ~/.bashrc
 
 ```
 
-#### Install kind
+### Install kind
 
 ```bash
 
@@ -755,7 +755,7 @@ sudo mv ./kind /usr/local/bin/kind
 
 [Back to top](#demo)
 
-#### Create Kubernetes cluster
+### Create Kubernetes cluster
 
 ```bash
 
@@ -765,7 +765,7 @@ kind create cluster --name mycluster
 
 [Back to top](#demo)
 
-#### Create first test app
+### Create first test app
 
 ```bash
 
@@ -849,5 +849,96 @@ kubectl apply --filename pod.yaml
 ```
 
 [Back to top](#demo)
+
+### Deployments
+
+There are 3 types of *kubernetes controllers* 
+- DaemonSet (Special cases, more later)
+- StatefulSet (Special cases, more later)
+- ReplicaSet (Used to control and ensure x number of pods running at all time, *is possible*)
+
+We will be looking at **ReplicaSet** now. However, replicasets are the only *controller* that is never deployed
+as a stand-alone controller, because a **ReplicaSet** is *immutable* when it comes to *image versions* and are therefore now capable of rolling out a new deployment of a new version of an image type.
+
+To control this we always deploy a **Deployment** that controls the **ReplicaSet** and that can make a new **ReplicaSet** with a new image version and gracefully un-deploy the old one.
+
+#### Cleanup existing deployment
+
+```bash
+
+### Using manifest file to remove everything again
+kubectl delete --filename pod.yaml
+### Manually delete the pod we created to begin with, without the use of manifest files
+kubectl delete pod nginx
+
+```
+Please note: when removing these pods the namespace is completely empty. In other words at the movement we do not have any controllers to ensure that up and running of our pods. 
+A **Deployment/ReplicaSet** will fix this
+
+- Create a deployment.yaml file
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx
+
+```
+
+- Apply the manifest
+
+```bash
+kubectl apply --filename deployment.yaml
+```
+
+- Verify the pods/deployment/replicaset
+
+```bash
+kubectl get all
+```
+
+- Now let's kill the pods again like before (replace name with correct name from your environment)
+```bash
+kubectl delete pod nginx-deployment-77b4f5b649-lnbm6
+```
+
+- List all pods again and notice that a new pod was created immediately because the **ReplicaSet** has a *desired state* of 1 and it will make sure, if possible, that the *current state* is always equal to the *desired state*, so once it saw that the *current state* was down to 0, it started a new pod.
+
+- Let's try to scale *desired state* up
+
+```bash
+kubectl scale deployment nginx-deployment --replicas 4
+```
+
+- List pods and verify that now 4 pods are running
+
+- Take a look at the *ip addresses* of the pods
+
+```bash
+kubectl get pods --output wide
+```
+
+- Go into the *debug pod* and curl some of the addresses, notice that each of them are responding
+
+
+[Back to top](#demo)
+
+### Services
+
+
+
+
 
 
