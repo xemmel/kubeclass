@@ -638,7 +638,7 @@ hostname -I
 - The local ip address for *netwebserver2* will be something like 172.65.0.3
 
 - We will now install *nmap* and scan the subnet
-   - NOTE: nmap is a **hacker tool* for both *white-hats* and *black-hats* please only use inside this virtual network we are doing now, and NOT for anything else, unless you know what you are doing
+   - NOTE: nmap is a **hacker tool** for both *white-hats* and *black-hats* please only use inside this virtual network we are doing now, and NOT for anything else, unless you know what you are doing
 
 ```bash
 
