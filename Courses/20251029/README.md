@@ -1027,28 +1027,36 @@ curl nginx-service.test
 ## Infrastructure
 
 
-+-----------------------------------------------------------------------------------+
-|                                 Kubernetes Cluster                                |
-|                                                                                   |
-|  +---------------------------+        +-----------------------------------------+ |
-|  |        Control Plane      |        |                 Worker Nodes            | |
-|  |                           |        |                                         | |
-|  |  +---------------------+  |        |  +---------------+   +---------------+  | |
-|  |  |  kube-apiserver      |<-----------------> kubelet   |   |   kubelet     |  | |
-|  |  +---------------------+  |        |  +---------------+   +---------------+  | |
-|  |  |  etcd               |  |        |  |  kube-proxy   |   |  kube-proxy   |  | |
-|  |  +---------------------+  |        |  +---------------+   +---------------+  | |
-|  |  |  scheduler          |  |        |  | container rt  |   | container rt  |  | |
-|  |  +---------------------+  |        |  | (containerd)  |   | (containerd)  |  | |
-|  |  |  controller-manager |  |        |  +---------------+   +---------------+  | |
-|  |  +---------------------+  |        |  |  Pods         |   |  Pods         |  | |
-|  +---------------------------+        |  |  - app        |   |  - app        |  | |
-|                                       |  |  - sidecar    |   |  - ingress    |  | |
-|                                       |  +---------------+   +---------------+  | |
-|                                       +-----------------------------------------+ |
-|                                                                                   |
-|  Add-ons (often): CoreDNS, CNI plugin, Ingress Controller, Metrics Server         |
-+-----------------------------------------------------------------------------------+
+```mermaid
+flowchart LR
+  subgraph CP[Control Plane]
+    API[kube-apiserver]
+    ETCD[etcd]
+    SCH[kube-scheduler]
+    CM[kube-controller-manager]
+  end
+
+  subgraph N1[Worker Node 1]
+    K1[kubelet]
+    KP1[kube-proxy]
+    C1[containerd]
+    P1[Pods]
+  end
+
+  subgraph N2[Worker Node 2]
+    K2[kubelet]
+    KP2[kube-proxy]
+    C2[containerd]
+    P2[Pods]
+  end
+
+  API --> K1
+  API --> K2
+  KP1 --> P1
+  KP2 --> P2
+
+
+
 
 [Back to top](#demo)
 
