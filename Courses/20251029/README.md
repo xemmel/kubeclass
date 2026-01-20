@@ -696,3 +696,158 @@ docker network rm webservernet
 ```
 
 [Back to top](#demo)
+
+
+### Kubernetes
+
+### Update ubuntu
+
+```bash
+
+sudo apt update && sudo apt upgrade -y
+
+```
+
+### Install Docker (if needed)
+
+```bash
+
+sudo apt install docker.io -y
+
+sudo usermod -aG docker $USER
+newgrp docker
+
+
+```
+
+### Install kubectl 
+
+```bash
+
+### install kubectl 
+
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+chmod +x kubectl
+mkdir -p ~/.local/bin
+mv ./kubectl ~/.local/bin/kubectl
+
+### kubectl completion
+
+sudo apt-get install -y bash-completion
+echo "source <(kubectl completion bash)" >> ~/.bashrc
+source ~/.bashrc
+
+
+```
+
+#### Install kind
+
+```bash
+
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.31.0/kind-linux-amd64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+
+
+```
+
+[Back to top](#demo)
+
+#### Create Kubernetes cluster
+
+```bash
+
+kind create cluster --name mycluster
+
+```
+
+[Back to top](#demo)
+
+#### Create first test app
+
+```bash
+
+### Create namespace
+kubectl create namespace test
+
+### Run a pod/Container in the namespace
+kubectl run nginx --image=nginx --namespace test
+
+### List all pods in the namespace
+kubectl get pods --output wide --namespace test
+
+### Set test namespace as default
+kubectl config set-context --current --namespace test
+
+### Validate default namespace
+kubectl config get-contexts
+
+### List all pods in namespace (without namespace specification)
+kubectl get pods --output wide
+
+
+```
+
+[Back to top](#demo)
+
+
+#### Debug pod
+
+```bash
+
+kubectl create namespace debug
+kubectl run debug --image=nginx --namespace debug
+
+### list folders/files in debug pod
+kubectl exec -it debug --namespace debug -- ls -l
+
+### bash into debug pod
+
+kubectl exec -it debug --namespace debug -- bash
+
+### Try and curl the nginx container in the test namespace
+
+curl ........
+
+### Exit out of the debug pod
+exit
+
+### Alter the nginx container with new webpage
+kubectl exec -it nginx -- sh -c "echo '<html>Hello</html>' > /usr/share/nginx/html/index.html"
+
+### Now go into debug pod again and curl, you should now see the new page
+
+```
+
+[Back to top](#demo)
+
+#### Using manifest files 
+
+##### Create file
+
+> Create file pod.yaml in an appropriate folder
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: nginx2
+spec:
+  containers:
+    - name: nginx2-container
+      image: nginx
+
+```
+
+### Apply manifest
+```bash
+
+kubectl apply --filename pod.yaml
+
+```
+
+[Back to top](#demo)
+
+
