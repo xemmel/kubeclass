@@ -700,6 +700,17 @@ docker network rm webservernet
 
 ## Kubernetes
 
+Kubernetes is an *container orchestration platform/environment* that can handle a lot of the pains we have when working solely with **docker/containers** 
+
+- High availability -> A kubernetes cluster can spawn multiple servers *(nodes)*
+- Load balancing
+- Security
+- Networking
+- Controllers (make sure that everything is running as planned)
+- HTTP Traffic (Certificates, routing)
+- Advanced Volume control
+
+
 ### Update ubuntu
 
 ```bash
