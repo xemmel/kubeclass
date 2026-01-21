@@ -1214,3 +1214,98 @@ kubectl drain multi-worker3 --ignore-daemonsets
 - When the node is updated *unschedule*/*uncordon* it again
 
 [Back to top](#demo)
+
+
+## Ingress
+
+### Install
+
+
+```bash
+
+kind delete cluster --....
+
+cat<<EOF>>ingress_cluster.yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+- role: worker
+EOF
+
+kind create cluster --name ingress --config ingress_cluster.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+
+```
+
+### Simple ingress
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /one
+        pathType: Prefix
+        backend:
+          service:
+            name: ingress-service
+            port:
+              number: 80
+```
+
+### Elastic Ingress
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: elastic-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /elastic(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: elastic-service
+                port:
+                  number: 9200
+```
+
+
+
+- Volumes
+- Infrastructure
+   - Maintanance
+- Ingress / Gateway API
+- Deployment
+   - HELM
+- configMaps/secrets
+
+
