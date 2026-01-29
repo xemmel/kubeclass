@@ -2,6 +2,8 @@
 
 ```bash
 
+sudo iptables -P FORWARD ACCEPT
+
 multipass launch --name kubserver --cpus 2 --memory 4G --disk 20G
 
 multipass shell kubserver
