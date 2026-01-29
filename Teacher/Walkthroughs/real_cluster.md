@@ -143,3 +143,16 @@ watch kubectl get nodes
 ```
 
 [Back to top](#real-cluster-setup)
+
+### Cleanup
+
+```bash
+
+multipass delete con-1-large -purge
+multipass delete wor-1-large -purge
+multipass delete wor-2-large -purge
+
+
+```
+
+[Back to top](#real-cluster-setup)
