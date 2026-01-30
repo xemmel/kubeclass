@@ -121,20 +121,9 @@ source ~/.bashrc
 [Back to top](#real-cluster-setup)
 
 
-### Install network
-
-```bash
-
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml
-
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml
 
 
-```
-
-[Back to top](#real-cluster-setup)
-
-### Install latest network
+### Install  network
 
 ```bash
 ### Not working 
@@ -142,6 +131,7 @@ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1
 CALICO_TAG="$(curl -fsSL https://api.github.com/repos/projectcalico/calico/releases/latest | jq -r .tag_name)"
 
 kubectl create -f "https://raw.githubusercontent.com/projectcalico/calico/${CALICO_TAG}/manifests/tigera-operator.yaml"
+sleep 10
 kubectl create -f "https://raw.githubusercontent.com/projectcalico/calico/${CALICO_TAG}/manifests/custom-resources.yaml"
 
 ```
