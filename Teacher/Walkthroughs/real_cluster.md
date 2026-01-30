@@ -148,9 +148,9 @@ watch kubectl get nodes
 
 ```bash
 
-multipass delete con-1-large -purge
-multipass delete wor-1-large -purge
-multipass delete wor-2-large -purge
+multipass delete con-1-large --purge
+multipass delete wor-1-large --purge
+multipass delete wor-2-large --purge
 
 
 ```
