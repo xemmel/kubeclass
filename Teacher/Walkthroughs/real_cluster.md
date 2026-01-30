@@ -1,11 +1,41 @@
 ### Real cluster setup
 
+
+
+
+### Create master node
+
 ```bash
 
 sudo iptables -P FORWARD ACCEPT
 
 
 multipass launch --name con-1-large --disk 30G --memory 4G --cpus 2
+
+```
+
+### Create template node
+
+```bash
+multipass launch --name template-large --disk 30G --memory 4G --cpus 2
+
+### Update it
+
+multipass stop template-large
+
+
+multipass clone --name con-1-large template-large
+multipass clone --name wor-1-large template-large
+multipass start con-1-large
+multipass start wor-1-large
+
+
+
+```
+
+### Create worker nodes
+
+```bash
 multipass launch --name wor-1-large --disk 30G --memory 4G --cpus 2
 multipass launch --name wor-2-large --disk 30G --memory 4G --cpus 2
 
@@ -89,6 +119,23 @@ sudo kubeadm config images pull
 
 [Back to top](#real-cluster-setup)
 
+
+### Clone master to worker nodes
+
+```bash
+
+multipass stop con-1-large
+multipass clone --name wor-1-large con-1-large
+multipass clone --name wor-x-large con-1-large
+multipass start con-1-large
+multipass start wor-1-large
+
+
+
+```
+
+[Back to top](#real-cluster-setup)
+
 ### Setup cluster
 
 ```bash
@@ -136,6 +183,7 @@ kubectl create -f "https://raw.githubusercontent.com/projectcalico/calico/${CALI
 
 ```
 
+
 [Back to top](#real-cluster-setup)
 
 ### Add a worker node
@@ -173,6 +221,16 @@ SERVER_NAME="con-1-large"
 multipass stop $SERVER_NAME
 multipass restore --destructive "${SERVER_NAME}.${SERVER_NAME}-snap"
 multipass start $SERVER_NAME
+
+```
+
+[Back to top](#real-cluster-setup)
+
+### Debug pod 
+
+```bash
+
+kubectl create namespace debug && kubectl run --namespace debug debug --image nginx
 
 ```
 
