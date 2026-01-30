@@ -191,6 +191,17 @@ kubectl create -f "https://raw.githubusercontent.com/projectcalico/calico/${CALI
 ```bash
 ### First do the pre-configure
 
+### Or
+WORKER_NODE_NUMBER="2"
+
+NODE_NAME="wor-${WORKER_NODE_NUMBER}-large"
+
+multipass clone --name $NODE_NAME template-large
+multipass start $NODE_NAME
+multipass shell $NODE_NAME
+
+
+
 #### In master
 kubeadm token create --print-join-command
 
