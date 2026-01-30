@@ -163,6 +163,31 @@ watch kubectl get nodes
 
 [Back to top](#real-cluster-setup)
 
+### Take snapshot of server
+
+```bash
+
+SERVER_NAME="con-1-large"
+multipass stop $SERVER_NAME
+multipass snapshot --name "${SERVER_NAME}-snap" $SERVER_NAME
+multipass start $SERVER_NAME
+
+
+```
+[Back to top](#real-cluster-setup)
+
+### Restore snapshot
+
+```bash
+SERVER_NAME="con-1-large"
+multipass stop $SERVER_NAME
+multipass restore --destructive "${SERVER_NAME}.${SERVER_NAME}-snap"
+multipass start $SERVER_NAME
+
+```
+
+[Back to top](#real-cluster-setup)
+
 ### Cleanup
 
 ```bash
