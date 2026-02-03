@@ -1,11 +1,41 @@
 ### Real cluster setup
 
+
+
+
+### Create master node
+
 ```bash
 
 sudo iptables -P FORWARD ACCEPT
 
 
 multipass launch --name con-1-large --disk 30G --memory 4G --cpus 2
+
+```
+
+### Create template node
+
+```bash
+multipass launch --name template-large --disk 30G --memory 4G --cpus 2
+
+### Update it
+
+multipass stop template-large
+
+
+multipass clone --name con-1-large template-large
+multipass clone --name wor-1-large template-large
+multipass start con-1-large
+multipass start wor-1-large
+
+
+
+```
+
+### Create worker nodes
+
+```bash
 multipass launch --name wor-1-large --disk 30G --memory 4G --cpus 2
 multipass launch --name wor-2-large --disk 30G --memory 4G --cpus 2
 
@@ -64,9 +94,16 @@ sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/conf
 sudo systemctl restart containerd
 sudo systemctl enable containerd
 
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+K8S_VERSION=$(curl -fsSL https://dl.k8s.io/release/stable.txt)
+K8S_MINOR=${K8S_VERSION%.*}
 
-echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+curl -fsSL "https://pkgs.k8s.io/core:/stable:/${K8S_MINOR}/deb/Release.key" \
+  | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
+https://pkgs.k8s.io/core:/stable:/${K8S_MINOR}/deb/ /" \
+| sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 
 sudo apt-get update
@@ -76,6 +113,23 @@ sudo apt-mark hold kubelet kubeadm kubectl
 
 sudo systemctl enable --now kubelet
 sudo kubeadm config images pull
+
+
+```
+
+[Back to top](#real-cluster-setup)
+
+
+### Clone master to worker nodes
+
+```bash
+
+multipass stop con-1-large
+multipass clone --name wor-1-large con-1-large
+multipass clone --name wor-x-large con-1-large
+multipass start con-1-large
+multipass start wor-1-large
+
 
 
 ```
@@ -114,31 +168,80 @@ source ~/.bashrc
 [Back to top](#real-cluster-setup)
 
 
-### Install network
+
+
+### Install  network
 
 ```bash
+### Not working 
 
-#### From FE
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml
+CALICO_TAG="$(curl -fsSL https://api.github.com/repos/projectcalico/calico/releases/latest | jq -r .tag_name)"
 
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml
-
+kubectl create -f "https://raw.githubusercontent.com/projectcalico/calico/${CALICO_TAG}/manifests/tigera-operator.yaml"
+sleep 10
+kubectl create -f "https://raw.githubusercontent.com/projectcalico/calico/${CALICO_TAG}/manifests/custom-resources.yaml"
 
 ```
 
-[Back to top](#real-cluster-setup)
 
+[Back to top](#real-cluster-setup)
 
 ### Add a worker node
 
 ```bash
 ### First do the pre-configure
 
+### Or
+WORKER_NODE_NUMBER="2"
+
+NODE_NAME="wor-${WORKER_NODE_NUMBER}-large"
+
+multipass clone --name $NODE_NAME template-large
+multipass start $NODE_NAME
+multipass shell $NODE_NAME
+
+
+
 #### In master
 kubeadm token create --print-join-command
 
 watch kubectl get nodes
 
+
+```
+
+[Back to top](#real-cluster-setup)
+
+### Take snapshot of server
+
+```bash
+
+SERVER_NAME="con-1-large"
+multipass stop $SERVER_NAME
+multipass snapshot --name "${SERVER_NAME}-snap" $SERVER_NAME
+multipass start $SERVER_NAME
+
+
+```
+[Back to top](#real-cluster-setup)
+
+### Restore snapshot
+
+```bash
+SERVER_NAME="con-1-large"
+multipass stop $SERVER_NAME
+multipass restore --destructive "${SERVER_NAME}.${SERVER_NAME}-snap"
+multipass start $SERVER_NAME
+
+```
+
+[Back to top](#real-cluster-setup)
+
+### Debug pod 
+
+```bash
+
+kubectl create namespace debug && kubectl run --namespace debug debug --image nginx
 
 ```
 
