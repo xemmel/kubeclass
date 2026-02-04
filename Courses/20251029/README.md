@@ -1036,6 +1036,22 @@ curl nginx-service.test
 
 ## Logging
 
+### Fix
+
+> If you see the error **failed to create fsnotify watcher: too many open files**
+> When trying to log a pod with -f
+
+```bash
+
+sudo sysctl -w fs.inotify.max_user_watches=524288
+sudo sysctl -w fs.inotify.max_user_instances=1024
+sudo sysctl -w fs.inotify.max_queued_events=32768
+
+
+```
+
+[Back to top](#demo)
+
 - First let's try and log (and follow) one of our nginx pods (name will differ)
 
 ```bash
