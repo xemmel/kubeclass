@@ -1,4 +1,8 @@
 
+### multi
+
+```bash
+
 kind get clusters
 kind delete cluster --name kind
 
@@ -83,6 +87,6 @@ kubectl drain multicluster-worker2 --ignore-daemonsets
 ## Do a ucordon after maintanance
 
 
-
+```
 
 
