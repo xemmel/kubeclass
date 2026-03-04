@@ -96,5 +96,8 @@ curl elastic-service.demo01:9200/_cat/indices
 curl elastic-service.demo01:9200/db1 -X PUT
 
 
+### Remove deployment
+
+kubectl delete --filename elastic.yaml
 
 ```
