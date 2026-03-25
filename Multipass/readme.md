@@ -18,13 +18,21 @@ multipass snapshot --name kubegroundimage kube-template
 
 ```
 
-### New cluster
+### Create Nodes
 
 ```bash
+
 multipass clone --name con-1-large kube-template
 multipass clone --name wor-1-large kube-template
 
 multipass start con-1-large wor-1-large
+
+
+```
+
+### Create cluster
+
+```bash
 
 
 multipass shell con-1-large
