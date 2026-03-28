@@ -239,6 +239,11 @@ multipass delete con-1-large --purge
 multipass delete wor-1-large --purge
 
 
+## Client
+multipass delete client-1-large --purge
+
+
+
 
 ```
 

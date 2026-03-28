@@ -68,8 +68,6 @@ multipass shell con-1-large
 
 ## Setup vars
 
-```bash
-
 BASEREQUEST=$(cat ./usertmp/$K8SUSER.csr | base64 | tr -d '\n')
 
 kubectl apply -f - <<EOF
@@ -83,6 +81,8 @@ spec:
   usages:
     - client auth
 EOF
+
+kubectl certificate approve user-csr
 
 kubectl get csr user-csr -o jsonpath='{.status.certificate}' | \
   base64 --decode > ./usertmp/$K8SUSER.crt
