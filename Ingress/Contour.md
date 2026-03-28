@@ -96,7 +96,10 @@ EOF
 
 ```bash
 
-kubectl apply -f https://projectcontour.io/examples/httpbin.yaml
+kubectl create namespace defaulthttpbin
+
+kubectl apply -f https://projectcontour.io/examples/httpbin.yaml --namespace defaulthttpbin
+
 
 NODEPORT=$(kubectl get service --namespace projectcontour envoy -o=jsonpath='{ .spec.ports[?(@.port=='80')].nodePort }')
 
