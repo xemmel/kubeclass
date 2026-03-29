@@ -80,7 +80,7 @@ source ~/.bashrc
 
 
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml
-
+sleep 10s
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml
 
 
@@ -100,6 +100,57 @@ JOIN_CMD=$(multipass exec con-1-large -- sudo kubeadm token create --print-join-
 multipass exec wor-1-large -- sudo bash -c "$JOIN_CMD"
 
 multipass exec con-1-large  -- watch kubectl get nodes
+
+```
+
+### Take/Use snapshot
+
+```bash
+
+## Take snapshot of con/wor
+
+multipass stop wor-1-large
+multipass stop con-1-large
+
+multipass info con-1-large.clean >/dev/null 2>&1 && multipass delete con-1-large.clean --purge
+multipass info wor-1-large.clean >/dev/null 2>&1 && multipass delete wor-1-large.clean --purge
+
+multipass snapshot --name clean con-1-large
+multipass snapshot --name clean wor-1-large
+
+multipass start con-1-large
+multipass start wor-1-large
+
+## Clear cluster to clean snapshot
+
+multipass stop wor-1-large
+multipass stop con-1-large
+
+multipass restore --destructive con-1-large.clean
+multipass restore --destructive wor-1-large.clean
+
+multipass start con-1-large
+multipass start wor-1-large
+
+
+### Check
+multipass exec con-1-large -- kubectl get nodes
+
+multipass exec con-1-large -- kubectl get namespaces
+
+multipass exec con-1-large -- kubectl create namespace mustgo
+
+
+```
+
+### Clean client server
+
+```bash
+
+multipass delete client-1-large --purge
+multipass clone --name client-1-large kube-template
+multipass start client-1-large
+
 
 ```
 

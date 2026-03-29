@@ -122,6 +122,7 @@ CONADDRESS=""
 kubectl config set-cluster "test-cluster" \
   --server $CONADDRESS \
   --insecure-skip-tls-verify=true
+  
 
 kubectl config set-credentials $K8SUSER \
    --client-certificate=./usertmp/$K8SUSER.crt \
@@ -158,6 +159,19 @@ kubectl create rolebinding $K8SUSER-rolebinding \
 kubectl create rolebinding $K8SGROUP-group-rolebinding \
   --role="$K8SUSER-role" --group=$K8SGROUP --namespace $K8SUSER
 
+
+```
+
+#### Call raw
+
+```bash
+
+kubectl get pods --namespace $K8SUSER -v7
+
+
+cat /home/ubuntu/.kube/config
+
+curl https://10.6.180.250:6443/api/v1/namespaces/user1/pods --cert ./usertmp/user1.crt --key ./usertmp/user1.key -k | jq .
 
 ```
 
