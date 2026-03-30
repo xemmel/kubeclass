@@ -183,3 +183,14 @@ kubectl get pods,services --namespace group1 ## Fails
 
 
 ```
+
+### Check existing certificate
+
+```bash
+
+kubectl config view --raw -o jsonpath='{.users[0].user.client-certificate-data}' \
+| base64 -d \
+| openssl x509 -noout -subject -nameopt multiline
+
+
+```
