@@ -56,7 +56,7 @@ uvicorn app:app --port 8000 --no-access-log &
 
 ## Press enter
 
-curl localhost:8000/items/123
+    curl localhost:8000/items/123
 
 fg
 
@@ -66,6 +66,9 @@ fg
 sudo apt install docker.io -y
 sudo usermod -aG docker $USER
 newgrp docker
+
+sudo apt install docker-buildx -y
+
 
 
 [ -e requirements.txt ] && rm requirements.txt
@@ -87,7 +90,7 @@ COPY . /code/app
 CMD ["fastapi", "run", "app/app.py", "--port", "80"]
 EOF
 
-docker build --tag api1:1.0 .
+docker buildx build --tag api1:1.0 .
 
 docker run --name api1 --publish 8899:80 -d api1:1.0
 

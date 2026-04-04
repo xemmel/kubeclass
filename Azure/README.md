@@ -15,6 +15,20 @@ choco install azure-cli -y
 
 ```
 
+### Install Azure CLI (Ubuntu)
+
+```bash
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+```
+
+### Login 
+
+```bash
+
+az login --use-device-code
+
+```
+
 ### Get kubernetes Cluster API Key Certificate
 
 ```powershell
