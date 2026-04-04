@@ -390,6 +390,11 @@ $containerAppRestJson = az containerapp show `
 
 $containerAppRest = $containerAppRestJson | ConvertFrom-Json
 
+```
+
+### Calls 
+
+```bash
 
 $errorBody = @"
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
