@@ -262,6 +262,27 @@ az containerapp update `
 
 ```
 
+### Get Awake status
+
+```powershell
+
+
+$containerAppType = "Soap";
+$result = az containerapp replica count --name $containerAppSoap.name --resource-group $rgName --subscription $subscriptionId;
+Write-Host ("${containerAppType}: $result");
+
+
+$containerAppType = "Rest";
+$result = az containerapp replica count --name $containerAppRest.name --resource-group $rgName --subscription $subscriptionId;
+Write-Host ("${containerAppType}: $result");
+
+
+$containerAppType = "Debug";
+$result = az containerapp replica count --name $containerAppDebug.name --resource-group $rgName --subscription $subscriptionId;
+Write-Host ("${containerAppType}: $result");
+
+
+```
 
 
 ### Wake them all
@@ -394,7 +415,7 @@ $containerAppRest = $containerAppRestJson | ConvertFrom-Json
 
 ### Calls 
 
-```bash
+```powershell
 
 $errorBody = @"
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
