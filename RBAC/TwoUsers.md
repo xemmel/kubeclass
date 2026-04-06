@@ -80,9 +80,14 @@ kubectl delete csr user-csr
 
 exit
 
-### Copy certificates to client Server
+### Copy certificates to client Server and the ca.crt
 
 MULTIUSER=$(multipass exec con-1-large -- whoami)
+
+## Ca (If not running insecure-skip-tls-verify=true)
+
+multipass transfer -p "con-1-large:/etc/kubernetes/pki/ca.crt" "ca.crt"
+multipass transfer -p "ca.crt" "client-1-large:/home/$MULTIUSER/ca/ca.crt"
 
 
 ### User1
@@ -96,6 +101,7 @@ multipass transfer -p "user2.crt" "client-1-large:/home/$MULTIUSER/user2cred/use
 
 rm "user1.crt"
 rm "user2.crt"
+rm "ca.crt"
 
 
 ### Setup kubectl for both users on client
@@ -116,10 +122,17 @@ echo "source <(kubectl completion bash)" >> ~/.bashrc
 source ~/.bashrc
 
 
+## No ca.crt (insecure MITM attacks!!!)
 kubectl config set-cluster "test-cluster" \
   --server $CONADDRESS \
   --insecure-skip-tls-verify=true
 
+## TLS ca.crt
+
+kubectl config set-cluster test-cluster \
+  --server="$CONADDRESS" \
+  --certificate-authority=./ca/ca.crt \
+  --embed-certs=true
 
 
 kubectl config set-credentials user1 \
@@ -180,6 +193,23 @@ kubectl config use-context "user2-test-context"
 
 kubectl get pods -A ## Succeeds
 kubectl get pods,services --namespace group1 ## Fails
+
+#### Raw curl call using ca.crt and using user1
+
+curl \
+  --cacert ca/ca.crt \
+  --cert user1cred/user1.crt \
+  --key user1cred/user1.key \
+  https://10.6.180.251:6443/api/v1/namespaces/group1/pods
+
+
+## If no ca.crt
+
+curl \
+  --insecure \
+  --cert user1cred/user1.crt \
+  --key user1cred/user1.key \
+  https://10.6.180.251:6443/api/v1/namespaces/group1/pods
 
 
 ```
