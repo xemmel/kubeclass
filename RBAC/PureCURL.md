@@ -105,6 +105,30 @@ curl $CLUSTERAPIADDRESS/api/v1/namespaces/group1/pods \
 	|   jq '.items[] | {namespace: .metadata.namespace, name: .metadata.name, containers: .spec.containers[] | {image: .image}}'
 
 
+#### Now use kubectl
+
+sudo apt-get install -y bash-completion
+echo "source <(kubectl completion bash)" >> ~/.bashrc
+source ~/.bashrc
+
+kubectl config set-cluster test-cluster \
+  --server="$CLUSTERAPIADDRESS" \
+  --certificate-authority=./user1cred/ca.crt \
+  --embed-certs=true
+
+kubectl config set-credentials user1 \
+   --client-certificate=./user1cred/user1.crt \
+   --client-key ./user1cred/user1.key \
+   --embed-certs=true
+
+kubectl config set-context "user1-test-context" \
+  --cluster="test-cluster" \
+  --user=user1
+  
+kubectl config use-context "user1-test-context"
+
+kubectl get pods --namespace group1
+
 
 ```
 
