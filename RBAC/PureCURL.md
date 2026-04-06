@@ -44,6 +44,8 @@ rm user1.csr
 
 ## Con
 
+multipass shell con-1-large
+
 ### Sign the csr with ca.crt and create user1.crt
 
 sudo openssl x509 -req \
