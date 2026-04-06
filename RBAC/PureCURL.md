@@ -34,7 +34,7 @@ openssl req -new -key "./user1cred/user1.key" \
 multipass transfer "client-1-large:./user1cred/user1.key" "user1.key"
 multipass transfer "client-1-large:./user1cred/user1.csr" "user1.csr"
 
-multipass exec con-1-large -- "mkdir user1cred"
+multipass exec con-1-large -- mkdir user1cred
 
 multipass transfer "user1.key" "con-1-large:./user1cred/user1.key"
 multipass transfer "user1.csr" "con-1-large:./user1cred/user1.csr"
