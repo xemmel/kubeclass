@@ -121,9 +121,9 @@ CALICO_VERSION=$(curl -fsSL https://api.github.com/repos/projectcalico/calico/re
   | sed -E 's/.*"([^"]+)".*/\1/')
 
 
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/tigera-operator.yaml
 sleep 10s
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/custom-resources.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/custom-resources.yaml
 
 
 ```
