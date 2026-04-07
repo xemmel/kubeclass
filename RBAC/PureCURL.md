@@ -137,8 +137,7 @@ kubectl get pods --namespace group1
 
 ```bash
 
-multipass stop wor-1-large
-multipass stop con-1-large
+multipass stop wor-1-large con-1-large
 
 multipass restore --destructive con-1-large.clean
 multipass restore --destructive wor-1-large.clean

@@ -124,7 +124,7 @@ EOF
 kubectl create namespace debug && kubectl run debug --namespace debug --image nginx
 
 kubectl exec -it --namespace debug debug -- curl hello1-service.gatewaydemo
-kubectl exec -it --namespace debug debug -- curl hello1-service.gatewaydemo
+kubectl exec -it --namespace debug debug -- curl hello2-service.gatewaydemo
 
 kubectl exec -it --namespace debug debug -- curl 
 
