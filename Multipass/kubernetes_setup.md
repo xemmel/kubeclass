@@ -93,7 +93,13 @@ multipass clone --name con-1-large kube-template
 multipass clone --name wor-1-large kube-template
 multipass clone --name client-1-large kube-template
 
-multipass start con-1-large wor-1-large client-1-large
+multipass start client-1-large
+
+
+multipass set local.con-1-large.memory=6G
+multipass set local.wor-1-large.memory=6G
+
+multipass start con-1-large wor-1-large
 
 ```
 
@@ -122,7 +128,7 @@ CALICO_VERSION=$(curl -fsSL https://api.github.com/repos/projectcalico/calico/re
 
 
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/tigera-operator.yaml
-sleep 10s
+sleep 15s
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/custom-resources.yaml
 
 
