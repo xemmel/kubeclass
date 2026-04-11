@@ -155,6 +155,10 @@ JOIN_CMD=$(multipass exec con-1-large -- sudo kubeadm token create --print-join-
 multipass exec wor-1-large -- sudo bash -c "$JOIN_CMD"
 
 
+JOIN_CMD=$(multipass exec con-1-latest -- sudo kubeadm token create --print-join-command)
+multipass exec wor-1-latest -- sudo bash -c "$JOIN_CMD"
+
+
 ```
 
 ### Take snapshot of nodes

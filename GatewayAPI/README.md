@@ -51,6 +51,37 @@ kubectl create namespace gatewaydemo
 kubectl config set-context --current --namespace gatewaydemo
 
 
+
+
+### GatewayClass
+
+kubectl apply -f - <<EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: example-gateway
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+EOF
+
+### Gateway
+
+> Will create a new LoadBalancer Service called *envoy-gatewaydemo-example-gateway-.......*
+
+kubectl apply -f - <<EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: example-gateway
+spec:
+  gatewayClassName: example-gateway
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 80
+EOF
+
+
 ### Deployment and Service
 
 kubectl apply -f - <<EOF
@@ -128,34 +159,6 @@ kubectl exec -it --namespace debug debug -- curl hello2-service.gatewaydemo
 
 kubectl exec -it --namespace debug debug -- curl 
 
-
-### GatewayClass
-
-kubectl apply -f - <<EOF
-apiVersion: gateway.networking.k8s.io/v1
-kind: GatewayClass
-metadata:
-  name: example-gateway
-spec:
-  controllerName: gateway.envoyproxy.io/gatewayclass-controller
-EOF
-
-### Gateway
-
-> Will create a new LoadBalancer Service called *envoy-gatewaydemo-example-gateway-.......*
-
-kubectl apply -f - <<EOF
-apiVersion: gateway.networking.k8s.io/v1
-kind: Gateway
-metadata:
-  name: example-gateway
-spec:
-  gatewayClassName: example-gateway
-  listeners:
-  - name: http
-    protocol: HTTP
-    port: 80
-EOF
 
 ### HTTPRoutes
 
