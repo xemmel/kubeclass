@@ -1,6 +1,29 @@
 ## Multipass
 
 
+### Install
+
+```bash
+
+## If snap is not installed
+
+sudo apt update
+sudo apt install snapd
+
+
+sudo snap install multipass
+
+```
+
+### Launch
+
+```bash
+
+multipass launch --name server --disk 30G --memory 4G --cpus 2
+multipass launch --name newest --disk 30G --memory 4G --cpus 2 devel
+
+```
+
 ### Init
 
 ```bash

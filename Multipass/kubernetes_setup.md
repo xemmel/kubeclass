@@ -10,6 +10,17 @@ multipass shell kube-template
 
 ```
 
+### Create newest image 3 servers directly
+
+```bash
+
+multipass launch --name con-1-latest --disk 30G --memory 6G --cpus 2 devel
+multipass launch --name wor-1-latest --disk 30G --memory 6G --cpus 2 devel
+multipass launch --name client-1-latest --disk 30G --memory 2G --cpus 2 devel
+
+
+```
+
 ### Setup kubeadm, containerd etc
 
 ```bash

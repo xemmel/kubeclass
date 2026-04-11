@@ -1,5 +1,22 @@
 # Linux
 
+## No sudo password prompt
+
+```bash
+
+sudo visudo
+
+## change
+%sudo   ALL=(ALL:ALL) ALL
+
+## to
+
+%sudo   ALL=(ALL:ALL) NOPASSWD:ALL
+
+## If you are not member of the group sudo then make a new entry where you replace %sudo with your username or a group
+
+```
+
 ## Update
 
 ```bash
