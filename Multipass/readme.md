@@ -1,7 +1,7 @@
 ## Multipass
 
 
-### Install
+### Install Linux
 
 ```bash
 
@@ -12,6 +12,14 @@ sudo apt install snapd
 
 
 sudo snap install multipass
+
+```
+
+### Install Windows
+
+```bash
+
+winget install Canonical.Multipass
 
 ```
 
