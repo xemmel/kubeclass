@@ -81,7 +81,6 @@ EOF
 GATEWAY_NODEPORT=$(kubectl get svc -A | grep LoadB | awk -F'[:/ ]+' '{ print $7 }')
 
 GATEWAY_NODEPORT=$(kubectl get svc -A -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].spec.ports[0].nodePort}')
-
 curl "localhost:$GATEWAY_NODEPORT/hello3"
 
 ```

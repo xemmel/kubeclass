@@ -136,6 +136,16 @@ sudo apt-get install -y bash-completion
 echo "source <(kubectl completion bash)" >> ~/.bashrc
 source ~/.bashrc
 
+## Helm
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+chmod 700 get_helm.sh
+./get_helm.sh
+
+echo "source <(helm completion bash)" >> ~/.bashrc
+source ~/.bashrc
+
+
 CALICO_VERSION=$(curl -fsSL https://api.github.com/repos/projectcalico/calico/releases/latest \
   | grep '"tag_name"' \
   | sed -E 's/.*"([^"]+)".*/\1/')
@@ -158,6 +168,18 @@ JOIN_CMD=$(multipass exec con-1-large -- sudo kubeadm token create --print-join-
 multipass exec wor-1-large -- sudo bash -c "$JOIN_CMD"
 
 
+```
+
+### Add new worker node
+
+```bash
+
+multipass clone --name wor-2-large kube-template
+multipass set local.wor-2-large.memory=6G
+multipass start wor-2-large
+
+JOIN_CMD=$(multipass exec con-1-large -- sudo kubeadm token create --print-join-command)
+multipass exec wor-2-large -- sudo bash -c "$JOIN_CMD"
 
 
 ```

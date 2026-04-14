@@ -1,5 +1,23 @@
 ## Full
 
+
+#### Standard Channel
+
+```bash
+
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.0/standard-install.yaml
+
+```
+
+#### Experimental Channel
+
+```bash
+
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.0/experimental-install.yaml
+
+```
+
+
 ```bash
 
 
@@ -16,6 +34,7 @@ spec:
 EOF
 
 kubectl create namespace hello
+kubectl create namespace localhost-cert
 
 
 mkdir hellocert
@@ -25,14 +44,22 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -out ./hellocert/tls.crt \
   -subj "/CN=localhost"
 
-  ls ./hellocert -l
 
+
+
+kubectl -n hello create secret tls hello-local-tls --namespace localhost-cert \
+  --key=./hellocert/tls.key \
+  --cert=./hellocert/tls.crt
+
+
+## Local secret
 
 kubectl -n hello create secret tls hello-local-tls --namespace hello \
   --key=./hellocert/tls.key \
   --cert=./hellocert/tls.crt
 
-kubectl get secret hello-local-tls --namespace hello
+## kubectl get secret hello-local-tls --namespace local-cert -o yaml
+
 
 
 kubectl apply --namespace hello -f - <<EOF
@@ -147,6 +174,7 @@ curl "https://localhost:$GATEWAY_NODEPORT_443/hello" --insecure
 ### Cleanup
 
 kubectl delete namespace hello
+kubectl delete namespace localhost-cert
 
 kubectl delete gatewayclass envoy-gatewayclass
 
