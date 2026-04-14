@@ -126,6 +126,13 @@ kubectl get pods,services,gateway,httproutes --namespace hello
 
 kubectl create namespace debug && kubectl run --namespace debug debug --image nginx
 
+#### Change Service IP address
+
+kubectl exec -it --namespace debug debug -- curl https://10.100.104.136:443/hello --insecure
+
+
+
+
 ### Test call hello
 
 GATEWAY_NODEPORT_80=$(kubectl get svc -A -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].spec.ports[0].nodePort}')
