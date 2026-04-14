@@ -90,7 +90,7 @@ kubectl create namespace group1
 
 kubectl run --namespace group1 webserver --image nginx
 
-kubectl create role group1-full-control-role --verb=* --resource=* --namespace group1
+kubectl create role group1-full-control-role --verb=* --resource=*.* --namespace group1
 
 kubectl create rolebinding group1-group1-full-control-rolebinding \
   --role=group1-full-control-role --group=Group1 --namespace group1
@@ -127,7 +127,8 @@ kubectl config set-context "user1-test-context" \
   
 kubectl config use-context "user1-test-context"
 
-kubectl get pods --namespace group1
+kubectl config set-context --current --namespace group1
+kubectl get pods
 
 
 ```

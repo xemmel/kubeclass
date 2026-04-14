@@ -21,7 +21,10 @@ source ~/.bashrc
 
 ```bash
 
-helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.7.1 -n envoy-gateway-system --create-namespace
+helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.7.1 -n envoy-gateway-system --create-namespace 
+
+## If CRDS installed else where
+helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.7.1 -n envoy-gateway-system --create-namespace --skip-crds
 
 kubectl wait --timeout=5m -n envoy-gateway-system deployment/envoy-gateway --for=condition=Available
 
@@ -64,6 +67,17 @@ spec:
   controllerName: gateway.envoyproxy.io/gatewayclass-controller
 EOF
 
+### GatewayClass (Doesn't exist)
+
+kubectl apply -f - <<EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: example2-gateway
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass3-controller
+EOF
+
 ### Gateway
 
 > Will create a new LoadBalancer Service called *envoy-gatewaydemo-example-gateway-.......*
@@ -79,6 +93,9 @@ spec:
   - name: http
     protocol: HTTP
     port: 80
+  - name: https
+    protocol: HTTP
+    port: 443
 EOF
 
 
