@@ -9,11 +9,23 @@ kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/re
 
 ```
 
+#### Standard Channel Latest
+
+```bash
+
+VERSION=$(curl -s https://api.github.com/repos/kubernetes-sigs/gateway-api/releases/latest | jq -r .tag_name)
+
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${VERSION}/standard-install.yaml
+
+```
+
 #### Experimental Channel
 
 ```bash
 
-kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.0/experimental-install.yaml
+VERSION=$(curl -s https://api.github.com/repos/kubernetes-sigs/gateway-api/releases/latest | jq -r .tag_name)
+
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${VERSION}/experimental-install.yaml
 
 ```
 

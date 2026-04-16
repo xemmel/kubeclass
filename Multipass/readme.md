@@ -150,8 +150,12 @@ multipass snapshot --name clean wor-1-large
 
 multipass start con-1-large wor-1-large
 
+```
+
 
 ## Clear cluster to clean snapshot
+
+```bash
 
 multipass stop wor-1-large con-1-large
 
