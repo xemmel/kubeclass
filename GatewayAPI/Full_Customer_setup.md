@@ -34,27 +34,25 @@ spec:
 EOF
 
 kubectl create namespace hello
-kubectl create namespace localhost-cert
-
+kubectl create namespace common-gateway
 
 mkdir hellocert
 
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -keyout ./hellocert/tls.key \
   -out ./hellocert/tls.crt \
-  -subj "/CN=localhost"
+  -subj "/CN=localhost" \
+  -quiet
 
 
 
 
-kubectl -n hello create secret tls hello-local-tls --namespace localhost-cert \
-  --key=./hellocert/tls.key \
-  --cert=./hellocert/tls.crt
 
 
-## Local secret
 
-kubectl -n hello create secret tls hello-local-tls --namespace hello \
+## Secret in common-gateway namespace
+
+kubectl -n hello create secret tls hello-local-tls --namespace common-gateway \
   --key=./hellocert/tls.key \
   --cert=./hellocert/tls.crt
 
@@ -62,20 +60,26 @@ kubectl -n hello create secret tls hello-local-tls --namespace hello \
 
 
 
-kubectl apply --namespace hello -f - <<EOF
+kubectl apply --namespace common-gateway -f - <<EOF
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: hello-envoy-gateway
+  name: common-envoy-gateway
 spec:
   gatewayClassName: envoy-gatewayclass
   listeners:
   - name: http
     protocol: HTTP
     port: 80
+    allowedRoutes:
+      namespaces:
+        from: All
   - name: https
     protocol: HTTPS
     port: 443
+    allowedRoutes:
+      namespaces:
+        from: All
     tls:
       mode: Terminate
       certificateRefs:
@@ -84,6 +88,7 @@ spec:
         name: hello-local-tls
 EOF
 
+### Hello
 
 kubectl apply --namespace hello --filename - <<EOF
 apiVersion: apps/v1
@@ -117,8 +122,10 @@ spec:
     - name: http
       port: 80
       targetPort: 80
+
 EOF
 
+### Hello route
 
 kubectl apply --namespace hello --filename - <<EOF
 apiVersion: gateway.networking.k8s.io/v1
@@ -127,7 +134,8 @@ metadata:
   name: hello-httproute
 spec:
   parentRefs:
-  - name: hello-envoy-gateway
+  - name: common-envoy-gateway
+    namespace: common-gateway
   rules:
     - backendRefs:
       - name: hello-service
@@ -169,16 +177,94 @@ GATEWAY_NODEPORT_443=$(kubectl get svc -A -o jsonpath='{.items[?(@.spec.type=="L
 curl "localhost:$GATEWAY_NODEPORT_80/hello"
 
 curl "https://localhost:$GATEWAY_NODEPORT_443/hello" --insecure
+curl "https://localhost:$GATEWAY_NODEPORT_443/hello2" --insecure
+
 
 
 ### Cleanup
 
 kubectl delete namespace hello
-kubectl delete namespace localhost-cert
+kubectl delete namespace hello2
+
+kubectl delete namespace common-gateway
 
 kubectl delete gatewayclass envoy-gatewayclass
 
 rm -rf hellocert
+
+
+```
+
+
+### Create Hello 2 other namespace
+
+```bash
+
+kubectl create namespace hello2
+
+kubectl apply --namespace hello2 --filename - <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-deployment
+spec:
+  selector:
+    matchLabels:
+      app: hello2
+  template:
+    metadata:
+      labels:
+        app: hello2
+    spec:
+      containers:
+        - name: hello2-container
+          image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+          env:
+            - name: TITLE
+              value: 'hello2app'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello2-service
+spec:
+  selector:
+    app: hello2
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+
+EOF
+
+### Hello route
+
+kubectl apply --namespace hello2 --filename - <<EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: hello2-httproute
+spec:
+  parentRefs:
+  - name: common-envoy-gateway
+    namespace: common-gateway
+  rules:
+    - backendRefs:
+      - name: hello2-service
+        kind: Service
+        port: 80
+      matches:
+        - path:
+            type: PathPrefix
+            value: /hello2
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /	
+EOF
+
 
 
 ```
