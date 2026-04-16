@@ -54,6 +54,17 @@ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/${VERSION}/co
 
 kubectl apply -f - <<EOF
 apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 192.168.1.240-192.168.1.250
+EOF
+
+kubectl apply -f - <<EOF
+apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
   name: default
@@ -93,11 +104,6 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -out ./hellocert/tls.crt \
   -subj "/CN=localhost" \
   -quiet
-
-
-
-
-
 
 
 ## Secret in common-gateway namespace
@@ -205,6 +211,14 @@ EOF
 
 
 kubectl get pods,services,gateway,httproutes --namespace hello
+
+
+### Test LoadBalancer
+
+LOADBALANCER_IP=$(kubectl get services -A -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[0].ip}')
+
+curl https://${LOADBALANCER_IP}/hello --insecure
+
 
 
 ### Test Pod
