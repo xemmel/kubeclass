@@ -29,12 +29,44 @@ kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/re
 
 ```
 
+### Install Envoy Proxy (Helm)
 
 ```bash
 
 
 helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.7.1 -n envoy-gateway-system --create-namespace --skip-crds
 
+```
+
+### Intall MetalLB
+
+```bash
+
+VERSION=$(curl -s https://api.github.com/repos/metallb/metallb/releases/latest | jq -r .tag_name)
+
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/${VERSION}/config/manifests/metallb-native.yaml
+
+```
+
+#### IP Pool and L2
+
+```bash
+
+kubectl apply -f - <<EOF
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  namespace: metallb-system
+EOF
+
+
+
+```
+
+### Install GatewayClass
+
+```bash
 
 kubectl apply -f - <<EOF
 apiVersion: gateway.networking.k8s.io/v1
@@ -44,6 +76,12 @@ metadata:
 spec:
   controllerName: gateway.envoyproxy.io/gatewayclass-controller
 EOF
+
+```
+
+### Install Gateway and secret
+
+```bash
 
 kubectl create namespace hello
 kubectl create namespace common-gateway
