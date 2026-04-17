@@ -27,14 +27,47 @@ VERSION=$(curl -s https://api.github.com/repos/kubernetes-sigs/gateway-api/relea
 
 kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${VERSION}/experimental-install.yaml
 
+##
+
 ```
 
-### Install Envoy Proxy (Helm)
+### Check if Envoy proxy is present
+
+```bash
+kubectl get crd | grep -i envoy
+kubectl api-resources | grep -i envoy
+
+```
+
+### Install Envoy System with EnvoyProxy 
+
+```bash
+
+helm template eg-crds oci://docker.io/envoyproxy/gateway-crds-helm \
+  --version v1.4.6 \
+  --set crds.gatewayAPI.enabled=false \
+  --set crds.envoyGateway.enabled=true \
+  | kubectl apply --server-side -f -
+
+helm install eg oci://docker.io/envoyproxy/gateway-helm \
+  --version v1.7.1 -n envoy-gateway-system --create-namespace \
+  --set crds.gatewayAPI.enabled=false \
+  --set crds.envoyGateway.enabled=true | kubectl apply --server-side -f -
+
+```
+
+### Install Envoy Proxy without envoyproxy (Helm)
 
 ```bash
 
 
-helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.7.1 -n envoy-gateway-system --create-namespace --skip-crds
+helm install eg oci://docker.io/envoyproxy/gateway-helm \
+  --version v1.5.9 \
+  -n envoy-gateway-system \
+  --create-namespace \
+  --skip-crds
+
+##
 
 ```
 
@@ -45,6 +78,8 @@ helm install eg oci://docker.io/envoyproxy/gateway-helm --version v1.7.1 -n envo
 VERSION=$(curl -s https://api.github.com/repos/metallb/metallb/releases/latest | jq -r .tag_name)
 
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/${VERSION}/config/manifests/metallb-native.yaml
+
+## 
 
 ```
 
@@ -62,6 +97,8 @@ spec:
   addresses:
     - 192.168.1.240-192.168.1.250
 EOF
+
+sleep 10s
 
 kubectl apply -f - <<EOF
 apiVersion: metallb.io/v1beta1
@@ -90,11 +127,19 @@ EOF
 
 ```
 
+### Check GatewayClass accepted
+
+```bash
+
+kubectl get gatewayclasses
+
+
+```
+
 ### Install Gateway and secret
 
 ```bash
 
-kubectl create namespace hello
 kubectl create namespace common-gateway
 
 mkdir hellocert
@@ -144,7 +189,15 @@ spec:
         name: hello-local-tls
 EOF
 
+```
+
+
+
 ### Hello
+
+```bash
+
+kubectl create namespace hello
 
 kubectl apply --namespace hello --filename - <<EOF
 apiVersion: apps/v1
@@ -210,7 +263,7 @@ spec:
 EOF
 
 
-kubectl get pods,services,gateway,httproutes --namespace hello
+
 
 
 ### Test LoadBalancer
