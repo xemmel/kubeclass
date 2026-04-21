@@ -34,3 +34,26 @@ sudo nsenter --target $(docker inspect $CONTAINER_NAME | jq '.[] | .State.Pid') 
 ls /usr/share/nginx/html/ -l
 
 ```
+
+
+### Start Process Inside container
+
+
+```bash
+
+docker run -d --name demo alpine sleep 1000
+
+docker exec -it demo sh
+
+
+sleep 600 &
+
+
+### Outside
+
+ps aux | grep sleep
+
+sudo pkill -f "sleep 600"
+
+
+```

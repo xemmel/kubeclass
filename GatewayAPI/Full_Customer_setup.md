@@ -193,7 +193,7 @@ EOF
 
 
 
-### Hello
+### Hello Deployment
 
 ```bash
 
@@ -263,7 +263,11 @@ spec:
 EOF
 
 
+```
 
+### Hello test
+
+```bash
 
 
 ### Test LoadBalancer
@@ -297,8 +301,13 @@ curl "https://localhost:$GATEWAY_NODEPORT_443/hello" --insecure
 curl "https://localhost:$GATEWAY_NODEPORT_443/hello2" --insecure
 
 
+```
+
+
 
 ### Cleanup
+
+```bash
 
 kubectl delete namespace hello
 kubectl delete namespace hello2
