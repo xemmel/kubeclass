@@ -125,7 +125,7 @@ kubectl logs $(kubectl get pods -o name | tail -n 1)
 
 kubectl delete $(kubectl get pods -o name | tail -n 1)
 
-multipass exec wor-1-latest -- ls /opt/local-path-provisioner
+multipass exec wor-1-large -- ls /opt/local-path-provisioner
 
 ```
 
