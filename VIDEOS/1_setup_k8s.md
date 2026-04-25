@@ -30,8 +30,6 @@ sudo iptables --policy FORWARD ACCEPT
 
 multipass launch --name flowgrait-k8s-template --memory 4GB --cpus 2 --disk 20GB devel
 
-multipass exec flowgrait-k8s-template -- ls
-
 multipass shell flowgrait-k8s-template
 
 ```
