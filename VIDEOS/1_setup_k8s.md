@@ -115,16 +115,16 @@ multipass stop flowgrait-k8s-template
 ```bash
 
 multipass clone --name control-plane-flowgrait-k8s flowgrait-k8s-template
-multipass clone --name worker-1-flowgrait-k8s flowgrait-k8s-template
+multipass clone --name worker1-flowgrait-k8s flowgrait-k8s-template
 multipass clone --name client-flowgrait-k8s flowgrait-k8s-template
 
 multipass start client-flowgrait-k8s
 
 
 multipass set local.control-plane-flowgrait-k8s.memory=6G
-multipass set local.worker-1-flowgrait-k8s.memory=6G
+multipass set local.worker1-flowgrait-k8s.memory=6G
 
-multipass start control-plane-flowgrait-k8s worker-1-flowgrait-k8s
+multipass start control-plane-flowgrait-k8s worker1-flowgrait-k8s
 
 
 ```
@@ -211,7 +211,7 @@ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALIC
 
 ```bash
 
-WORKER_NODE_NAME="worker-1-flowgrait-k8s"
+WORKER_NODE_NAME="worker1-flowgrait-k8s"
 
 JOIN_CMD=$(multipass exec control-plane-flowgrait-k8s -- sudo kubeadm token create --print-join-command)
 multipass exec $WORKER_NODE_NAME -- sudo bash -c "$JOIN_CMD"
@@ -230,15 +230,15 @@ multipass exec control-plane-flowgrait-k8s -- watch kubectl get nodes
 
 ```bash
 
-multipass stop worker-1-flowgrait-k8s control-plane-flowgrait-k8s
+multipass stop worker1-flowgrait-k8s control-plane-flowgrait-k8s
 
 multipass info control-plane-flowgrait-k8s.clean >/dev/null 2>&1 && multipass delete control-plane-flowgrait-k8s.clean --purge
-multipass info worker-1-flowgrait-k8s.clean >/dev/null 2>&1 && multipass delete worker-1-flowgrait-k8s.clean --purge
+multipass info worker1-flowgrait-k8s.clean >/dev/null 2>&1 && multipass delete worker1-flowgrait-k8s.clean --purge
 
 multipass snapshot --name clean control-plane-flowgrait-k8s
-multipass snapshot --name clean worker-1-flowgrait-k8s
+multipass snapshot --name clean worker1-flowgrait-k8s
 
-multipass start control-plane-flowgrait-k8s worker-1-flowgrait-k8s
+multipass start control-plane-flowgrait-k8s worker1-flowgrait-k8s
 
 
 ```
@@ -247,12 +247,12 @@ multipass start control-plane-flowgrait-k8s worker-1-flowgrait-k8s
 
 ```bash
 
-multipass stop worker-1-flowgrait-k8s control-plane-flowgrait-k8s
+multipass stop worker1-flowgrait-k8s control-plane-flowgrait-k8s
 
 multipass restore --destructive control-plane-flowgrait-k8s.clean
-multipass restore --destructive worker-1-flowgrait-k8s.clean
+multipass restore --destructive worker1-flowgrait-k8s.clean
 
-multipass start control-plane-flowgrait-k8s worker-1-flowgrait-k8s
+multipass start control-plane-flowgrait-k8s worker1-flowgrait-k8s
 
 
 ```
@@ -344,10 +344,17 @@ kubectl exec -it debug --namespace debug -- bash
 
 ### NMAP inside debug pod
 
+#### Install nmap
 ```bash
 
 apt update
 apt install nmap -y
+
+```
+
+#### Use nmap
+
+```bash
 
 PODRANGE=$(hostname -I | awk -F"." '{ print $1"."$2"."$3".0/24" }')
 nmap -sn $PODRANGE | grep -i report
@@ -378,7 +385,7 @@ kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name}{" => "}{.spec.p
 
 ```bash
 
-multipass delete control-plane-flowgrait-k8s worker-1-flowgrait-k8s client-flowgrait-k8s  --purge
+multipass delete control-plane-flowgrait-k8s worker1-flowgrait-k8s client-flowgrait-k8s  --purge
 
 ```
 
@@ -386,6 +393,6 @@ multipass delete control-plane-flowgrait-k8s worker-1-flowgrait-k8s client-flowg
 
 ```bash
 
-multipass delete control-plane-flowgrait-k8s worker-1-flowgrait-k8s client-flowgrait-k8s flowgrait-k8s-template  --purge
+multipass delete control-plane-flowgrait-k8s worker1-flowgrait-k8s client-flowgrait-k8s flowgrait-k8s-template  --purge
 
 ```
