@@ -257,6 +257,16 @@ multipass start control-plane-flowgrait-k8s worker1-flowgrait-k8s
 
 ```
 
+### Test Restored Cluster
+
+```bash
+
+multipass exec control-plane-flowgrait-k8s -- kubectl get namespaces
+multipass exec control-plane-flowgrait-k8s -- kubectl get nodes
+
+
+```
+
 ## Test Cluster
 
 ### Enter Control-plane
