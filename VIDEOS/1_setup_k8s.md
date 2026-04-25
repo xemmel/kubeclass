@@ -167,6 +167,14 @@ source ~/.bashrc
 
 ```
 
+### Test kubectl
+
+```bash
+
+kubectl get nodes
+
+```
+
 ### Install Helm
 
 ```bash
@@ -208,6 +216,11 @@ WORKER_NODE_NAME="worker-1-flowgrait-k8s"
 JOIN_CMD=$(multipass exec control-plane-flowgrait-k8s -- sudo kubeadm token create --print-join-command)
 multipass exec $WORKER_NODE_NAME -- sudo bash -c "$JOIN_CMD"
 
+```
+### Check worker-node status
+
+```bash
+
 multipass exec control-plane-flowgrait-k8s -- watch kubectl get nodes
 
 
@@ -217,8 +230,130 @@ multipass exec control-plane-flowgrait-k8s -- watch kubectl get nodes
 
 ```bash
 
+multipass stop worker-1-flowgrait-k8s control-plane-flowgrait-k8s
+
+multipass info control-plane-flowgrait-k8s.clean >/dev/null 2>&1 && multipass delete control-plane-flowgrait-k8s.clean --purge
+multipass info worker-1-flowgrait-k8s.clean >/dev/null 2>&1 && multipass delete worker-1-flowgrait-k8s.clean --purge
+
+multipass snapshot --name clean control-plane-flowgrait-k8s
+multipass snapshot --name clean worker-1-flowgrait-k8s
+
+multipass start control-plane-flowgrait-k8s worker-1-flowgrait-k8s
+
 
 ```
+
+## Restore Cluster snapshot
+
+```bash
+
+multipass stop worker-1-flowgrait-k8s control-plane-flowgrait-k8s
+
+multipass restore --destructive control-plane-flowgrait-k8s.clean
+multipass restore --destructive worker-1-flowgrait-k8s.clean
+
+multipass start control-plane-flowgrait-k8s worker-1-flowgrait-k8s
+
+
+```
+
+## Test Cluster
+
+### Enter Control-plane
+
+```bash
+
+multipass shell control-plane-flowgrait-k8s
+
+```
+
+### Create nginx deployment
+
+#### Create Deployment
+
+```bash
+
+kubectl create namespace test-web
+
+kubectl apply --namespace test-web --filename - <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-web-deployment
+spec:
+  selector:
+    matchLabels:
+      app: test-web
+  template:
+    metadata:
+      labels:
+        app: test-web
+    spec:
+      containers:
+        - name: test-web-container
+          image: nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-web-service
+spec:
+  selector:
+    app: test-web
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+EOF
+
+```
+
+#### Scale to 3
+
+```bash
+
+kubectl scale deployment test-web-deployment --namespace test-web --replicas 3
+
+```
+
+#### Check test-web 
+
+```bash
+
+kubectl get all --namespace test-web
+
+```
+
+### Create Debug Pod
+
+```bash
+
+kubectl create namespace debug && kubectl run debug --image nginx --namespace debug
+
+```
+
+### Enter debug Pod
+
+> Might take a minute to pull image
+
+```bash
+
+kubectl exec -it debug --namespace debug -- bash
+
+```
+
+### NMAP inside debug pod
+
+```bash
+
+apt update
+apt install nmap -y
+
+PODRANGE=$(hostname -I | awk -F"." '{ print $1"."$2"."$3".0/24" }')
+nmap -sn $PODRANGE | grep -i report
+
+```
+
 
 ## Scratch Control-plane
 
@@ -240,6 +375,14 @@ kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name}{" => "}{.spec.p
 ```
 
 ## Clean up Cluster
+
+```bash
+
+multipass delete control-plane-flowgrait-k8s worker-1-flowgrait-k8s client-flowgrait-k8s  --purge
+
+```
+
+## Clean up Cluster With Template
 
 ```bash
 
