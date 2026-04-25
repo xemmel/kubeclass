@@ -35,8 +35,19 @@ multipass shell client-1-large
 
 ### Create private key
 
+
+K8SUSER="janedoe"
+
 mkdir usertmp
 openssl genrsa -out "./usertmp/$K8SUSER.key" 2048
+
+
+
+### Create Certificate Signing Request (ADMIN)
+openssl req -new -key "./usertmp/$K8SUSER.key" \
+  -out "./usertmp/$K8SUSER.csr" \
+  -subj "/CN=$K8SUSER/O=kubeadm:cluster-admins"
+
 
 ### Create Certificate Signing Request
 openssl req -new -key "./usertmp/$K8SUSER.key" \
@@ -69,6 +80,7 @@ multipass shell con-1-large
 ## Setup vars
 
 BASEREQUEST=$(cat ./usertmp/$K8SUSER.csr | base64 | tr -d '\n')
+echo $BASEREQUEST
 
 kubectl apply -f - <<EOF
 apiVersion: certificates.k8s.io/v1
@@ -171,7 +183,7 @@ kubectl get pods --namespace $K8SUSER -v7
 
 cat /home/ubuntu/.kube/config
 
-curl https://10.6.180.250:6443/api/v1/namespaces/user1/pods --cert ./usertmp/user1.crt --key ./usertmp/user1.key -k | jq .
+curl https://10.6.180.250:6443/api/v1/namespaces/user1/pods --cert "./usertmp/$K8SUSER.crt" --key "./usertmp/$K8SUSER.key" -k | jq .
 
 ```
 

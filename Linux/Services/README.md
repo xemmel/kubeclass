@@ -18,7 +18,7 @@ systemctl list-units --type=service | grep hello
 
 sudo systemctl daemon-reload
 
-systemctl start hello.service
+sudo systemctl start hello.service
 
 systemctl status hello.service
 
