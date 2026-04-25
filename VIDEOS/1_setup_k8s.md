@@ -215,6 +215,13 @@ multipass exec control-plane-flowgrait-k8s -- watch kubectl get nodes
 
 ```
 
+## Take Cluster snapshot
+
+```bash
+
+
+```
+
 ## Scratch Control-plane
 
 ```bash
@@ -238,6 +245,6 @@ kubectl get nodes -o jsonpath='{range .items[*]}{.metadata.name}{" => "}{.spec.p
 
 ```bash
 
-multipass delete control-plane-flowgrait-k8s worker-1-flowgrait-k8s client-flowgrait-k8s  --purge
+multipass delete control-plane-flowgrait-k8s worker-1-flowgrait-k8s client-flowgrait-k8s flowgrait-k8s-template  --purge
 
 ```
