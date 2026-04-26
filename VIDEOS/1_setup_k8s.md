@@ -247,7 +247,7 @@ multipass start control-plane-flowgrait-k8s worker1-flowgrait-k8s
 
 ```bash
 
-multipass stop worker1-flowgrait-k8s control-plane-flowgrait-k8s
+multipass stop worker1-flowgrait-k8s control-plane-flowgrait-k8s --force
 
 multipass restore --destructive control-plane-flowgrait-k8s.clean
 multipass restore --destructive worker1-flowgrait-k8s.clean
