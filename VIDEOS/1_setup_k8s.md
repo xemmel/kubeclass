@@ -226,6 +226,53 @@ multipass exec control-plane-flowgrait-k8s -- watch kubectl get nodes
 
 ```
 
+## Add Additional Worker node
+
+```bash
+
+read -p "Worker number: " WORKER_NUMBER
+WORKER_NODE_NAME="worker${WORKER_NUMBER}-flowgrait-k8s"
+multipass clone --name $WORKER_NODE_NAME flowgrait-k8s-template
+multipass start $WORKER_NODE_NAME
+
+JOIN_CMD=$(multipass exec control-plane-flowgrait-k8s -- sudo kubeadm token create --print-join-command)
+multipass exec $WORKER_NODE_NAME -- sudo bash -c "$JOIN_CMD"
+
+
+```
+
+## Rollout restart deployment
+
+```bash
+
+kubectl rollout restart deployment --namespace test-web test-web-deployment
+
+```
+
+## Remove worker node
+
+```bash
+
+read -p "Worker number: " WORKER_NUMBER
+WORKER_NODE_NAME="worker${WORKER_NUMBER}-flowgrait-k8s"
+multipass stop $WORKER_NODE_NAME --force
+multipass delete $WORKER_NODE_NAME --purge
+
+multipass exec control-plane-flowgrait-k8s -- \
+kubectl delete node "${WORKER_NODE_NAME}"
+
+
+```
+
+## Cleanup terminating pods
+
+```bash
+
+kubectl get pods --namespace test-web | grep -i termin | awk '{ print $1 }' | xargs -I {} kubectl delete pod {} --force --grace-period=0 --namespace test-web
+
+
+```
+
 ## Take Cluster snapshot
 
 ```bash
