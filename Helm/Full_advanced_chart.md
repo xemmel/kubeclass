@@ -71,19 +71,6 @@ spec:
         - name: {{ .Values.app.name }}-container
           image: {{ .Values.image.name }}
 EOF
-cat<<EOF> $CHARTNAME/templates/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ .Values.app.name }}
-spec:
-  selector:
-    app: {{ .Values.app.name }}
-  ports:
-    - name: http
-      port: {{ .Values.ports.port }}
-      targetPort: {{ .Values.ports.targetPort }}
-EOF
 
 cat<<EOF> $CHARTNAME/templates/service.yaml
 apiVersion: v1
@@ -98,6 +85,8 @@ spec:
       port: {{ .Values.ports.port }}
       targetPort: {{ .Values.ports.targetPort }}
 EOF
+
+
 
 cat<<EOF> $CHARTNAME/templates/httproute.yaml
 apiVersion: gateway.networking.k8s.io/v1
@@ -148,7 +137,9 @@ helm install customer1-release ./$CHARTNAME --set=app.name=customer1app --values
 LOADBALANCER_IP=$(kubectl get services -A -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[0].ip}')
 
 curl https://${LOADBALANCER_IP} --insecure -H "y-customer:10" ## Should hit
+
 curl https://${LOADBALANCER_IP} --insecure -H "y-customer:11" ## Should hit 
+
 curl https://${LOADBALANCER_IP} --insecure -H "y-customer:12" ## Should not hit
 
 
