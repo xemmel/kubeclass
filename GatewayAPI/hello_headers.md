@@ -100,6 +100,11 @@ spec:
           headers:
             - name: "x-customer"
               value: "1"
+        - path:
+            value: /
+          headers:
+            - name: "x-customer"
+              value: "3"
       filters:
         - type: URLRewrite
           urlRewrite:
@@ -148,8 +153,12 @@ EOF
 
 LOADBALANCER_IP=$(kubectl get services -A -o jsonpath='{.items[?(@.spec.type=="LoadBalancer")].status.loadBalancer.ingress[0].ip}')
 
-curl https://${LOADBALANCER_IP} --insecure -H "x-customer:1"
-curl https://${LOADBALANCER_IP} --insecure -H "x-customer:2"
+curl https://${LOADBALANCER_IP} --insecure -H "x-customer:1" ## Should hit 1
+curl https://${LOADBALANCER_IP} --insecure -H "x-customer:2" ## Should hit 2
+curl https://${LOADBALANCER_IP} --insecure -H "x-customer:3" ## Should hit 3
+curl https://${LOADBALANCER_IP} --insecure -H "x-customer:4" ## Should hit 404
+
+
 
 
 ```

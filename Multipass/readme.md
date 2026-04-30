@@ -209,3 +209,16 @@ multipass delete client-1-large --purge
 
 
 
+### Restart multipass
+
+```
+
+```
+
+### Restart WSL
+
+```powershell
+
+wsl -t Ubuntu-24.04
+
+```
