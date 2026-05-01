@@ -118,6 +118,11 @@ spec:
               replaceFullPath: /	
 EOF
 
+### Make a simple output from both webservers
+
+//TODO
+kubectl exec 
+
 ```
 
 ### Deploy customer1
@@ -126,6 +131,8 @@ EOF
 
 helm install customer1-release ./$CHARTNAME --set=app.name=customer1app --values ./$CHARTNAME/customers/customer1/values.yaml --namespace customer1 --create-namespace
 
+
+helm install customer2-release ./$CHARTNAME --set=app.name=customer2app --values ./$CHARTNAME/customers/customer2/values.yaml --namespace customer2 --create-namespace
 
 
 ```
@@ -141,6 +148,11 @@ curl https://${LOADBALANCER_IP} --insecure -H "y-customer:10" ## Should hit
 curl https://${LOADBALANCER_IP} --insecure -H "y-customer:11" ## Should hit 
 
 curl https://${LOADBALANCER_IP} --insecure -H "y-customer:12" ## Should not hit
+
+curl https://${LOADBALANCER_IP} --insecure -H "y-customer:13" ## Should hit
+
+curl https://${LOADBALANCER_IP} --insecure -H "y-customer:12" ## Should not hit
+
 
 
 ```

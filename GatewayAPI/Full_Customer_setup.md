@@ -120,7 +120,7 @@ kubectl apply -f - <<EOF
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
 metadata:
-  name: envoy-gatewayclass
+  name: gatewayclass
 spec:
   controllerName: gateway.envoyproxy.io/gatewayclass-controller
 EOF
@@ -142,20 +142,20 @@ kubectl get gatewayclasses
 
 kubectl create namespace common-gateway
 
-mkdir hellocert
+mkdir commongatewaycert
 
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-  -keyout ./hellocert/tls.key \
-  -out ./hellocert/tls.crt \
+  -keyout ./commongatewaycert/tls.key \
+  -out ./commongatewaycert/tls.crt \
   -subj "/CN=localhost" \
   -quiet
 
 
 ## Secret in common-gateway namespace
 
-kubectl -n hello create secret tls hello-local-tls --namespace common-gateway \
-  --key=./hellocert/tls.key \
-  --cert=./hellocert/tls.crt
+kubectl -n hello create secret tls common-gateway-tls --namespace common-gateway \
+  --key=./commongatewaycert/tls.key \
+  --cert=./commongatewaycert/tls.crt
 
 ## kubectl get secret hello-local-tls --namespace local-cert -o yaml
 
@@ -165,9 +165,9 @@ kubectl apply --namespace common-gateway -f - <<EOF
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: common-envoy-gateway
+  name: common-gateway
 spec:
-  gatewayClassName: envoy-gatewayclass
+  gatewayClassName: gatewayclass
   listeners:
   - name: http
     protocol: HTTP
@@ -186,7 +186,7 @@ spec:
       certificateRefs:
       - kind: Secret
         group: ""
-        name: hello-local-tls
+        name: common-gateway-tls
 EOF
 
 ```
@@ -243,7 +243,7 @@ metadata:
   name: hello-httproute
 spec:
   parentRefs:
-  - name: common-envoy-gateway
+  - name: common-gateway
     namespace: common-gateway
   rules:
     - backendRefs:
