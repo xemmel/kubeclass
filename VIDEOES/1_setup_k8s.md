@@ -184,13 +184,6 @@ source ~/.bashrc
 
 ```
 
-### Test kubectl
-
-```bash
-
-kubectl get nodes
-
-```
 
 ### Install Helm
 
@@ -221,6 +214,22 @@ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALIC
 sleep 15s
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/custom-resources.yaml
 
+
+```
+
+### Watch pods
+
+```bash
+
+watch kubectl get pods -A
+
+```
+
+### Watch nodes
+
+```bash
+
+watch kubectl get nodes
 
 ```
 
