@@ -22,11 +22,28 @@ sudo snap install multipass
 
 ## Create nodes
 
-### Create Server Template
+### Set iptables rule
 
 ```bash
 
 sudo iptables --policy FORWARD ACCEPT
+
+```
+
+### Set iptables rule permament
+
+```bash
+
+echo 'sudo iptables --policy FORWARD ACCEPT' >> ~/.bashrc
+
+```
+
+
+
+### Create Server Template
+
+```bash
+
 
 multipass launch --name flowgrait-k8s-template --memory 4GB --cpus 2 --disk 20GB devel
 
