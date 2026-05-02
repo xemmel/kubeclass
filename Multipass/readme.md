@@ -23,6 +23,22 @@ winget install Canonical.Multipass
 
 ```
 
+### Set iptables rule
+
+```bash
+
+sudo iptables --policy FORWARD ACCEPT
+
+```
+
+### Set iptables rule permament
+
+```bash
+
+echo 'sudo iptables --policy FORWARD ACCEPT' >> ~/.bashrc
+
+```
+
 ### Launch
 
 ```bash
@@ -31,6 +47,8 @@ multipass launch --name server --disk 30G --memory 4G --cpus 2
 multipass launch --name newest --disk 30G --memory 4G --cpus 2 devel
 
 ```
+
+
 
 ### Init
 
