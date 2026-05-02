@@ -1,5 +1,22 @@
 ## Kubernetes setup
 
+### Set iptables rule
+
+```bash
+
+sudo iptables --policy FORWARD ACCEPT
+
+```
+
+### Set iptables rule permament
+
+```bash
+
+echo 'sudo iptables --policy FORWARD ACCEPT' >> ~/.bashrc
+
+```
+
+
 ### Multipass create template server
 
 ```bash
