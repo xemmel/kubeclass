@@ -310,6 +310,55 @@ multipass start client-flowgrait-k8s
 
 ```
 
+### Setup kubeadmin on Client alone
+
+```bash
+
+multipass exec client-flowgrait-k8s -- mkdir cert
+multipass exec client-flowgrait-k8s -- openssl genrsa -out ./cert/kubeadmin.key 2048
+multipass exec client-flowgrait-k8s -- openssl req -new -key ./cert/kubeadmin.key -out ./cert/kubeadmin.csr -subj /CN=customkubeadmin/O=kubeadm:cluster-admins
+multipass exec client-flowgrait-k8s -- cp ./cert/kubeadmin.csr /tmp/kubeadmin.csr
+
+multipass transfer -p client-flowgrait-k8s:/tmp/kubeadmin.csr - \
+| multipass transfer -p - control-plane-flowgrait-k8s:/tmp/kubeadmin.csr
+
+multipass exec control-plane-flowgrait-k8s -- bash -lc '
+BASEREQUEST=$(cat /tmp/kubeadmin.csr | base64 | tr -d "\n")
+
+cat <<EOF | kubectl apply -f -
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: user-csr
+spec:
+  request: ${BASEREQUEST}
+  signerName: kubernetes.io/kube-apiserver-client
+  usages:
+    - client auth
+EOF
+'
+
+multipass exec control-plane-flowgrait-k8s -- kubectl certificate approve user-csr
+multipass exec control-plane-flowgrait-k8s -- bash -lc \
+'kubectl get csr user-csr -o jsonpath="{.status.certificate}" | base64 --decode > /tmp/kubeadmin.crt'
+multipass exec control-plane-flowgrait-k8s -- kubectl delete csr user-csr
+
+multipass transfer -p control-plane-flowgrait-k8s:/tmp/kubeadmin.crt - | multipass transfer -p - client-flowgrait-k8s:/tmp/kubeadmin.crt
+multipass transfer -p control-plane-flowgrait-k8s:/etc/kubernetes/pki/ca.crt - | multipass transfer -p - client-flowgrait-k8s:/tmp/ca.crt
+
+CLUSTER_API_SERVERURL="https://$(multipass exec control-plane-flowgrait-k8s -- kubectl cluster-info | grep -i dns | grep -oP "(?<=https://).*?(?=/)")"
+
+multipass exec client-flowgrait-k8s -- kubectl config set-cluster company-cluster --server=$CLUSTER_API_SERVERURL --certificate-authority=/tmp/ca.crt --embed-certs=true
+
+multipass exec client-flowgrait-k8s -- kubectl config set-credentials currentuser  --client-certificate=/tmp/kubeadmin.crt --client-key ./cert/kubeadmin.key --embed-certs=true
+
+multipass exec client-flowgrait-k8s -- kubectl config set-context company --cluster=company-cluster --user=currentuser
+
+multipass exec client-flowgrait-k8s -- kubectl config use-context company
+
+
+```
+
 
 ### Remove users
 
