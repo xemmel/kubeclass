@@ -72,3 +72,100 @@ metadata:
 EOF
 
 ```
+
+## Install gatewayclass
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: maingatewayclass
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+EOF
+
+```
+
+### Check GatewayClass accepted
+
+```bash
+kubectl get gatewayclasses
+
+```
+
+## Install gateway
+
+### No certificate gateway
+
+```bash
+
+kubectl create namespace normal-gateway
+
+kubectl apply --namespace normal-gateway -f - <<EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: normal-gateway
+spec:
+  gatewayClassName: maingatewayclass
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 80
+    allowedRoutes:
+      namespaces:
+        from: All
+EOF
+
+```
+
+### Self-signed Cert Gateway
+
+#### Create cert and secret
+
+```bash
+kubectl create namespace selfsigned-gateway
+
+mkdir gatewaycert
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout ./gatewaycert/tls.key \
+  -out ./gatewaycert/tls.crt \
+  -subj "/CN=localhost"
+
+kubectl create secret tls selfsigned-gateway-tls --namespace selfsigned-gateway \
+  --key=./gatewaycert/tls.key \
+  --cert=./gatewaycert/tls.crt
+
+rm -rf gatewaycert
+
+```
+
+#### Create gateway
+
+```bash
+
+kubectl apply --namespace selfsigned-gateway -f - <<EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: selfsigned-gateway
+spec:
+  gatewayClassName: maingatewayclass
+  listeners:
+  - name: https
+    protocol: HTTPS
+    port: 443
+    allowedRoutes:
+      namespaces:
+        from: All
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        group: ""
+        name: selfsigned-gateway-tls
+EOF
+
+```
