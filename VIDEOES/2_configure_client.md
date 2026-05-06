@@ -356,6 +356,13 @@ multipass exec client-flowgrait-k8s -- kubectl config set-context company --clus
 
 multipass exec client-flowgrait-k8s -- kubectl config use-context company
 
+```
+
+### Enter client server
+
+```bash
+
+multipass shell client-flowgrait-k8s
 
 ```
 

@@ -169,3 +169,87 @@ spec:
 EOF
 
 ```
+
+#### Create Helloapp on selfsigned-gateway
+
+```bash
+
+kubectl create namespace hello-app
+
+kubectl apply --namespace hello-app -f - <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-app
+spec:
+  selector:
+    matchLabels:
+      app: hello-app
+  template:
+    metadata:
+      labels:
+        app: hello-app
+    spec:
+      volumes:
+        - name: html
+          emptyDir: {}
+      initContainers:
+        - name: init-html
+          image: busybox
+          command:
+            - sh
+            - -c
+            - echo "hello-app" > /usr/share/nginx/html/index.html
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html
+      containers:
+        - name: hello-app
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-app
+spec:
+  selector:
+    app: hello-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: hello-app-httproute
+spec:
+  parentRefs:
+  - name: selfsigned-gateway
+    namespace: selfsigned-gateway
+  rules:
+    - backendRefs:
+      - name: hello-app
+        kind: Service
+        port: 80
+      matches:
+        - path:
+            type: PathPrefix
+            value: /hello
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /
+EOF
+
+
+
+
+```

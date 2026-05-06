@@ -67,8 +67,11 @@ sudo apt install docker.io -y
 sudo usermod -aG docker $USER
 newgrp docker
 
-sudo apt install docker-buildx -y
 
+## New better
+sudo apt install docker-buildx -y
+sudo usermod -aG docker $USER
+newgrp docker
 
 
 [ -e requirements.txt ] && rm requirements.txt
