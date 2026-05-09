@@ -330,6 +330,70 @@ multipass start control-plane-flowgrait-k8s worker1-flowgrait-k8s
 
 ```
 
+## Take Cluster snapshot fullclean
+
+```bash
+
+multipass stop worker1-flowgrait-k8s control-plane-flowgrait-k8s
+
+multipass info control-plane-flowgrait-k8s.fullclean >/dev/null 2>&1 && multipass delete control-plane-flowgrait-k8s.fullclean --purge
+multipass info worker1-flowgrait-k8s.fullclean >/dev/null 2>&1 && multipass delete worker1-flowgrait-k8s.fullclean --purge
+
+multipass snapshot --name fullclean control-plane-flowgrait-k8s
+multipass snapshot --name fullclean worker1-flowgrait-k8s
+
+multipass start control-plane-flowgrait-k8s worker1-flowgrait-k8s
+
+
+```
+
+## Restore Cluster snapshot fullclean
+
+```bash
+
+multipass stop worker1-flowgrait-k8s control-plane-flowgrait-k8s --force
+
+multipass restore --destructive control-plane-flowgrait-k8s.fullclean
+multipass restore --destructive worker1-flowgrait-k8s.fullclean
+
+multipass start control-plane-flowgrait-k8s worker1-flowgrait-k8s
+
+
+```
+
+
+## Take Cluster snapshot custom
+
+```bash
+
+multipass stop worker1-flowgrait-k8s control-plane-flowgrait-k8s
+
+multipass info control-plane-flowgrait-k8s.custom >/dev/null 2>&1 && multipass delete control-plane-flowgrait-k8s.custom --purge
+multipass info worker1-flowgrait-k8s.custom >/dev/null 2>&1 && multipass delete worker1-flowgrait-k8s.custom --purge
+
+multipass snapshot --name custom control-plane-flowgrait-k8s
+multipass snapshot --name custom worker1-flowgrait-k8s
+
+multipass start control-plane-flowgrait-k8s worker1-flowgrait-k8s
+
+
+```
+
+## Restore Cluster snapshot custom
+
+```bash
+
+multipass stop worker1-flowgrait-k8s control-plane-flowgrait-k8s --force
+
+multipass restore --destructive control-plane-flowgrait-k8s.custom
+multipass restore --destructive worker1-flowgrait-k8s.custom
+
+multipass start control-plane-flowgrait-k8s worker1-flowgrait-k8s
+
+
+```
+
+
 ### Test Restored Cluster
 
 ```bash

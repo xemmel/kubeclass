@@ -22,22 +22,82 @@ kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/re
 
 ### Envoy
 
+
+#### Install Envoy Gateway full
+
+> No crds present
+
+```bash
+
+helm install eg oci://docker.io/envoyproxy/gateway-helm \
+  -n envoy-gateway-system \
+  --create-namespace
+
+
+
+```
+
 #### Install Envoy Gateway
 
 ```bash
 LATEST=$(helm show chart oci://docker.io/envoyproxy/gateway-helm 2>/dev/null | grep '^version:' | awk '{print $2}')
 
 helm install eg oci://docker.io/envoyproxy/gateway-helm \
-  --version "$LATEST" \
   -n envoy-gateway-system \
   --create-namespace \
   --skip-crds
 
 ```
 
+### Install Envoy Gateway with security-policy
+
+```bash
+helm template eg-crds oci://docker.io/envoyproxy/gateway-crds-helm \
+  --set crds.gatewayAPI.enabled=true \
+  --set crds.gatewayAPI.channel=experimental \
+  --set crds.envoyGateway.enabled=true \
+| kubectl apply --server-side -f -
+
+
+
+```
+
 ## Install Loadbalancer
 
 ### MetalLB
+
+#### All
+
+```bash
+
+VERSION=$(curl -s https://api.github.com/repos/metallb/metallb/releases/latest | jq -r .tag_name)
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/${VERSION}/config/manifests/metallb-native.yaml
+
+sleep 30s
+
+kubectl apply -f - <<EOF
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 192.168.1.240-192.168.1.250
+EOF
+
+sleep 10s
+
+kubectl apply -f - <<EOF
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  namespace: metallb-system
+EOF
+
+
+```
 
 #### Install
 
@@ -172,6 +232,8 @@ EOF
 
 #### Create Helloapp on selfsigned-gateway
 
+> use /hello
+
 ```bash
 
 kubectl create namespace hello-app
@@ -250,6 +312,16 @@ spec:
 EOF
 
 
+```
 
+### Test hello
+
+```bash
+
+WORKER_NODE_IP=$(kubectl get nodes -o wide | grep worker | awk ' {print $6}')
+LOAD_BALANCER_PORT=$(kubectl get services -A | grep LoadB | grep selfsigned | awk '{ print $6 }' | awk -F":" '{ print $2 }' | awk -F"/" ' { print $1 }')
+
+
+curl https://$WORKER_NODE_IP:$LOAD_BALANCER_PORT/hello  --insecure
 
 ```

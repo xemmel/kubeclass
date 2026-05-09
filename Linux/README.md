@@ -26,6 +26,20 @@ sudo apt update && sudo apt upgrade -y
 
 [Back to top](#linux)
 
+## Get Access token from Azure Cli
+
+```bash
+
+## get claims
+az account get-access-token --resource https://storage.azure.com/ | jq .accessToken -r | awk -F"." '{ print $2 }' | base64 -d | jq .
+
+## Two step and set token in var
+
+TOKEN=$(az account get-access-token --resource https://storage.azure.com/ | jq .accessToken -r)
+echo $TOKEN | awk -F"." '{ print $2 }' | base64 -d | jq .
+
+```
+
 ## Install
 
 
