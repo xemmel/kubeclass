@@ -1,5 +1,33 @@
 # Configure Client Server
 
+## Install kubectl on a fresh server
+
+```bash
+
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+chmod +x kubectl
+mkdir -p ~/.local/bin
+mv ./kubectl ~/.local/bin/kubectl
+
+### kubectl completion
+
+sudo apt-get install -y bash-completion
+echo "source <(kubectl completion bash)" >> ~/.bashrc
+source ~/.bashrc
+
+
+```
+
+## Configure kubectl config from control-plane
+
+```bash
+
+multipass exec control-plane-flowgrait-k8s -- cat .kube/config | tee .kube/config
+
+```
+
 ## Find the cluster admin role for kubeadmin
 
 ```bash
