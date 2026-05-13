@@ -56,7 +56,7 @@ uvicorn app:app --port 8000 --no-access-log &
 
 ## Press enter
 
-    curl localhost:8000/items/123
+curl localhost:8000/items/123
 
 fg
 
@@ -93,9 +93,11 @@ COPY . /code/app
 CMD ["fastapi", "run", "app/app.py", "--port", "80"]
 EOF
 
-docker buildx build --tag api1:1.0 .
+IMAGENAME="api1:1.1"
 
-docker run --name api1 --publish 8899:80 -d api1:1.0
+docker buildx build --tag $IMAGENAME .
+
+docker run --name api1 --publish 8899:80 -d $IMAGENAME
 
 curl localhost:8899/items/125
 
@@ -110,6 +112,88 @@ exit
 
 
 multipass delete pytdev --purge
+
+```
+
+
+### Push local docker images into k8s worker nodes
+
+```bash
+
+VERSION="1.2"
+IMAGENAME="api1:${VERSION}"
+IMAGESAVENAME="api1-${VERSION}"
+
+
+
+docker save $IMAGENAME -o $IMAGESAVENAME.tar
+
+multipass transfer $IMAGESAVENAME.tar worker1-flowgrait-k8s:/home/ubuntu/$IMAGESAVENAME.tar
+
+## multipass shell worker1-flowgrait-k8s
+
+### Takes a while
+
+multipass exec worker1-flowgrait-k8s -- sudo ctr -n k8s.io images import /home/ubuntu/$IMAGESAVENAME.tar
+
+
+multipass exec worker1-flowgrait-k8s -- sudo ctr -n k8s.io images ls | grep -i api
+
+multipass exec worker1-flowgrait-k8s -- sudo rm /home/ubuntu/$IMAGESAVENAME.tar
+
+rm $IMAGESAVENAME.tar
+
+
+
+
+
+```
+
+### Test own image
+
+```bash
+NS="ownimage"
+kubectl create namespace $NS
+
+
+kubectl apply --namespace $NS -f - <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ownimage-deployment
+spec:
+  selector:
+    matchLabels:
+      app: ownimage
+  template:
+    metadata:
+      labels:
+        app: ownimage
+    spec:
+      containers:
+        - name: ownimage-container
+          image: $IMAGENAME
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ownimage
+spec:
+  type: NodePort
+  selector:
+    app: ownimage
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+EOF
+
+
+WORKER_NODE_IP=$(kubectl get nodes -o wide | grep worker | awk ' {print $6}')
+OWN_NODE_PORT=$(kubectl get services -A | grep -i ownimage | awk '{ print $6 }' | awk -F":" '{ print $2 }' | awk -F"/" '{ print $1 }')
+
+curl "http://${WORKER_NODE_IP}:${OWN_NODE_PORT}/items/345"
+
 
 ```
 

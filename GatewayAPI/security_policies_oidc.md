@@ -97,11 +97,11 @@ EOF
 
 ```bash
 
-CLIENTID="685536a1-b4df-45ae-b1e8-a77853d25d6a"
+
 CLIENTSECRET="wpR..."
 
+CLIENTID="685536a1-b4df-45ae-b1e8-a77853d25d6a"
 REDIRECT_URL="https://securetest.mortenlacour.com/app/oauth2/callback"
-
 ISSUER="https://sts.windows.net/551c586d-a82d-4526-b186-d061ceaa589e/"
 
 ```
@@ -112,9 +112,12 @@ ISSUER="https://sts.windows.net/551c586d-a82d-4526-b186-d061ceaa589e/"
 
 kubectl create secret generic securehello-app-secret --from-literal="client-secret=${CLIENTSECRET}" --namespace $KNAMESPACE
 
+kubectl create secret generic gateway-secret --from-literal="client-secret=${CLIENTSECRET}" --namespace selfsigned-gateway
+
+
 ```
 
-### Apply
+### Apply on HTTPRoute
 
 ```bash
 cat <<EOF | kubectl apply --namespace $KNAMESPACE --filename -
@@ -138,6 +141,49 @@ spec:
 EOF
 
 ```
+#### Remove
+
+```bash
+kubectl delete securitypolicy securehello-app-policy --namespace $KNAMESPACE
+
+```
+
+### Apply on Gateway
+
+```bash
+cat <<EOF | kubectl apply --namespace selfsigned-gateway --filename -
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: gateway-policy
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: selfsigned-gateway
+  oidc:
+    provider:
+      issuer: "${ISSUER}"
+    clientID: "${CLIENTID}"
+    clientSecret:
+      name: "gateway-secret"
+    redirectURL: "${REDIRECT_URL}"
+    logoutPath: "/app/logout"
+EOF
+
+```
+
+#### Remove
+
+```bash
+kubectl delete securitypolicy gateway-policy --namespace selfsigned-gateway
+
+kubectl delete secret gateway-secret --namespace selfsigned-gateway
+
+
+```
+
+
 
 ### Test
 
