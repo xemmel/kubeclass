@@ -1,4 +1,5 @@
 ## Kubernetes class
+### 2026
 
 ```
 Morten la Cour
