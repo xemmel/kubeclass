@@ -96,6 +96,7 @@ kind: Service
 metadata:
   name: elastic-service
 spec:
+  type: NodePort
   selector:
     app: elastic
   ports:
