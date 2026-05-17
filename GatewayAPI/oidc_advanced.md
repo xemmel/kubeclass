@@ -2,6 +2,8 @@
 
 ## Certbot
 
+```bash
+
 
 subscriptionId="4bf83030-fffb-4e17-8ec3-faacdf8634e5"
 dnsZone="learn-kubernetes.com"
@@ -91,11 +93,13 @@ az network dns record-set txt add-record \
 
 nslookup -type=TXT "_acme-challenge.${subdomain}.${dnsZone}"
 
-
+```
 
 
 
 ## kubernetes secret
+
+```bash
 
 mkdir tmpsecret 
 sudo cp "/etc/letsencrypt/live/${subdomain}.${dnsZone}/fullchain.pem" ./tmpsecret/fullchain.pem
@@ -112,7 +116,7 @@ kubectl create secret tls subdomain-secret \
   --cert="./tmpsecret/fullchain.pem" \
   --key="./tmpsecret/privkey.pem"
   
-  
+```
   
 ### Create k8s deployment and service
 
