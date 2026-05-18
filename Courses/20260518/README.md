@@ -136,4 +136,7 @@ kubectl run --namespace debug debug --image nginx
 kubectl exec -it --namespace debug debug -- bash
 
 
+### Call service dns
+curl testapp.test01
+
 ```
