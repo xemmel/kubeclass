@@ -128,6 +128,8 @@ kubectl get pods -o wide
 ## Scale
 kubectl scale deployment test-deployment --replicas 3
 
+## Describe LB (Service)
+kubectl describe service testapp
 
 ### debug pod
 kubectl create namespace debug
