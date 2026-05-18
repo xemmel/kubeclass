@@ -213,3 +213,16 @@ kubectl delete --filename deployment2.yaml
 kubectl delete --filename configmap.yaml
 
 ```
+
+### EDITOR in Linux
+
+```bash
+
+### Enter file
+vim configmap.yaml
+
+### To edit -> i
+
+### To save [ESC]:wq!
+
+```
