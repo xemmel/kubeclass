@@ -142,3 +142,74 @@ kubectl exec -it --namespace debug debug -- bash
 curl testapp.test01
 
 ```
+
+
+
+## Configmaps
+
+```bash
+
+kubectl create namespace test05
+kubectl config set-context --current --namespace test05
+
+cat<<EOF>deployment2.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+spec:
+  selector:
+    matchLabels:
+      app: testapp
+  template:
+    metadata:
+      labels:
+        app: testapp
+    spec:
+      containers:
+       - name: maincontainer
+         image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
+         env:
+           - name: TITLE
+             valueFrom:
+               configMapKeyRef:
+                 name: app-cm
+                 key: appTitle
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: testapp
+spec:
+  selector:
+    app: testapp
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+EOF
+
+cat<<EOF>configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-cm
+data:
+  appTitle: 'GreetinG students!!'
+EOF
+
+
+kubectl apply --filename configmap.yaml
+kubectl apply --filename deployment2.yaml
+
+
+### enter debug pod
+
+curl testapp.test05
+
+
+
+kubectl delete --filename deployment2.yaml
+kubectl delete --filename configmap.yaml
+
+```
