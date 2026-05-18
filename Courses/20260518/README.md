@@ -66,3 +66,74 @@ sudo mv ./kind /usr/local/bin/kind
 
 
 ```
+
+### Create cluster
+
+```bash
+
+kind create cluster
+
+kubectl get namespaces
+
+```
+
+### Create deployment
+
+```bash
+
+kubectl create namespace test01
+
+kubectl config set-context --current --namespace test01
+
+cat<<EOF>>deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+spec:
+  selector:
+    matchLabels:
+      app: testapp
+  template:
+    metadata:
+      labels:
+        app: testapp
+    spec:
+      containers:
+       - name: maincontainer
+         image: nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: testapp
+spec:
+  selector:
+    app: testapp
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+EOF
+
+## apply deployment and service
+kubectl apply --filename deployment.yaml
+
+## view all (pods, services)
+kubectl get all
+
+## view pods with ip-addresses
+kubectl get pods -o wide
+
+## Scale
+kubectl scale deployment test-deployment --replicas 3
+
+
+### debug pod
+kubectl create namespace debug
+kubectl run --namespace debug debug --image nginx
+
+kubectl exec -it --namespace debug debug -- bash
+
+
+```
