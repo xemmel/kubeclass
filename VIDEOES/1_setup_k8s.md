@@ -45,7 +45,7 @@ echo 'sudo iptables --policy FORWARD ACCEPT' >> ~/.bashrc
 ```bash
 
 
-multipass launch --name flowgrait-k8s-template --memory 4GB --cpus 2 --disk 20GB devel
+multipass launch --name flowgrait-k8s-template --memory 4GB --cpus 2 --disk 20GB
 
 multipass shell flowgrait-k8s-template
 
@@ -133,10 +133,6 @@ multipass stop flowgrait-k8s-template
 
 multipass clone --name control-plane-flowgrait-k8s flowgrait-k8s-template
 multipass clone --name worker1-flowgrait-k8s flowgrait-k8s-template
-multipass clone --name client-flowgrait-k8s flowgrait-k8s-template
-
-multipass start client-flowgrait-k8s
-
 
 multipass set local.control-plane-flowgrait-k8s.memory=6G
 multipass set local.worker1-flowgrait-k8s.memory=6G
@@ -249,6 +245,14 @@ multipass exec $WORKER_NODE_NAME -- sudo bash -c "$JOIN_CMD"
 
 multipass exec control-plane-flowgrait-k8s -- watch kubectl get nodes
 
+
+```
+
+### Configure kubectl on master server
+
+```bash
+
+multipass exec control-plane-flowgrait-k8s -- sudo cat /etc/kubernetes/admin.conf > ./.kube/config
 
 ```
 

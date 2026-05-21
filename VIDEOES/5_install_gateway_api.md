@@ -83,7 +83,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-    - 192.168.1.240-192.168.1.250
+    - 10.193.226.240-10.193.226.250
 EOF
 
 sleep 10s
