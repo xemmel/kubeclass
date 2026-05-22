@@ -22,6 +22,14 @@ helm repo update
 
 ```
 
+### Get parameters
+
+```bash 
+
+helm show values seaweedfs/seaweedfs
+
+```
+
 ### Install filesystem (no storageclass)
 
 ```bash
@@ -44,8 +52,8 @@ helm install seaweedfs seaweedfs/seaweedfs \
   --set volume.dataDirs[0].name=data1 \
   --set volume.dataDirs[0].type=persistentVolumeClaim \
   --set volume.dataDirs[0].size=10Gi \
-  --set volume.dataDirs[0].storageClass=local-path
-
+  --set volume.dataDirs[0].storageClass=local-path \
+  --set volume.dataDirs[0].maxVolumes=100
 
 
 
@@ -91,6 +99,17 @@ kubectl create namespace debug && kubectl run --namespace debug debug  --image n
 
 
 kubectl exec -it --namespace debug debug -- curl seaweedfs-s3.seaweedfs:8333
+
+kubectl exec -n debug debug -- \
+  curl -X PUT http://seaweedfs-s3.seaweedfs:8333/mybucket -s
+
+kubectl exec -n debug debug -- \
+  sh -c 'printf "testcontent" | curl -s -i -X PUT --data-binary @- http://seaweedfs-s3.seaweedfs:8333/mybucket/file1.txt'
+
+kubectl exec -n debug debug -- \
+  curl -s http://seaweedfs-s3.seaweedfs:8333/mybucket/file1.txt
+
+
 
 kubectl exec -it --namespace debug debug -- curl http://seaweedfs-s3.seaweedfs.svc.cluster.local:8333
 

@@ -16,6 +16,47 @@ source ~/.bashrc
 
 ```
 
+### Get repo
+
+```bash
+
+helm repo add seaweedfs https://seaweedfs.github.io/seaweedfs/helm
+helm repo update
+
+```
+
+### Show all parameters
+
+```bash
+
+helm show values seaweedfs/seaweedfs
+
+```
+
+### Install Chart
+
+```bash
+
+helm install seaweedfs seaweedfs/seaweedfs   \
+  --namespace seaweedfs   \
+  --create-namespace   \
+  --set s3.enabled=true
+
+```
+
+### Show install Chart values
+
+```bash
+
+helm get values --namespace seaweedfs seaweedfs
+helm get values --namespace seaweedfs seaweedfs --all
+
+
+```
+
+
+### Create local Chart
+
 ```bash
 
 CHARTNAME="flowapp"
@@ -71,6 +112,8 @@ port: 80
 EOF
 
 ```
+
+### Install/Upgrade local Chart
 
 ```bash
 
