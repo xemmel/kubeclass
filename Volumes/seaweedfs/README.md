@@ -76,7 +76,8 @@ helm install seaweedfs seaweedfs/seaweedfs \
   --set volume.dataDirs[0].name=data1 \
   --set volume.dataDirs[0].type=persistentVolumeClaim \
   --set volume.dataDirs[0].size=10Gi \
-  --set volume.dataDirs[0].storageClass=local-path
+  --set volume.dataDirs[0].storageClass=local-path \
+  --set volume.dataDirs[0].maxVolumes=100
  
 ```
 
