@@ -173,7 +173,7 @@ $sw.Elapsed.TotalMilliseconds
 cd -
 cd .\SoapFault.Rest\
 
-$imageVersion = "1.5";
+$imageVersion = "1.9";
 
 az acr build `
   --registry "$($acr.name)" `
@@ -245,6 +245,7 @@ az containerapp update `
 
   ### Rest
 
+ $imageVersion = "1.9";
   cd .\SoapFault.Rest\
 
 az acr build `

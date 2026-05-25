@@ -91,6 +91,14 @@ helm get values seaweedfs --namespace seaweedfs --all
 
 ```
 
+### Scale volumes
+
+```bash
+
+kubectl scale statefulset --namespace seaweedfs seaweedfs-volume --replicas 2
+
+```
+
 
 ### Test
 
