@@ -70,3 +70,23 @@ source devenv/bin/activate
 
 
 [Back to top](#linux)
+
+
+### Powershell
+
+```bash
+snap install powershell --classic
+
+```
+
+
+### Graph Powershell SDK
+
+```bash
+Register-PSRepository -Default
+Install-Module Microsoft.Graph -Scope CurrentUser -Repository PSGallery -Force
+
+connect-mggraph
+
+
+```

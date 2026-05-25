@@ -301,10 +301,10 @@ echo "https://${subdomain}.${dnsZone}:${tlsGatewayPort}/demoapp"
 
 ```bash
 
-cat<<EOF>>app.py
+cat<<EOF>app.py
 import os
 import json
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 from fastapi.responses import HTMLResponse,PlainTextResponse
 
 
@@ -323,6 +323,7 @@ async def index():
             <h1>Logon App{subtitle_html}</h1>
             <ul>
                 <li><a href="/env">Show all environment variables</a></li>
+                <li><a href="/headers">Show all Request Headers</a></li>
                 <li><a href="/version">Version</a></li>
                 <li><a href="/env/path">Filter environment variables by "path"</a></li>
                 <li><a href="/docs">FastAPI docs</a></li>
@@ -333,8 +334,12 @@ async def index():
 
 @app.get("/version")
 async def getversion():
-    return { "version" : "1.0" }
+    return { "version" : "1.2" }
 
+@app.get("/headers", response_class=PlainTextResponse)
+async def read_headers(request: Request):
+    headers = dict(request.headers)
+    return json.dumps(headers, indent=4, sort_keys=True)
 
 @app.get("/env", response_class=PlainTextResponse)
 @app.get("/env/{mask}", response_class=PlainTextResponse)
@@ -351,7 +356,8 @@ async def getenv(mask: str | None = None):
             if mask in key.lower()
         }
 
-    return json.dumps(env, indent=4, sort_keys=True)(devenv)
+    return json.dumps(env, indent=4, sort_keys=True)
+
 EOF
 
 pip install "fastapi[standard]"
@@ -431,7 +437,7 @@ acrFullName=$(echo $acr | jq .loginServer -r)
 
 
 ### Build and push
-az acr build --subscription $SUBSCRIPTIONID --resource-group $RGNAME --registry $APPNAME --image "${acrFullName}/${APPNAME}:1.0" .
+az acr build --subscription $SUBSCRIPTIONID --resource-group $RGNAME --registry $APPNAME --image "${acrFullName}/${APPNAME}:1.2" .
 
 
 ```
@@ -459,7 +465,7 @@ cat<<EOF> $CHARTNAME/values.yaml
 application:
   name: $CHARTNAME
 image:
-  name: $acrFullName/k8ssecrettest:1.0
+  name: $acrFullName/k8ssecrettest:1.2
 ports:
   port: 80
   targetPort: 80
@@ -561,6 +567,7 @@ helm install secretapp2 ./$CHARTNAME --set=title=app2 --set=postfix=app2 --names
 
 helm uninstall secretapp1 --namespace secretapp1 && kubectl delete namespace secretapp1
 helm uninstall secretapp2 --namespace secretapp2 && kubectl delete namespace secretapp2
+
 kubectl delete namespace demo-app
 
 rm -rf $CHARTNAME
