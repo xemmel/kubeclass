@@ -131,6 +131,9 @@ multipass stop flowgrait-k8s-template
 
 ```bash
 
+multipass info worker1-flowgrait-k8s >/dev/null 2>&1 && multipass delete worker1-flowgrait-k8s --purge
+multipass info control-plane-flowgrait-k8s >/dev/null 2>&1 && multipass delete control-plane-flowgrait-k8s --purge
+
 multipass clone --name control-plane-flowgrait-k8s flowgrait-k8s-template
 multipass clone --name worker1-flowgrait-k8s flowgrait-k8s-template
 
@@ -209,6 +212,29 @@ CALICO_VERSION=$(curl -fsSL https://api.github.com/repos/projectcalico/calico/re
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/tigera-operator.yaml
 sleep 15s
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/custom-resources.yaml
+
+
+```
+
+#### CALICO Helm
+
+```bash
+
+CALICO_VERSION=$(curl -fsSL https://api.github.com/repos/projectcalico/calico/releases/latest \
+  | grep '"tag_name"' \
+  | sed -E 's/.*"([^"]+)".*/\1/')
+
+  
+helm repo add projectcalico https://docs.tigera.io/calico/charts
+
+
+kubectl create namespace tigera-operator
+
+helm template calico-crds projectcalico/crd.projectcalico.org.v1 --version $CALICO_VERSION | kubectl apply --server-side -f -
+
+
+helm install calico projectcalico/tigera-operator --version $CALICO_VERSION --namespace tigera-operator
+
 
 
 ```
