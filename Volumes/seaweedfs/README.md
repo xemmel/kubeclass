@@ -81,6 +81,38 @@ helm install seaweedfs seaweedfs/seaweedfs \
  
 ```
 
+#### Install with secret credentials
+
+```bash
+
+helm install seaweedfs seaweedfs/seaweedfs \
+  --namespace seaweedfs \
+  --create-namespace \
+  --set s3.enabled=true \
+  --set s3.enableAuth=true \
+  --set s3.existingConfigSecret=seaweedfs-s3-config \
+  --set volume.dataDirs[0].name=data1 \
+  --set volume.dataDirs[0].type=persistentVolumeClaim \
+  --set volume.dataDirs[0].size=10Gi \
+  --set volume.dataDirs[0].storageClass=local-path \
+  --set volume.dataDirs[0].maxVolumes=100
+
+
+kubectl create secret generic seaweedfs-s3-config \
+  -n seaweedfs \
+  --from-literal=seaweedfs_s3_config='{
+    "identities": [{
+      "name": "admin",
+      "credentials": [{
+        "accessKey": "customer1",
+        "secretKey": "5454545454!!!!"
+      }],
+      "actions": ["Admin", "Read", "Write"]
+    }]
+  }'
+
+```
+
 ### Get helm parameters 
 
 ```bash
