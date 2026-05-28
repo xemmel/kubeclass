@@ -264,6 +264,44 @@ az containerapp update `
 ```
 
 
+### Wake them all (Bash)
+
+```bash
+
+SUBSCRIPTIONID="bf53a50b-85e5-474d-b261-c87c0ed65901"
+RGNAME="rg-apifaults"
+ENVNAME="conenv-apifaults"
+
+apps=$(az containerapp list \
+  --subscription "$SUBSCRIPTIONID" \
+  --resource-group "$RGNAME" \
+  --query "[].name" -o tsv)
+
+
+
+
+### Wake them up
+
+i=1
+for app in $apps; do
+  {
+    fqdn=$(az containerapp show \
+      --subscription "$SUBSCRIPTIONID" \
+      --resource-group "$RGNAME" \
+      --name "$app" \
+      --query "properties.configuration.ingress.fqdn" -o tsv)
+
+    url="https://$fqdn/version"
+    result=$(curl -s "$url")
+    echo "job $i app '$app' url '$url' returned '$result'"
+  } &
+  ((i++))
+done
+
+wait
+
+
+```
 
 ### Wake them all
 

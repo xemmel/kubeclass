@@ -5,7 +5,12 @@ app = FastAPI()
 
 @app.get("/version")
 def get_version():
-    return { "version" : "1.11g" }
+    return { "version" : "1.11" }
+
+
+@app.post("/error/{code}")
+def post_error(code: int):
+    raise HTTPException(status_code=code, detail="I am a post error")
 
 @app.get("/test/{text}")
 def test_text(text: str):
