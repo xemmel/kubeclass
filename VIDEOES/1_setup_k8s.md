@@ -58,6 +58,8 @@ multipass shell flowgrait-k8s-template
 
 sudo apt update && sudo apt upgrade -y
 
+sudo apt install tree -y
+
 cat << EOF | sudo tee /etc/modules-load.d/containerd.conf
 overlay
 br_netfilter
@@ -111,8 +113,18 @@ sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+chmod 700 get_helm.sh
+./get_helm.sh
+
+echo "source <(helm completion bash)" >> ~/.bashrc
+source ~/.bashrc
+
 sudo systemctl enable --now kubelet
 sudo kubeadm config images pull
+
+
 
 
 ```
