@@ -269,7 +269,9 @@ curl -s \
 
 
 
+### Start
 
+```bash
 
 docker ps -a -q | xargs docker rm -f
 
@@ -400,4 +402,4 @@ curl -s \
   "http://localhost:8855/admin/realms/demo/clients" | jq '.[].clientId'
 
 
-
+```
