@@ -1,3 +1,7 @@
+### User certs
+
+```bash
+
 docker run -d -p 3000:8080 \
     --name open-webui \
     --restart always \
@@ -17,7 +21,7 @@ docker run -d -p 3000:8080 \
     docker run -d -p 3000:8080  --name open-webui --restart always ghcr.io/open-webui/open-webui:ollama
 
 
-
+```
 
 
 
@@ -27,6 +31,7 @@ docker run -d -p 3000:8080 \
 
 - user creates their own private-key and a certificate request, with the users *name* and *group*
 
+```bash
 
 mkdir user_init
 
@@ -107,6 +112,10 @@ curl https://[API-Endpoint] --insecure
 
 - Let's fix the insecure TLS problem. Get the API-Server certificate from the control-plane
 
+```
+
+```bash
+
 multipass exec control-plane-flowgrait-k8s -- cat /etc/kubernetes/pki/ca.crt | tee user_init/kube_ca.crt > /dev/null
 
 
@@ -165,6 +174,8 @@ curl https://[API-Endpoint]/api/v1/namespaces/developers-playground/pods --cacer
 
 
 returns
+
+```
 
 ```json
 {
