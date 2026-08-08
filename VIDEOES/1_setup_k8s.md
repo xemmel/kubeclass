@@ -148,13 +148,11 @@ sudo systemctl enable --now kubelet
 sudo kubeadm config images pull
 
 
-
+exit
 
 ```
 
 ### Stop Template
-
-> exit first
 
 ```bash
 
@@ -218,38 +216,7 @@ source ~/.bashrc
 
 ```
 
-
-### Install Helm
-
-```bash
-
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
-chmod 700 get_helm.sh
-./get_helm.sh
-
-echo "source <(helm completion bash)" >> ~/.bashrc
-source ~/.bashrc
-
-
-```
-
 ### Install Cluster Networking
-
-#### CALICO
-
-```bash
-
-CALICO_VERSION=$(curl -fsSL https://api.github.com/repos/projectcalico/calico/releases/latest \
-  | grep '"tag_name"' \
-  | sed -E 's/.*"([^"]+)".*/\1/')
-
-
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/tigera-operator.yaml
-sleep 15s
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/custom-resources.yaml
-
-
-```
 
 #### CALICO Helm
 
@@ -270,9 +237,24 @@ helm template calico-crds projectcalico/crd.projectcalico.org.v1 --version $CALI
 
 helm install calico projectcalico/tigera-operator --version $CALICO_VERSION --namespace tigera-operator
 
+```
+
+##### Calico kubectl (alternative)
+
+```bash
+
+CALICO_VERSION=$(curl -fsSL https://api.github.com/repos/projectcalico/calico/releases/latest \
+  | grep '"tag_name"' \
+  | sed -E 's/.*"([^"]+)".*/\1/')
+
+
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/tigera-operator.yaml
+sleep 15s
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/custom-resources.yaml
 
 
 ```
+
 
 ### Watch pods
 
