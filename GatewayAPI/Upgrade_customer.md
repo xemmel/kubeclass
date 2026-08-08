@@ -48,8 +48,6 @@ ENVOY_VERSION="v1.7.2"
 
 ```bash
 
-rm crds.yaml -f
-
 helm template eg-crds oci://docker.io/envoyproxy/gateway-crds-helm   \
  	--version $ENVOY_VERSION   \
 	--set crds.gatewayAPI.enabled=false   \
