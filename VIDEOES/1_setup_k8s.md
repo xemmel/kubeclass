@@ -67,7 +67,6 @@ classDiagram
 
 ```bash
 
-
 multipass launch --name flowgrait-k8s-template --memory 4GB --cpus 2 --disk 20GB
 
 multipass shell flowgrait-k8s-template
@@ -86,6 +85,15 @@ ALT_VERSION="yes"
 
 
 ```bash
+
+
+if [ "$ALT_VERSION" = "yes" ]; then
+    read -p "Version: " K8S_VERSION
+else
+    K8S_VERSION=$(curl -fsSL https://dl.k8s.io/release/stable.txt | sed 's/^v//; s/\.[0-9]*$//')
+fi
+
+
 
 sudo apt update && sudo apt upgrade -y
 
@@ -132,8 +140,6 @@ sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/conf
 sudo systemctl restart containerd
 sudo systemctl enable containerd
 
-
-K8S_VERSION=$(curl -fsSL https://dl.k8s.io/release/stable.txt | sed 's/^v//; s/\.[0-9]*$//')
 
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v${K8S_VERSION}/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
