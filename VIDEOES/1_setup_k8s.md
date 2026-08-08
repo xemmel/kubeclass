@@ -76,6 +76,14 @@ multipass shell flowgrait-k8s-template
 
 #### Install Prerequisites 
 
+##### Set alt-version
+
+```bash
+
+ALT_VERSION="yes"
+
+```
+
 
 ```bash
 
