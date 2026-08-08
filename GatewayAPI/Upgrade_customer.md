@@ -36,12 +36,19 @@ kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/re
 
 ### Install envoy gateway with existing CRDS
 
+#### Set Version
 ```bash
 
-ENVOY_VERSION="v1.8.3"
+## ENVOY_VERSION="v1.8.3"
 ENVOY_VERSION="v1.7.2"
 
-## rm crds.yaml -f
+```
+
+### Install
+
+```bash
+
+rm crds.yaml -f
 
 helm template eg-crds oci://docker.io/envoyproxy/gateway-crds-helm   \
  	--version $ENVOY_VERSION   \
