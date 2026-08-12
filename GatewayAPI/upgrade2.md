@@ -2,6 +2,7 @@
 
 Kubernetes 1.35
 
+```bash
 
 
 multipass stop worker1-flowgrait-k8s control-plane-flowgrait-k8s --force
@@ -209,3 +210,5 @@ create_hello_service hello4
 
 ### kubectl delete namespace hello-apps
 
+
+```
