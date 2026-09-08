@@ -90,6 +90,15 @@ kubectl get node worker3-flowgrait-k8s --show-labels
 
 ```
 
+### Un-taint
+
+```bash
+
+kubectl taint node worker3-flowgrait-k8s dedicated=gpu:NoSchedule-
+kubectl label node worker3-flowgrait-k8s dedicated-
+
+```
+
 ### Restart
 
 ```bash
@@ -156,6 +165,16 @@ kubectl scale deployment --namespace gpu-test gpu-test --replicas 6
 ```bash
 
 kubectl get pods --namespace gpu-test -o wide
+
+```
+
+### Remove namespaces
+
+```bash
+
+kubectl delete namespace normal-test gpu-test
+
+
 
 ```
 

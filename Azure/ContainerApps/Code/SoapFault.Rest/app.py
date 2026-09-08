@@ -1,12 +1,30 @@
-from fastapi import FastAPI,HTTPException,Response
+from fastapi import FastAPI,HTTPException,Response,Request
 import re
 
 app = FastAPI()
 
 @app.get("/version")
 def get_version():
-    return { "version" : "1.11" }
+    return { "version" : "1.19" }
 
+
+@app.post("/submit")
+async def post_submit(request: Request):
+    body = await request.json()
+
+    id = body["id"]
+    status = body["status"]
+
+    if (status == 'error'):
+        raise HTTPException(status_code=500, detail="You posted 'error'")
+    return {
+        "method": request.method,
+        "url": str(request.url),
+        "headers": dict(request.headers),
+        "body": body,
+        "id": id,
+        "status" : status
+    }
 
 @app.post("/error/{code}")
 def post_error(code: int):

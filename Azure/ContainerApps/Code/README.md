@@ -244,7 +244,7 @@ az containerapp update `
 
   ### Rest
 
-  $imageVersion = "1.10";
+  $imageVersion = "1.13";
 
   cd .\SoapFault.Rest\
 
