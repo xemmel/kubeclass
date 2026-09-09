@@ -53,7 +53,7 @@ stringData:
     }
 EOF
 
-
+rm -f seaweed_values.yaml
 cat<<EOF>> seaweed_values.yaml
 s3:
   enabled: true
@@ -62,7 +62,7 @@ s3:
   credentials:
     admin:
       accessKey: admin
-      secretKey: '444455555'
+      secretKey: { .Values.password | quote }
 volume:
   dataDirs:
     - name: data1
@@ -73,6 +73,7 @@ volume:
 EOF
 
 kubectl create namespace seaweed
+
 kubectl apply --filename seaweed_user_secret.yaml --namespace seaweed
 
 
@@ -132,5 +133,14 @@ aclUsers:
 &*   → all Pub/Sub channels
 
 
+
+```
+
+
+#### Helm values in secret
+
+```
+
+{{ .Values.seaweed.users.app1.accessKey | quote }}
 
 ```
