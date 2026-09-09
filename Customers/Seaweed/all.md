@@ -1,3 +1,5 @@
+```bash
+
 rm -fr statgpt-wrapper
 mkdir statgpt-wrapper
 
@@ -136,3 +138,4 @@ seaweedfs:
         storageClass: *storageClass
 EOF
 
+```

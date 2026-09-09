@@ -1,3 +1,5 @@
+```bash
+
 helm dependency build ./statgpt-wrapper
 
 helm install statgpt ./statgpt-wrapper \
@@ -39,3 +41,4 @@ kubectl get secret -n statgpt seaweedfs-s3-users -o json \
   | jq -r '.identities[].name'
 
 
+```
