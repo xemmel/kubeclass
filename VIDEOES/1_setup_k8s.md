@@ -232,6 +232,30 @@ source ~/.bashrc
 
 ### Install Cluster Networking
 
+#### CILIUM
+
+````bash
+
+# Cilium configuration
+API_SERVER_IP=$(hostname -I | awk '{print $1}')
+API_SERVER_PORT=6443
+CILIUM_VERSION=1.20.2
+
+echo "Kubernetes API server: ${API_SERVER_IP}:${API_SERVER_PORT}"
+
+# Install Cilium
+helm install cilium oci://quay.io/cilium/charts/cilium \
+  --version ${CILIUM_VERSION} \
+  --namespace kube-system \
+  --set kubeProxyReplacement=true \
+  --set k8sServiceHost=${API_SERVER_IP} \
+  --set k8sServicePort=${API_SERVER_PORT} \
+  --set egressGateway.enabled=true \
+  --set bpf.masquerade=true
+  
+
+```
+
 #### CALICO Helm
 
 ```bash

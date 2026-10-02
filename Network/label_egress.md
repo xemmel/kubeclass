@@ -101,12 +101,22 @@ BPF masquerading
 Egress Gateway support
 Set the API server information:
 ```bash
+
+### Dont use
 API_SERVER_IP=10.193.226.184
 API_SERVER_PORT=6443
 CILIUM_VERSION=1.20.2
 ```
 Install Cilium:
 ```bash
+# Cilium configuration
+API_SERVER_IP=$(hostname -I | awk '{print $1}')
+API_SERVER_PORT=6443
+CILIUM_VERSION=1.20.2
+
+echo "Kubernetes API server: ${API_SERVER_IP}:${API_SERVER_PORT}"
+
+# Install Cilium
 helm install cilium oci://quay.io/cilium/charts/cilium \
   --version ${CILIUM_VERSION} \
   --namespace kube-system \
@@ -115,6 +125,7 @@ helm install cilium oci://quay.io/cilium/charts/cilium \
   --set k8sServicePort=${API_SERVER_PORT} \
   --set egressGateway.enabled=true \
   --set bpf.masquerade=true
+  
 ```
 Wait for the cluster:
 ```bash
