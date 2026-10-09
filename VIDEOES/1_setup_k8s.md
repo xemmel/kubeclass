@@ -234,7 +234,7 @@ source ~/.bashrc
 
 #### CILIUM
 
-````bash
+```bash
 
 # Cilium configuration
 API_SERVER_IP=$(hostname -I | awk '{print $1}')
