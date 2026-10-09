@@ -212,6 +212,19 @@ sudo kubeadm init --pod-network-cidr="${POD_IP_RANGE}"
 
 ```
 
+#### Cluster for CILIUM
+
+```bash
+
+POD_IP_RANGE="192.168.0.0/16"
+
+sudo kubeadm init \
+  --pod-network-cidr="${POD_IP_RANGE}" \
+  --skip-phases=addon/kube-proxy
+
+```
+
+
 ### Configure kubectl
 
 ```bash
