@@ -73,6 +73,16 @@ multipass shell flowgrait-k8s-template
 
 ```
 
+### Create Server Template Experimental
+
+```bash
+
+multipass launch --name flowgrait-k8s-template --memory 4GB --cpus 2 --disk 20GB devel
+
+multipass shell flowgrait-k8s-template
+
+```
+
 #### Install Prerequisites 
 
 ##### Set alt-version
