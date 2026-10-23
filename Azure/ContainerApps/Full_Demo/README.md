@@ -133,3 +133,8 @@ az containerapp update \
 
 ```
 
+### Clean up
+
+```bash
+az group delete --subscription $SUBSCRIPTIONID --name "rg-${APPNAME}" --yes
+```
