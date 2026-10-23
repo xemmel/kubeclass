@@ -8,6 +8,79 @@ APPNAME="fridaymlc"
 LOCATION="swedencentral"
 ```
 
+### Files
+
+#### requirements.txt
+
+```
+fastapi[standard]
+```
+
+#### Dockerfile
+
+```dockerfile
+FROM python:3.14
+
+WORKDIR /code
+
+COPY ./requirements.txt /code/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+COPY . /code/app
+
+CMD ["fastapi", "run", "app/webapi.py", "--port", "80"]
+
+```
+
+#### webapi.py
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/version")
+def get_version():
+    return { "version" : "1.0" }
+```
+
+#### Create all
+
+```bash
+cat<<EOF>>requirements.txt
+fastapi[standard]
+EOF
+
+cat<<EOF>>Dockerfile
+```dockerfile
+FROM python:3.14
+
+WORKDIR /code
+
+COPY ./requirements.txt /code/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+COPY . /code/app
+
+CMD ["fastapi", "run", "app/webapi.py", "--port", "80"]
+EOF
+
+cat<<EOF>>webapi.py
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/version")
+def get_version():
+    return { "version" : "1.0" }
+EOF
+
+```
+
 ### Create Resource Group
 
 ```bash
