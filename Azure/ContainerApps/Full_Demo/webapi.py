@@ -5,4 +5,4 @@ app = FastAPI()
 
 @app.get("/version")
 def get_version():
-    return { "version" : "1.1" }
+    return { "version" : "1.0" }
