@@ -54,7 +54,6 @@ fastapi[standard]
 EOF
 
 cat<<EOF>Dockerfile
-```dockerfile
 FROM python:3.14
 
 WORKDIR /code
