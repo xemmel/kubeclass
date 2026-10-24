@@ -195,6 +195,37 @@ az containerapp replica list \
   -o tsv
 ```
 
+### Cost for the last 30 days
+
+```bash
+FROM=$(date -u -d '29 days ago' +%Y-%m-%d)
+TO=$(date -u +%Y-%m-%d)
+
+az rest \
+  --method post \
+  --url "https://management.azure.com/subscriptions/${SUBSCRIPTIONID}/resourceGroups/rg-${APPNAME}/providers/Microsoft.CostManagement/query?api-version=2026-06-01" \
+  --headers "ClientType=MLC-CostManagement" \
+  --body "{
+    \"type\": \"ActualCost\",
+    \"timeframe\": \"Custom\",
+    \"timePeriod\": {
+      \"from\": \"${FROM}T00:00:00Z\",
+      \"to\": \"${TO}T23:59:59Z\"
+    },
+    \"dataset\": {
+      \"granularity\": \"None\",
+      \"aggregation\": {
+        \"totalCost\": {
+          \"name\": \"Cost\",
+          \"function\": \"Sum\"
+        }
+      }
+    }
+  }" \
+  --query "properties.rows" \
+  -o table
+```
+
 ### Upgrade image and container app
 
 ```bash
