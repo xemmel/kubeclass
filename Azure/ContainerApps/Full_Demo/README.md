@@ -184,6 +184,17 @@ ACA_INGRESS_URL=$(echo $ACA | jq .properties.configuration.ingress.fqdn -r)
 curl "https://${ACA_INGRESS_URL}/version"
 ```
 
+### Get Replica Count
+
+```bash
+az containerapp replica list \
+  --subscription "$SUBSCRIPTIONID" \
+  --resource-group "rg-${APPNAME}" \
+  --name "aca-${APPNAME}" \
+  --query "length([?properties.runningState=='Running'])" \
+  -o tsv
+```
+
 ### Upgrade image and container app
 
 ```bash
