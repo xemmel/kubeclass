@@ -74,6 +74,35 @@ EOF
 
 ```
 
+
+### Create Deployment to run on h200
+
+```bash
+
+kubectl apply --namespace labeltest --filename - <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: h300-deployment
+spec:
+  selector:
+    matchLabels:
+      app: h300
+  template:
+    metadata:
+      labels:
+        app: h300
+    spec:
+      containers:
+        - name: h300-container
+          image: nginx
+      nodeSelector:
+        gputype: h300
+EOF
+
+
+```
+
 ### Scale
 
 ```bash
