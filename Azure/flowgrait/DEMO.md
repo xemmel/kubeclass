@@ -130,7 +130,7 @@ az resource list --resource-group "${appName}-${domainName}-${env}-rg" -o table
 - Resquest Response
 
 Key|Value|Required
-----|----
+----|----|----
 name|getproducts|*
 targetUrl|https://thenewappapphello.kindpebble-8ed0ec78.germanywestcentral.azurecontainerapps.io/products|*
 urlTemplate|/products
