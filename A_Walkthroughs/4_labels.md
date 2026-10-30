@@ -75,7 +75,9 @@ EOF
 ```
 
 
-### Create Deployment to run on h200
+### Create Deployment to run on h300
+
+> Note: This is stay in pending state
 
 ```bash
 
