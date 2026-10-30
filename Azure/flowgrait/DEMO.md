@@ -34,6 +34,13 @@ $branchName = git rev-parse --abbrev-ref HEAD
 
 ```
 
+#### Existing branch
+
+```powershell
+$branchName = git rev-parse --abbrev-ref HEAD
+```
+
+
 #### Create domain folder and files
 
 ```powershell
@@ -105,7 +112,38 @@ git push
 
 ```
 
+### View Resources in Domain RG
+
+```powershell
+az resource list --resource-group "${appName}-${domainName}-${env}-rg" -o table
+
+```
+
+
+
 ### Create RR Flow
+
+#### With FlowUI
+
+- New Deployment Task
+- Request Response Flows
+- Resquest Response
+
+Key|Value|Required
+----|----
+name|getproducts|*
+targetUrl|https://thenewappapphello.kindpebble-8ed0ec78.germanywestcentral.azurecontainerapps.io/products|*
+urlTemplate|/products
+relayHeaders|CustomHeader:Test
+methodType|GET
+relayMethodType|GET
+contentType|application/json
+
+- Add Task
+
+
+
+#### Whole Yaml
 
 ```yaml
 ## Request Response Get Products
