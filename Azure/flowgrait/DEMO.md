@@ -17,6 +17,15 @@ $env = "dev";
 
 ```
 
+### Set browser pages
+
+```powershell
+
+Start-Process chrome.exe -ArgumentList '--new-window', 'https://portal.azure.com/#@adminintegrationit.onmicrosoft.com/resource/subscriptions/5a05f537-a707-4bc8-99bc-0ad16de9d511/resourceGroups/flowgrait-dev-rg/providers/Microsoft.Insights/components/flowgrait-dev-appi/quickPulse', 'https://thenewappapphello-frontapp.kindpebble-8ed0ec78.germanywestcentral.azurecontainerapps.io/receiveddocuments'
+
+
+```
+
 ### Set new domain name
 
 ```powershell
@@ -264,6 +273,7 @@ isDistributorFlow|true
 ```powershell
 curl "https://${appName}-${env}-apim.azure-api.net/${domainName}/document" -X POST -d "Message" -H "oip-key:$apiSubKey"
 
+```
 
 ### Remove 
 
