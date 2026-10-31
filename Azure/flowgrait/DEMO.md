@@ -194,6 +194,77 @@ curl "https://${appName}-${env}-apim.azure-api.net/${domainName}/products" -H "o
 
 ```
 
+## One-way
+
+### Step 1
+
+- New Deployment Task
+- One way Flows
+- Receive (Step 1 and 2)
+- Http Receive Step 1
+
+Key|Value|Required
+----|----|----
+name|receivedocument|*
+urlTemplate|/document|*
+relayHeaders|CustomHeader:Test
+uniqueName|receivedocumenthttp
+
+- Add Task
+
+### Step 2
+
+- New Deployment Task
+- One way Flows
+- Receive (Step 1 and 2)
+- Receive Transform (Step 2)
+
+Key|Value|Required
+----|----|----
+name|receivedocument|*
+isDistributorFlow|true
+
+- Add Task
+
+### Step 3
+
+
+- New Deployment Task
+- One way Flows
+- Receive (Step 3 and 4)
+- Send Transform (Step 3)
+
+Key|Value|Required
+----|----|----
+name|sendall|*
+sqlFilter|(FlowName = 'receivedocument')|*
+isDistributorFlow|true
+
+- Add Task
+
+### Step 4
+
+- New Deployment Task
+- One way Flows
+- Receive (Step 3 and 4)
+- Relay Send (Step 4)
+
+Key|Value|Required
+----|----|----
+name|sendall|*
+endPointName|sendallhttp|*
+targetUrl|https://thenewappapphello-frontapp.kindpebble-8ed0ec78.germanywestcentral.azurecontainerapps.io//documents
+relayHeaders|Content-Type:text/plain
+isDistributorFlow|true
+
+- Add Task
+
+### Test one-way
+
+```powershell
+curl "https://${appName}-${env}-apim.azure-api.net/${domainName}/document" -X POST -d "Message" -H "oip-key:$apiSubKey"
+
+
 ### Remove 
 
 ```powershell
