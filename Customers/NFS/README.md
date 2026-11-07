@@ -37,40 +37,43 @@ sudo apt install -y nfs-kernel-server
 ### Configure
 
 ```bash
-read -p "Fileshare name: " NFS_APP_NAME
+read -rp "Fileshare name: " NFS_APP_NAME
 
-path="/srv/nfs/${NFS_APP_NAME}"
+if [[ ! "$NFS_APP_NAME" =~ ^[a-zA-Z0-9][a-zA-Z0-9_-]*$ ]]; then
+  echo "Invalid fileshare name."
+else
+  path="/srv/nfs/${NFS_APP_NAME}"
 
-sudo mkdir -p "$path"
-sudo chown nobody:nogroup "$path"
+  sudo mkdir -p "$path"
+  sudo chown nobody:nogroup "$path"
 
-sudo find "$path" -type d -exec chmod 0777 {} +
-sudo find "$path" -type f -exec chmod a+rw {} +
+  sudo find "$path" -type d -exec chmod 0777 {} +
+  sudo find "$path" -type f -exec chmod a+rw {} +
 
+  while true; do
+    read -rp "Allowed IP addresses (comma-separated): " NODE_IP_INPUT
+    NODE_IP_INPUT="${NODE_IP_INPUT//[[:space:]]/}"
 
-while true; do
-  read -p "Allowed IP-Addresses (comma-delimited): " NODE_IP_INPUT
-  NODE_IP_INPUT="${NODE_IP_INPUT//[[:space:]]/}"
+    if [[ -z "$NODE_IP_INPUT" || "$NODE_IP_INPUT" == ,* ||
+          "$NODE_IP_INPUT" == *, || "$NODE_IP_INPUT" == *,,* ]]; then
+      echo "Enter one or more IPs separated by commas, without empty entries."
+      continue
+    fi
 
-  if [[ -z "$NODE_IP_INPUT" || "$NODE_IP_INPUT" == ,* ||
-        "$NODE_IP_INPUT" == *, || "$NODE_IP_INPUT" == *,,* ]]; then
-    echo "Enter one or more IPs separated by commas, without empty entries."
-    continue
-  fi
-
-  IFS=',' read -ra NODE_IPS <<< "$NODE_IP_INPUT"
-  break
-done
-
-sudo mkdir -p /etc/exports.d
-
-{
-  printf '%s' "${path:?Shared directory path is not set}"
-  for NODE_IP in "${NODE_IPS[@]}"; do
-    printf ' %s(rw,sync,no_subtree_check,root_squash)' "$NODE_IP"
+    IFS=',' read -ra NODE_IPS <<< "$NODE_IP_INPUT"
+    break
   done
-  printf '\n'
-} | sudo tee "/etc/exports.d/${NFS_APP_NAME}.exports"
+
+  sudo mkdir -p /etc/exports.d
+
+  {
+    printf '%s' "$path"
+    for NODE_IP in "${NODE_IPS[@]}"; do
+      printf ' %s(rw,sync,no_subtree_check,no_root_squash)' "$NODE_IP"
+    done
+    printf '\n'
+  } | sudo tee "/etc/exports.d/${NFS_APP_NAME}.exports"
+fi
 
 ```
 
@@ -78,35 +81,39 @@ sudo mkdir -p /etc/exports.d
 
 ```bash
 read -rp "Fileshare name: " NFS_APP_NAME
-path="/srv/nfs/${NFS_APP_NAME}"
 
-while true; do
-  read -rp "Complete allowed IP list (comma-separated): " NODE_IP_INPUT
-  NODE_IP_INPUT="${NODE_IP_INPUT//[[:space:]]/}"
+if [[ ! "$NFS_APP_NAME" =~ ^[a-zA-Z0-9][a-zA-Z0-9_-]*$ ]]; then
+  echo "Invalid fileshare name."
+elif [[ ! -f "/etc/exports.d/${NFS_APP_NAME}.exports" ]]; then
+  echo "Export configuration does not exist."
+else
+  path="/srv/nfs/${NFS_APP_NAME}"
 
-  if [[ -z "$NODE_IP_INPUT" || "$NODE_IP_INPUT" == ,* ||
-        "$NODE_IP_INPUT" == *, || "$NODE_IP_INPUT" == *,,* ]]; then
-    echo "Enter one or more IPs separated by commas, without empty entries."
-    continue
-  fi
+  while true; do
+    read -rp "Complete allowed IP list (comma-separated): " NODE_IP_INPUT
+    NODE_IP_INPUT="${NODE_IP_INPUT//[[:space:]]/}"
 
-  IFS=',' read -ra NODE_IPS <<< "$NODE_IP_INPUT"
-  break
-done
+    if [[ -z "$NODE_IP_INPUT" || "$NODE_IP_INPUT" == ,* ||
+          "$NODE_IP_INPUT" == *, || "$NODE_IP_INPUT" == *,,* ]]; then
+      echo "Enter one or more IPs separated by commas, without empty entries."
+      continue
+    fi
 
-sudo mkdir -p /etc/exports.d
-
-{
-  printf '%s' "$path"
-  for NODE_IP in "${NODE_IPS[@]}"; do
-    printf ' %s(rw,sync,no_subtree_check,root_squash)' "$NODE_IP"
+    IFS=',' read -ra NODE_IPS <<< "$NODE_IP_INPUT"
+    break
   done
-  printf '\n'
-} | sudo tee "/etc/exports.d/${NFS_APP_NAME}.exports"
 
-sudo exportfs -rav
-sudo exportfs -v
+  {
+    printf '%s' "$path"
+    for NODE_IP in "${NODE_IPS[@]}"; do
+      printf ' %s(rw,sync,no_subtree_check,no_root_squash)' "$NODE_IP"
+    done
+    printf '\n'
+  } | sudo tee "/etc/exports.d/${NFS_APP_NAME}.exports"
 
+  sudo exportfs -rav
+  sudo exportfs -v
+fi
 ```
 
 ### Start the NFS Server
@@ -304,6 +311,120 @@ kubectl exec -it --namespace debug debug -- curl volumetest.volumetest
 PVC_FOLDER=$(find "/srv/nfs/${NFS_APP_NAME}" \
   -mindepth 1 -maxdepth 1 -type d -name 'pvc-*')
 
-echo "hello" | tee "${PVC_FOLDER}/index.html"
+echo "<html><body><h1>hello</h1></body></html>" | tee "${PVC_FOLDER}/index.html"
+
+```
+
+#### Scale
+
+```bash
+kubectl scale deployment --namespace volumetest volumetest --replicas 3
+
+```
+
+
+### Elastic Deployment
+
+```bash
+kubectl create namespace elasticvolume
+
+kubectl apply --namespace elasticvolume --filename - <<EOF
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: elastic-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: nfs-rw-${NFS_APP_NAME}
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastic-deployment
+spec:
+  selector:
+    matchLabels:
+      app: elastic
+  template:
+    metadata:
+      labels:
+        app: elastic
+    spec:
+      containers:
+        - name: elastic-container
+          image: elasticsearch:9.1.5
+          env:
+            - name: 'xpack.security.enabled'
+              value: 'false'
+            - name: 'discovery.type'
+              value: 'single-node'
+            - name: ES_JAVA_OPTS
+              value: "-Xms512m -Xmx512m"
+          resources:
+            requests:
+                memory: "1Gi"
+                cpu: "250m"
+            limits:
+                memory: "1Gi"
+                cpu: "1"
+          volumeMounts:
+            - mountPath: /usr/share/elasticsearch/data
+              name: datamount
+      volumes:
+        - name: datamount
+          persistentVolumeClaim:
+            claimName: elastic-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic-service
+spec:
+  type: NodePort
+  selector:
+    app: elastic
+  ports:
+    - port: 9200
+      targetPort: 9200
+EOF
+
+```
+
+#### Logs
+
+```bash
+kubectl logs --namespace elasticvolume -l app=elastic -f
+
+```
+
+#### Test 
+
+```bash
+kubectl exec -it --namespace debug debug -- curl elastic-service.elasticvolume:9200
+
+```
+
+#### List indicies
+
+```bash
+kubectl exec -it --namespace debug debug -- curl elastic-service.elasticvolume:9200/_cat/indices
+
+```
+
+#### Create index
+
+```bash
+kubectl exec -it --namespace debug debug -- curl -X PUT elastic-service.elasticvolume:9200/database1
+
+```
+
+#### Rollout restart
+
+```bash
+kubectl rollout restart deployment --namespace elasticvolume elastic-deployment
 
 ```
