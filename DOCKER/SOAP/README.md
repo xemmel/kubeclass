@@ -166,6 +166,16 @@ CMD ["python", "soap.py"]
 
 EOF
 
+cat<<EOF>> request.xml
+<soap:Envelope
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:m="urn:soap-stub">
+  <soap:Body>
+    <m:StubRequest />
+  </soap:Body>
+</soap:Envelope>
+EOF
+
 
 ```
 
