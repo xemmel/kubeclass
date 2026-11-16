@@ -4,6 +4,7 @@
 ## Create folder
 
 ```bash
+cd ~/code
 mkdir soapcontainer
 cd soapcontainer
 
@@ -186,17 +187,30 @@ docker run -it --publish 6789:8080 -d soap:1.0
 
 - Note: Soap should NOT return anything else than 200 or 500 so last test is **wrong**
 
+### Success
 ```bash
-# Success
 curl.exe -i "http://localhost:6789/soap?mode=success" -H "Content-Type: text/xml; charset=utf-8" --data-binary "@request.xml"
 
-# Server fault
+```
+
+
+###  Server fault
+
+```bash
 curl.exe -i "http://localhost:6789/soap?mode=fail" -H "Content-Type: text/xml; charset=utf-8" --data-binary "@request.xml"
 
-# Customer not found: HTTP 500, application error code 404
+```
+
+### Customer not found: HTTP 500, application error code 404
+
+```bash
 curl.exe -i "http://localhost:6789/soap?mode=notfound" -H "Content-Type: text/xml; charset=utf-8" --data-binary "@request.xml"
 
-# SOAP Fault returned with HTTP 404
+```
+
+### SOAP Fault returned with HTTP 404
+
+```bash
 curl.exe -i "http://localhost:6789/soap?mode=http404" -H "Content-Type: text/xml; charset=utf-8" --data-binary "@request.xml"
 
 ```
